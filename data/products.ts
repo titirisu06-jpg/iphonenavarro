@@ -1,0 +1,98 @@
+import { Category } from '../types';
+import type { Product } from '../types';
+
+// iPhoneNavarro — Catálogo inicial de iPhones
+// Los precios son en USD como referencia, mostrar consultar WhatsApp
+
+export const products: Product[] = [
+  // SELLADOS — iPhone nuevos en caja
+  {
+    id: 'iph16pro-256-desert',
+    name: 'iPhone 16 Pro',
+    category: Category.SELLADOS,
+    price: 1100,
+    currency: 'USD',
+    image: 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-16-pro-finish-select-202409-6-9inch-deserttitanium?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1725297476684',
+    description: 'iPhone 16 Pro. Chip A18 Pro. Ceramic Shield 2. Sellado en caja, con garantía oficial.',
+    storages: ['256GB', '512GB', '1TB'],
+    colors: ['Desert Titanium', 'Black Titanium', 'White Titanium', 'Natural Titanium'],
+  },
+  {
+    id: 'iph16-128-black',
+    name: 'iPhone 16',
+    category: Category.SELLADOS,
+    price: 950,
+    currency: 'USD',
+    image: 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-16-finish-select-202409-6-1inch-black?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1724925055',
+    description: 'iPhone 16. Chip A18. Ceramic Shield 2. Sellado en caja.',
+    storages: ['128GB', '256GB', '512GB'],
+    colors: ['Black', 'White', 'Pink', 'Teal', 'Ultramarine'],
+  },
+  {
+    id: 'iph16plus-256-white',
+    name: 'iPhone 16 Plus',
+    category: Category.SELLADOS,
+    price: 1050,
+    currency: 'USD',
+    image: 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-16-finish-select-202409-6-1inch-white_AV1?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1724925055',
+    description: 'iPhone 16 Plus. La pantalla más grande. Sellado en caja.',
+    storages: ['128GB', '256GB', '512GB'],
+    colors: ['Black', 'White', 'Pink', 'Teal', 'Ultramarine'],
+  },
+  {
+    id: 'iph15pro-256-titanium',
+    name: 'iPhone 15 Pro',
+    category: Category.SELLADOS,
+    price: 1000,
+    currency: 'USD',
+    image: 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-finish-select-202309-6-7inch-naturaltitanium?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1693009985',
+    description: 'iPhone 15 Pro Max. Chip A17 Pro. Sellado en caja.',
+    storages: ['256GB', '512GB', '1TB'],
+    colors: ['Natural Titanium', 'Blue Titanium', 'White Titanium', 'Black Titanium'],
+  },
+  // USADOS PREMIUM
+  {
+    id: 'iph14pro-usado',
+    name: 'iPhone 14 Pro',
+    category: Category.USADOS_PREMIUM,
+    price: 850,
+    currency: 'USD',
+    image: 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-pro-finish-select-202209-6-7inch-deeppurple?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1663703841',
+    description: 'iPhone 14 Pro. Estado excelente, batería garantizada. Verificado y revisado.',
+    storages: ['128GB', '256GB', '512GB'],
+    colors: ['Deep Purple', 'Gold', 'Silver', 'Space Black'],
+  },
+  {
+    id: 'iph13-usado',
+    name: 'iPhone 13',
+    category: Category.USADOS_PREMIUM,
+    price: 600,
+    currency: 'USD',
+    image: 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-finish-select-2021-6-1inch-blue?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1629842709',
+    description: 'iPhone 13. Excelente estado, bordes sin marcas. Ideal para el debut Apple.',
+    storages: ['128GB', '256GB'],
+    colors: ['Midnight', 'Starlight', 'Blue', 'Pink', 'Green', 'Red'],
+  },
+  {
+    id: 'iph12-usado',
+    name: 'iPhone 12',
+    category: Category.USADOS,
+    price: 450,
+    currency: 'USD',
+    image: 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-family-select-2020?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1604021661',
+    description: 'iPhone 12. Buen estado general. Precio accesible.',
+    storages: ['64GB', '128GB'],
+    colors: ['Black', 'White', 'Blue', 'Red', 'Green', 'Purple'],
+  },
+  {
+    id: 'iph11-usado',
+    name: 'iPhone 11',
+    category: Category.USADOS,
+    price: 350,
+    currency: 'USD',
+    image: 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-11-black-select-2019?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1567022175',
+    description: 'iPhone 11. El más accesible de nuestra línea.',
+    storages: ['64GB', '128GB'],
+    colors: ['Black', 'White', 'Yellow', 'Purple', 'Red', 'Green'],
+  },
+];

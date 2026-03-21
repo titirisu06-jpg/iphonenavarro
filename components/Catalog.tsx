@@ -52,19 +52,25 @@ const ProductCard: React.FC<{ product: Product; onSelect: (p: Product) => void }
           <p className="text-ink-tertiary text-sm leading-relaxed line-clamp-2 mb-3">{product.description}</p>
         )}
         {/* Storage chips */}
-        {product.storages && product.storages.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-4">
-            {product.storages.map(s => (
-              <span
-                key={s}
-                className="text-[10px] font-semibold text-ink-secondary px-2.5 py-1 rounded-lg"
-                style={{ background: '#F5F5F7', border: '1px solid #E5E5EA', fontFamily: 'monospace' }}
-              >
-                {s}
-              </span>
-            ))}
-          </div>
-        )}
+        {(() => {
+          const allStorages = Array.from(new Set([
+            ...(product.storages || []),
+            ...((product as any).variants?.map((v: any) => v.storage) || [])
+          ]));
+          return allStorages.length > 0 ? (
+            <div className="flex flex-wrap gap-1.5 mb-4">
+              {allStorages.map(s => (
+                <span
+                  key={Math.random() + s}
+                  className="text-[10px] font-semibold text-ink-secondary px-2.5 py-1 rounded-lg"
+                  style={{ background: '#F5F5F7', border: '1px solid #E5E5EA', fontFamily: 'monospace' }}
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
+          ) : null;
+        })()}
         {/* CTA */}
         <button
           onClick={() => onSelect(product)}
@@ -96,7 +102,7 @@ const Catalog: React.FC = () => {
 
       const { data, error } = await supabase
         .from('products')
-        .select('*')
+        .select('*, variants(storage)')
         .order('created_at', { ascending: false });
 
       if (error || !data) {

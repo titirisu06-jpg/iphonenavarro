@@ -45,27 +45,36 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) => {
     fetchVariants();
   }, [product.id]);
 
-  const displayStorages = variants.length > 0 
-    ? Array.from(new Set(variants.map(v => v.storage))) 
-    : product.storages || [];
+  const displayStorages = Array.from(new Set([
+    ...(product.storages || []),
+    ...variants.map(v => v.storage)
+  ]));
 
-  const displayColors = variants.length > 0 && selectedStorage
-    ? Array.from(new Set(variants.filter(v => v.storage === selectedStorage).map(v => v.color))) 
-    : product.colors || [];
+  const includeBaseColors = product.storages?.includes(selectedStorage || '');
+  const variantColors = variants.filter(v => v.storage === selectedStorage).map(v => v.color);
 
-  const displayBatteries = variants.length > 0 && selectedStorage && selectedColor
+  const calculatedColors = Array.from(new Set([
+    ...(includeBaseColors ? (product.colors || []) : []),
+    ...variantColors
+  ]));
+
+  const displayColors = calculatedColors.length > 0 ? calculatedColors : (product.colors || []);
+
+  const displayBatteries = selectedStorage && selectedColor
     ? Array.from(new Set(variants.filter(v => v.storage === selectedStorage && v.color === selectedColor).map(v => v.battery)))
     : [];
 
   useEffect(() => {
-    if (variants.length > 0 && selectedColor && displayColors.length > 0) {
+    if (selectedColor && displayColors.length > 0) {
       if (!displayColors.includes(selectedColor)) setSelectedColor(displayColors[0]);
     }
   }, [selectedStorage, displayColors]);
 
   useEffect(() => {
-    if (variants.length > 0 && selectedBattery && displayBatteries.length > 0) {
+    if (selectedBattery && displayBatteries.length > 0) {
       if (!displayBatteries.includes(selectedBattery)) setSelectedBattery(displayBatteries[0]);
+    } else if (displayBatteries.length === 0) {
+      setSelectedBattery(undefined);
     }
   }, [selectedColor, displayBatteries]);
 

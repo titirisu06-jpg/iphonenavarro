@@ -11,6 +11,8 @@ import FAQ from './components/FAQ';
 import Nosotros from './components/Nosotros';
 import ServicioTecnico from './components/ServicioTecnico';
 import Redes from './components/Redes';
+import { AdminLogin } from './components/AdminLogin';
+import { AdminDashboard } from './components/AdminDashboard';
 import Footer from './components/Footer';
 import { MessageCircle } from 'lucide-react';
 import { buildWhatsAppUrl } from './utils/whatsapp';
@@ -107,6 +109,8 @@ const App: React.FC = () => (
     <Route path="/" element={<HomePage />} />
     <Route path="/faq" element={<FAQPage />} />
     <Route path="/redes" element={<RedesPage />} />
+    <Route path="/admin" element={<AdminLogin />} />
+    <Route path="/admin/dashboard" element={<AdminDashboard />} />
   </Routes>
 );
 

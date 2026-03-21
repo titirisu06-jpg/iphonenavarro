@@ -14,7 +14,6 @@ export interface ProductVariant {
   battery: string;
   price: number;
   stock_status: string;
-  sku?: string;
 }
 
 export interface Product {

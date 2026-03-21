@@ -1,6 +1,7 @@
 
-import React, { useState } from 'react';
-import { products } from '../data/products';
+import React, { useState, useEffect } from 'react';
+import { products as localProducts } from '../data/products';
+import { supabase } from '../utils/supabase';
 import { Category } from '../types';
 import type { Product } from '../types';
 import { MessageCircle, ChevronRight } from 'lucide-react';
@@ -81,6 +82,34 @@ const ProductCard: React.FC<{ product: Product; onSelect: (p: Product) => void }
 const Catalog: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<Category | 'all'>('all');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [catalogItems, setCatalogItems] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadCatalog = async () => {
+      setLoading(true);
+      if (!import.meta.env.VITE_SUPABASE_URL) {
+        setCatalogItems(localProducts);
+        setLoading(false);
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error || !data) {
+        console.error('Error fetching catalog:', error);
+        setCatalogItems(localProducts);
+      } else {
+        setCatalogItems(data as Product[]);
+      }
+      setLoading(false);
+    };
+
+    loadCatalog();
+  }, []);
 
   const categories: Array<{ key: Category | 'all'; label: string }> = [
     { key: 'all', label: 'Todos' },
@@ -89,7 +118,7 @@ const Catalog: React.FC = () => {
     { key: Category.USADOS, label: 'Usados' },
   ];
 
-  const filtered = activeCategory === 'all' ? products : products.filter(p => p.category === activeCategory);
+  const filtered = activeCategory === 'all' ? catalogItems : catalogItems.filter(p => p.category === activeCategory);
 
   return (
     <section id="catalogo" className="section-light py-24 scroll-mt-20">
@@ -124,12 +153,23 @@ const Catalog: React.FC = () => {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {filtered.map((product, i) => (
-            <div key={product.id} className="reveal" style={{ transitionDelay: `${i * 0.05}s` }}>
-              <ProductCard product={product} onSelect={setSelectedProduct} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 min-h-[400px]">
+          {loading ? (
+            <div className="col-span-full flex flex-col items-center justify-center text-ink-tertiary">
+              <div className="w-8 h-8 md:w-10 md:h-10 border-4 border-iphone-blue/20 border-t-iphone-blue rounded-full animate-spin mb-4" />
+              <p className="font-semibold text-sm tracking-wide">Cargando catálogo...</p>
             </div>
-          ))}
+          ) : filtered.length === 0 ? (
+            <div className="col-span-full py-20 text-center text-ink-tertiary">
+              <p className="text-lg">No hay productos disponibles en esta categoría.</p>
+            </div>
+          ) : (
+            filtered.map((product, i) => (
+              <div key={product.id} className="animate-fade-up" style={{ animationDelay: `${i * 0.05}s` }}>
+                <ProductCard product={product} onSelect={setSelectedProduct} />
+              </div>
+            ))
+          )}
         </div>
 
         {/* Bottom CTA */}

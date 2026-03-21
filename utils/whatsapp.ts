@@ -7,8 +7,9 @@ export const buildWhatsAppUrl = (message?: string): string => {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
 };
 
-export const buildProductWhatsAppUrl = (productName: string, storage?: string, color?: string): string => {
-  const details = [productName, storage, color].filter(Boolean).join(' - ');
+export const buildProductWhatsAppUrl = (productName: string, storage?: string, color?: string, battery?: string): string => {
+  const batteryStr = battery ? `Batería ${battery}%` : '';
+  const details = [productName, storage, color, batteryStr].filter(Boolean).join(' - ');
   return buildWhatsAppUrl(`Hola iPhone Navarro, me interesa el ${details}. Quiero más info.`);
 };
 

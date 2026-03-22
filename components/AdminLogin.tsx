@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
-import { Lock, Mail, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Lock, Mail, ArrowRight, ShieldCheck, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export const AdminLogin: React.FC = () => {
@@ -44,8 +44,17 @@ export const AdminLogin: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-6 py-12">
-      <div className="card-white p-10 max-w-md w-full" style={{ borderRadius: 28 }}>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-6 py-12 relative">
+      
+      {/* Botón flotante global para volver */}
+      <button 
+        onClick={() => navigate('/')}
+        className="absolute top-6 left-6 flex items-center gap-2 px-4 py-2 bg-white text-ink-secondary hover:text-ink hover:bg-gray-100 rounded-full shadow-sm border border-gray-200 font-medium text-sm transition-colors z-10"
+      >
+        <ArrowLeft size={16} /> Volver a la Tienda
+      </button>
+
+      <div className="card-white p-10 max-w-md w-full relative" style={{ borderRadius: 28 }}>
         <div className="flex justify-center mb-6">
           <div className="w-16 h-16 bg-iphone-blue rounded-2xl flex items-center justify-center shadow-lg">
             <ShieldCheck size={32} color="white" />

@@ -65,18 +65,22 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) => {
     : [];
 
   useEffect(() => {
-    if (selectedColor && displayColors.length > 0) {
-      if (!displayColors.includes(selectedColor)) setSelectedColor(displayColors[0]);
+    if (displayColors.length > 0) {
+      if (!selectedColor || !displayColors.includes(selectedColor)) {
+        setSelectedColor(displayColors[0]);
+      }
     }
-  }, [selectedStorage, displayColors]);
+  }, [displayColors, selectedColor]);
 
   useEffect(() => {
-    if (selectedBattery && displayBatteries.length > 0) {
-      if (!displayBatteries.includes(selectedBattery)) setSelectedBattery(displayBatteries[0]);
-    } else if (displayBatteries.length === 0) {
+    if (displayBatteries.length > 0) {
+      if (!selectedBattery || !displayBatteries.includes(selectedBattery)) {
+        setSelectedBattery(displayBatteries[0]);
+      }
+    } else {
       setSelectedBattery(undefined);
     }
-  }, [selectedColor, displayBatteries]);
+  }, [displayBatteries, selectedBattery]);
 
   const exactVariant = variants.find(v => v.storage === selectedStorage && v.color === selectedColor && v.battery === selectedBattery);
   const currentPrice = exactVariant ? exactVariant.price : product.price;

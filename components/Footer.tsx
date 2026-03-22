@@ -13,7 +13,7 @@ const paymentMethods = [
 
 const navGroups = [
   { title: 'Tienda', links: [{ name: 'Catálogo', id: 'catalogo' }, { name: 'Plan Canje', id: 'plan-canje' }, { name: 'Mayoristas', id: 'mayoristas' }] },
-  { title: 'Info', links: [{ name: 'Garantía', id: 'garantia' }, { name: 'FAQ', id: 'faq' }, { name: 'Contacto', id: 'contacto' }] },
+  { title: 'Info', links: [{ name: 'Garantía', id: 'garantia' }, { name: 'Contacto', id: 'contacto' }] },
 ];
 
 const MediosDePago: React.FC = () => (

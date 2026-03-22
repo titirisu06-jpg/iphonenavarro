@@ -5,7 +5,7 @@ import { ShieldCheck, Star } from 'lucide-react';
 const trustItems = [
   { value: '+10.000', label: 'Ventas realizadas' },
   { value: '12 meses', label: 'Garantía sellados' },
-  { value: '2 meses', label: 'Garantía usados' },
+  { value: '1 mes', label: 'Garantía usados' },
   { value: '100%', label: 'Originales verificados' },
 ];
 
@@ -48,7 +48,7 @@ const Garantia: React.FC = () => (
               Todos los equipos sellados tienen{' '}
               <strong className="text-ink">12 meses de garantía oficial</strong>.
               Los Usados Premium cuentan con{' '}
-              <strong className="text-ink">2 meses de garantía escrita</strong>{' '}
+              <strong className="text-ink">1 mes de garantía escrita</strong>{' '}
               por fallas de fabricación. Más de 10.000 clientes nos eligieron.
             </p>
             <div className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-full" style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.2)' }}>
@@ -58,8 +58,8 @@ const Garantia: React.FC = () => (
           </div>
         </div>
         {/* Decorative stars */}
-        <div className="absolute top-8 right-8 flex gap-1 opacity-20">
-          {[...Array(5)].map((_, i) => <Star key={i} size={16} className="text-iphone-blue" fill="currentColor" />)}
+        <div className="absolute top-8 right-8 flex gap-1.5 drop-shadow-sm">
+          {[...Array(5)].map((_, i) => <Star key={i} size={18} color="#F59E0B" fill="#F59E0B" />)}
         </div>
       </div>
     </div>

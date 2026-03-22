@@ -27,13 +27,13 @@ const Nosotros: React.FC = () => {
                 Próximamente abrimos nuestro nuevo local en Lobos. Vení a conocernos y descubrí todo lo que tenemos para vos.
               </p>
               <a 
-                href="https://maps.google.com/?q=Chacabuco+y+Rivadavia,+Lobos,+Buenos+Aires" 
+                href="https://maps.app.goo.gl/Q2wz6nR3oe293s7w7" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-iphone-blue font-semibold text-sm hover:underline relative z-10"
               >
                 <MapPin size={16} />
-                Chacabuco y Rivadavia, Lobos
+                Ver ubicación en el mapa
               </a>
             </div>
           </div>

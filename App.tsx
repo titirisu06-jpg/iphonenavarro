@@ -7,7 +7,6 @@ import Catalog from './components/Catalog';
 import TradeIn from './components/TradeIn';
 import Mayoristas from './components/Mayoristas';
 import Garantia from './components/Garantia';
-import FAQ from './components/FAQ';
 import Nosotros from './components/Nosotros';
 import ServicioTecnico from './components/ServicioTecnico';
 import Redes from './components/Redes';
@@ -78,18 +77,7 @@ const HomePage: React.FC = () => {
   );
 };
 
-const FAQPage: React.FC = () => {
-  return (
-    <div>
-      <Header />
-      <main className="pt-24 bg-white min-h-screen">
-        <FAQ />
-      </main>
-      <Footer />
-      <WhatsAppFab />
-    </div>
-  );
-};
+
 
 const RedesPage: React.FC = () => {
   return (
@@ -107,7 +95,6 @@ const RedesPage: React.FC = () => {
 const App: React.FC = () => (
   <Routes>
     <Route path="/" element={<HomePage />} />
-    <Route path="/faq" element={<FAQPage />} />
     <Route path="/redes" element={<RedesPage />} />
     <Route path="/admin" element={<AdminLogin />} />
     <Route path="/admin/dashboard" element={<AdminDashboard />} />

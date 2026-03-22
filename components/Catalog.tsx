@@ -90,6 +90,7 @@ const Catalog: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [catalogItems, setCatalogItems] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     const loadCatalog = async () => {
@@ -150,7 +151,7 @@ const Catalog: React.FC = () => {
           {categories.map(cat => (
             <button
               key={cat.key}
-              onClick={() => setActiveCategory(cat.key)}
+              onClick={() => { setActiveCategory(cat.key); setShowAll(false); }}
               className={`filter-pill ${activeCategory === cat.key ? 'active' : ''}`}
             >
               {cat.label}
@@ -170,13 +171,25 @@ const Catalog: React.FC = () => {
               <p className="text-lg">No hay productos disponibles en esta categoría.</p>
             </div>
           ) : (
-            filtered.map((product, i) => (
-              <div key={product.id} className="animate-fade-up" style={{ animationDelay: `${i * 0.05}s` }}>
+            (showAll ? filtered : filtered.slice(0, 8)).map((product, i) => (
+              <div key={product.id} className="animate-fade-up" style={{ animationDelay: `${(i % 8) * 0.05}s` }}>
                 <ProductCard product={product} onSelect={setSelectedProduct} />
               </div>
             ))
           )}
         </div>
+
+        {/* Show More Button */}
+        {!loading && !showAll && filtered.length > 8 && (
+          <div className="mt-10 flex justify-center animate-fade-up">
+            <button
+              onClick={() => setShowAll(true)}
+              className="px-8 py-3.5 bg-gray-100 hover:bg-gray-200 text-ink-secondary font-semibold rounded-2xl transition-all duration-300 flex items-center gap-2"
+            >
+              Ver Catálogo Completo <ChevronRight size={16} />
+            </button>
+          </div>
+        )}
 
         {/* Bottom CTA */}
         <div className="mt-12 text-center reveal">

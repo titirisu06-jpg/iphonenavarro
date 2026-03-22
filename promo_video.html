@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone Navarro — Promo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #060608;
+      font-family: 'Inter', -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Scaler wrapper: 1920x1080 canvas that shrinks/grows to fill viewport ── */
+    #scaler {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 1920px;
+      height: 1080px;
+      transform-origin: top left;
+      /* JS sets: transform: scale(X) + margin offsets for letter/pillarbox */
+    }
+
+    canvas#bg { position: absolute; top: 0; left: 0; width: 1920px; height: 1080px; z-index: 0; }
+
+    /* ── Scene system ── */
+    .scene {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .scene.active { opacity: 1; pointer-events: auto; }
+
+    /* ── Gradient overlays ── */
+    .radial-blue {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,113,227,0.22) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .radial-gold {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(181,164,142,0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── Typography ── */
+    .eyebrow {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #B5A48E;
+      opacity: 0;
+    }
+    .headline { color: #fff; font-weight: 800; line-height: 0.9; letter-spacing: -0.04em; }
+    .headline em { font-style: normal; color: #C8B99A; }
+    .subline { color: rgba(255,255,255,0.6); font-weight: 400; line-height: 1.6; }
+
+    /* ── iPhone SVG illustration ── */
+    .phone-wrap {
+      position: relative;
+      filter: drop-shadow(0 40px 80px rgba(0,113,227,0.35)) drop-shadow(0 0 120px rgba(181,164,142,0.2));
+    }
+
+    /* ── Pill badge ── */
+    .badge {
+      display: inline-flex;
+      align-self: flex-start;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0,113,227,0.1);
+      border: 1px solid rgba(0,113,227,0.25);
+      color: #2997FF;
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      width: fit-content;
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #0071E3; }
+
+    /* ── Stat card ── */
+    .stat-card {
+      background: rgba(28,28,30,0.9);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 24px;
+      padding: 36px 48px;
+      text-align: center;
+      backdrop-filter: blur(20px);
+      opacity: 0;
+    }
+    .stat-number {
+      font-size: 60px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #FFFFFF 0%, #A8C8FF 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .stat-label {
+      font-size: 15px;
+      color: rgba(255,255,255,0.45);
+      font-weight: 500;
+      margin-top: 8px;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Feature row ── */
+    .feature-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 14px 22px;
+      color: rgba(255,255,255,0.85);
+      font-size: 15px;
+      font-weight: 500;
+      opacity: 0;
+    }
+    .feature-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #0071E3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* ── CTA Button ── */
+    .cta-btn {
+      background: #0071E3;
+      color: #fff;
+      font-weight: 700;
+      border-radius: 100px;
+      padding: 18px 48px;
+      font-size: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 32px rgba(0,113,227,0.5);
+      opacity: 0;
+    }
+    .cta-secondary {
+      background: rgba(255,255,255,0.07);
+      color: #fff;
+      font-weight: 600;
+      border-radius: 100px;
+      padding: 18px 48px;
+      font-size: 18px;
+      border: 1px solid rgba(255,255,255,0.15);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+    }
+
+    /* ── Grid lines ── */
+    .grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,113,227,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,113,227,0.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+    }
+
+    /* ── Horizontal line accent ── */
+    .line-h {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(181,164,142,0.4), transparent);
+      opacity: 0;
+    }
+
+    /* ── Scene 1 — Intro ── */
+    #s1 { flex-direction: column; }
+    #s1 .logo-text {
+      font-size: 96px;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      color: #fff;
+      opacity: 0;
+    }
+    #s1 .logo-text span { color: #B5A48E; }
+    #s1 .tagline {
+      font-size: 22px;
+      color: rgba(181,164,142,0.7);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-top: 20px;
+      opacity: 0;
+    }
+
+    /* ── Scene 2 — Hero ── */
+    #s2 { gap: 80px; justify-content: center; padding: 0 80px; }
+    #s2 .left { flex: 0 0 auto; width: 760px; display: flex; flex-direction: column; gap: 28px; }
+    #s2 .right { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; }
+    #s2 .big-headline { font-size: 110px; opacity: 0; }
+
+    /* ── Scene 3 — Stats ── */
+    #s3 { flex-direction: column; gap: 48px; align-items: center; justify-content: center; }
+    #s3 .stats-row { display: flex; gap: 28px; justify-content: center; flex-wrap: nowrap; }
+    #s3 .stat-card { min-width: 300px; max-width: 340px; flex: 1; }
+    #s3 .section-title { font-size: 18px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(181,164,142,0.6); opacity: 0; text-align: center; }
+
+    /* ── Scene 4 — Features ── */
+    #s4 { gap: 80px; justify-content: center; padding: 0 80px; }
+    #s4 .left { flex: 0 0 auto; width: 640px; display: flex; flex-direction: column; justify-content: center; }
+    #s4 .right { flex: 0 0 auto; width: 900px; display: flex; flex-direction: column; gap: 16px; }
+    #s4 .feat-headline { font-size: 76px; opacity: 0; }
+    #s4 .feat-sub { font-size: 20px; color: rgba(255,255,255,0.5); margin-top: 20px; opacity: 0; line-height: 1.5; }
+
+    /* ── Scene 5 — CTA final ── */
+    #s5 { flex-direction: column; gap: 32px; align-items: center; }
+    #s5 .final-headline { font-size: 90px; text-align: center; opacity: 0; }
+    #s5 .final-sub { font-size: 22px; text-align: center; color: rgba(255,255,255,0.5); opacity: 0; }
+    #s5 .cta-url-block { display: flex; flex-direction: column; align-items: center; gap: 16px; opacity: 0; }
+    #s5 .cta-label { font-size: 22px; color: rgba(255,255,255,0.55); font-weight: 400; letter-spacing: 0.02em; }
+    #s5 .cta-url { font-size: 42px; font-weight: 700; letter-spacing: -0.02em; background: linear-gradient(135deg, #FFFFFF 0%, #A8C8FF 60%, #B5A48E 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* ── Progress bar ── */
+    #progress {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #0071E3, #2997FF);
+      z-index: 100;
+      transition: none;
+      box-shadow: 0 0 8px rgba(0,113,227,0.8);
+    }
+
+    /* ── Vignette ── */
+    .vignette {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.65) 100%);
+      pointer-events: none;
+      z-index: 5;
+    }
+  </style>
+</head>
+<body>
+
+<div id="scaler">
+<canvas id="bg"></canvas>
+<div class="vignette"></div>
+<div id="progress"></div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 1 — INTRO LOGO                          -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="scene" id="s1">
+  <div class="grid-bg"></div>
+  <div class="radial-gold" style="width:700px;height:700px;top:50%;left:50%;transform:translate(-50%,-60%);"></div>
+  <div class="radial-blue" style="width:500px;height:500px;top:60%;left:50%;transform:translate(-50%,-40%);"></div>
+  <div class="logo-text" id="s1-logo">iPhone <span>Navarro</span></div>
+  <div class="tagline" id="s1-tagline">Navarro · Buenos Aires</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 2 — HERO "Es mucho iPhone"              -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="scene" id="s2">
+  <div class="grid-bg"></div>
+  <div class="radial-blue" style="width:900px;height:900px;top:-100px;right:-200px;"></div>
+  <div class="radial-gold" style="width:600px;height:600px;bottom:-200px;left:200px;"></div>
+
+  <div class="left">
+    <div class="badge" id="s2-badge">
+      <span class="badge-dot"></span>
+      +10.000 ventas confirmadas
+    </div>
+    <h1 class="headline big-headline" id="s2-headline">
+      Es mucho<br>
+      <em>iPhone.</em><br>
+      Por menos.
+    </h1>
+    <div class="subline" style="font-size:22px;max-width:480px;opacity:0;" id="s2-sub">
+      Sellados, usados premium y<br>envíos a todo el país.
+    </div>
+    <div class="line-h" style="width:280px;" id="s2-line"></div>
+  </div>
+
+  <div class="right" id="s2-phone">
+    <!-- iPhone SVG illustration -->
+    <div class="phone-wrap" id="phone-svg-wrap">
+      <svg width="420" height="840" viewBox="0 0 420 840" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Body -->
+        <rect x="10" y="10" width="400" height="820" rx="58" fill="#0F0F14"/>
+        <rect x="10" y="10" width="400" height="820" rx="58" fill="url(#bodyGrad)" opacity="0.8"/>
+        <!-- Frame border with titanium color -->
+        <rect x="10" y="10" width="400" height="820" rx="58" fill="none" stroke="url(#frameGrad)" stroke-width="3"/>
+        <!-- Screen area -->
+        <rect x="22" y="22" width="376" height="796" rx="46" fill="#000"/>
+        <!-- Screen gradient -->
+        <rect x="22" y="22" width="376" height="796" rx="46" fill="url(#screenGrad)"/>
+        <!-- Dynamic Island -->
+        <rect x="153" y="40" width="114" height="34" rx="17" fill="#000"/>
+        <!-- Screen content — glow -->
+        <circle cx="210" cy="420" r="180" fill="url(#screenGlow)" opacity="0.6"/>
+        <!-- Apple logo on screen -->
+        <g transform="translate(183, 310) scale(1.2)">
+          <path d="M23.5 14.8c-.5.8-1 1.6-1.8 1.6-.8 0-1-.5-2.1-.5s-1.4.5-2.1.5c-.8 0-1.3-.9-1.8-1.7-1.2-1.8-2-4.5-.8-6.2C15.5 7.6 16.5 7 17.5 7c.9 0 1.5.6 2.1.6.6 0 1.4-.7 2.5-.6.4 0 1.5.2 2.2 1.2-.1.1-1.3.8-1.3 2.3 0 1.8 1.7 2.4 1.7 2.5 0 0-.2.9-.7 1.7zM19 5.5c.5-.6 1.2-1 1.8-1 .1.8-.2 1.5-.7 2.1-.5.6-1.2 1-1.9 1-.1-.7.2-1.5.8-2.1z" fill="white" opacity="0.9"/>
+        </g>
+        <!-- Brand text on screen -->
+        <text x="210" y="420" text-anchor="middle" font-family="Inter, -apple-system, sans-serif" font-size="36" font-weight="800" fill="white">iPhone</text>
+        <text x="210" y="468" text-anchor="middle" font-family="Inter, -apple-system, sans-serif" font-size="36" font-weight="800" fill="#C8B99A">Navarro</text>
+        <rect x="150" y="488" width="120" height="1.5" fill="#B5A48E" opacity="0.3"/>
+        <text x="210" y="512" text-anchor="middle" font-family="Inter, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#B5A48E" opacity="0.6" letter-spacing="3">NAVARRO · BS. AS.</text>
+        <!-- Home bar -->
+        <rect x="135" y="790" width="150" height="5" rx="2.5" fill="white" opacity="0.2"/>
+        <!-- Side buttons -->
+        <rect x="0" y="200" width="6" height="60" rx="3" fill="#C8B99A" opacity="0.6"/>
+        <rect x="0" y="280" width="6" height="80" rx="3" fill="#C8B99A" opacity="0.6"/>
+        <rect x="0" y="380" width="6" height="80" rx="3" fill="#C8B99A" opacity="0.6"/>
+        <rect x="414" y="260" width="6" height="100" rx="3" fill="#C8B99A" opacity="0.6"/>
+        <!-- Camera module -->
+        <rect x="250" y="56" width="100" height="95" rx="22" fill="#141414"/>
+        <rect x="250" y="56" width="100" height="95" rx="22" fill="none" stroke="#2A2A2A" stroke-width="1.5"/>
+        <circle cx="275" cy="88" r="18" fill="#0A0A0A"/><circle cx="275" cy="88" r="13" fill="#111"/><circle cx="275" cy="88" r="8" fill="#1A1A1A"/><circle cx="271" cy="84" r="2.5" fill="rgba(255,255,255,0.15)"/>
+        <circle cx="325" cy="88" r="18" fill="#0A0A0A"/><circle cx="325" cy="88" r="13" fill="#111"/><circle cx="325" cy="88" r="8" fill="#1A1A1A"/><circle cx="321" cy="84" r="2.5" fill="rgba(255,255,255,0.15)"/>
+        <circle cx="300" cy="128" r="15" fill="#0A0A0A"/><circle cx="300" cy="128" r="10" fill="#111"/><circle cx="300" cy="128" r="6" fill="#1A1A1A"/>
+        <circle cx="280" cy="127" r="4" fill="#1C1C1E"/>
+        <!-- Reflection shine on screen -->
+        <path d="M30 80 Q80 50 150 60 L140 200 Q80 180 30 200 Z" fill="url(#shineGrad)" opacity="0.04"/>
+        <defs>
+          <linearGradient id="bodyGrad" x1="0" y1="0" x2="420" y2="840" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#B5A48E" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#0F0F14" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="frameGrad" x1="0" y1="0" x2="420" y2="840" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#C8B99A"/>
+            <stop offset="40%" stop-color="#8A7D6B"/>
+            <stop offset="100%" stop-color="#C8B99A"/>
+          </linearGradient>
+          <radialGradient id="screenGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#0071E3" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="screenGrad" x1="0" y1="0" x2="0" y2="840" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#020810"/>
+            <stop offset="50%" stop-color="#000408"/>
+            <stop offset="100%" stop-color="#010306"/>
+          </linearGradient>
+          <linearGradient id="shineGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="white" stop-opacity="1"/>
+            <stop offset="100%" stop-color="white" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 3 — STATS                               -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="scene" id="s3">
+  <div class="grid-bg"></div>
+  <div class="radial-blue" style="width:1200px;height:800px;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.5;"></div>
+  <div class="section-title" id="s3-title">En números</div>
+  <div class="stats-row">
+    <div class="stat-card" id="sc1">
+      <div class="stat-number" id="sn1">0</div>
+      <div class="stat-label">Ventas realizadas</div>
+    </div>
+    <div class="stat-card" id="sc2">
+      <div class="stat-number">24/7</div>
+      <div class="stat-label">Atención por WhatsApp</div>
+    </div>
+    <div class="stat-card" id="sc3">
+      <div class="stat-number">100%</div>
+      <div class="stat-label">Garantía incluida</div>
+    </div>
+    <div class="stat-card" id="sc4">
+      <div class="stat-number">📦</div>
+      <div class="stat-label">Envíos a todo el país</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 4 — FEATURES                            -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="scene" id="s4">
+  <div class="grid-bg"></div>
+  <div class="radial-gold" style="width:800px;height:800px;top:50%;left:-100px;transform:translateY(-50%);"></div>
+
+  <div class="left">
+    <h2 class="headline feat-headline" id="s4-headline">Todo lo que<br>necesitás.<br><em>En un lugar.</em></h2>
+    <p class="feat-sub" id="s4-sub">Comprá con confianza.<br>Vendemos iPhones como nadie.</p>
+  </div>
+
+  <div class="right">
+    <div class="feature-chip" id="fc1">
+      <div class="feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      iPhones Nuevos Sellados — Garantía Apple
+    </div>
+    <div class="feature-chip" id="fc2">
+      <div class="feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 10H2" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
+      Hasta 12 cuotas sin interés
+    </div>
+    <div class="feature-chip" id="fc3">
+      <div class="feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      Plan Canje — Tu viejo vale más
+    </div>
+    <div class="feature-chip" id="fc4">
+      <div class="feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9,22 9,12 15,12 15,22" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      Local físico + Envíos a todo el país
+    </div>
+    <div class="feature-chip" id="fc5">
+      <div class="feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      Servicio Técnico Certificado
+    </div>
+    <div class="feature-chip" id="fc6">
+      <div class="feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke="white" stroke-width="2"/></svg></div>
+      Venta Mayorista disponible
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 5 — CTA FINAL                           -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="scene" id="s5">
+  <div class="grid-bg"></div>
+  <div class="radial-blue" style="width:1400px;height:1000px;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.4;"></div>
+  <div class="radial-gold" style="width:800px;height:800px;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.3;"></div>
+
+  <h2 class="headline final-headline" id="s5-headline">
+    Tu próximo iPhone<br>está en <em>Navarro.</em>
+  </h2>
+  <p class="subline final-sub" id="s5-sub">
+    Más de 10.000 clientes ya lo eligieron.
+  </p>
+  <div class="cta-url-block" id="s5-url-block">
+    <span class="cta-label">Consultá ya en nuestra web</span>
+    <span class="cta-url">www.iphonenavarro.vercel.app</span>
+  </div>
+</div>
+
+</div><!-- /#scaler -->
+
+<script>
+// ──────────────────────────────────────────────────
+// VIEWPORT SCALER — fills any screen with 1920x1080
+// ──────────────────────────────────────────────────
+function scaleToViewport() {
+  const scaler = document.getElementById('scaler');
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  const scaleX = W / 1920;
+  const scaleY = H / 1080;
+  const scale = Math.min(scaleX, scaleY); // cover: use Math.max; fit: use Math.min
+  const offsetX = (W - 1920 * scale) / 2;
+  const offsetY = (H - 1080 * scale) / 2;
+  scaler.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+}
+scaleToViewport();
+window.addEventListener('resize', scaleToViewport);
+
+// ──────────────────────────────────────────────────
+// PARTICLE BACKGROUND
+// ──────────────────────────────────────────────────
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+canvas.width = 1920;
+canvas.height = 1080;
+
+const particles = Array.from({ length: 120 }, () => ({
+  x: Math.random() * 1920,
+  y: Math.random() * 1080,
+  r: Math.random() * 1.8 + 0.3,
+  vx: (Math.random() - 0.5) * 0.3,
+  vy: (Math.random() - 0.5) * 0.3,
+  alpha: Math.random() * 0.5 + 0.1,
+  color: Math.random() > 0.5 ? '#0071E3' : '#B5A48E',
+}));
+
+function drawBg() {
+  ctx.clearRect(0, 0, 1920, 1080);
+  ctx.fillStyle = '#060608';
+  ctx.fillRect(0, 0, 1920, 1080);
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.x < 0) p.x = 1920;
+    if (p.x > 1920) p.x = 0;
+    if (p.y < 0) p.y = 1080;
+    if (p.y > 1080) p.y = 0;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.color;
+    ctx.globalAlpha = p.alpha;
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+// ──────────────────────────────────────────────────
+// ANIMATOR UTILITIES
+// ──────────────────────────────────────────────────
+const ease = {
+  out: t => 1 - Math.pow(1 - t, 3),
+  inOut: t => t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2,
+  back: t => { const c1=1.70158, c3=c1+1; return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2); }
+};
+
+function animate(el, from, to, dur, delay, easing, prop, unit='', cb) {
+  setTimeout(() => {
+    const start = performance.now();
+    function step(now) {
+      const t = Math.min((now - start) / dur, 1);
+      const e = easing ? easing(t) : t;
+      const val = from + (to - from) * e;
+      el.style[prop] = val + unit;
+      if (t < 1) requestAnimationFrame(step);
+      else if (cb) cb();
+    }
+    requestAnimationFrame(step);
+  }, delay);
+}
+
+function fadeIn(el, dur=600, delay=0, cb) {
+  el.style.opacity = '0';
+  setTimeout(() => {
+    const start = performance.now();
+    function step(now) {
+      const t = Math.min((now - start) / dur, 1);
+      el.style.opacity = ease.out(t);
+      if (t < 1) requestAnimationFrame(step);
+      else if (cb) cb();
+    }
+    requestAnimationFrame(step);
+  }, delay);
+}
+
+function fadeOut(el, dur=400, delay=0, cb) {
+  setTimeout(() => {
+    const start = performance.now();
+    const startO = parseFloat(el.style.opacity) || 1;
+    function step(now) {
+      const t = Math.min((now - start) / dur, 1);
+      el.style.opacity = startO * (1 - ease.out(t));
+      if (t < 1) requestAnimationFrame(step);
+      else if (cb) cb();
+    }
+    requestAnimationFrame(step);
+  }, delay);
+}
+
+function slideUp(el, fromY, dur=700, delay=0, cb) {
+  el.style.opacity = '0';
+  el.style.transform = `translateY(${fromY}px)`;
+  setTimeout(() => {
+    const start = performance.now();
+    function step(now) {
+      const t = Math.min((now - start) / dur, 1);
+      const e = ease.back(t);
+      el.style.opacity = Math.min(ease.out(t) * 1.2, 1);
+      el.style.transform = `translateY(${fromY * (1-ease.out(t))}px)`;
+      if (t < 1) requestAnimationFrame(step);
+      else if (cb) cb();
+    }
+    requestAnimationFrame(step);
+  }, delay);
+}
+
+function countUp(el, from, to, dur, delay) {
+  setTimeout(() => {
+    const start = performance.now();
+    function step(now) {
+      const t = Math.min((now - start) / dur, 1);
+      const val = Math.round(from + (to - from) * ease.out(t));
+      el.textContent = '+' + val.toLocaleString('es-AR');
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }, delay);
+}
+
+// ──────────────────────────────────────────────────
+// SCENE MANAGEMENT
+// ──────────────────────────────────────────────────
+const scenes = ['s1','s2','s3','s4','s5'];
+let curr = -1;
+const totalDuration = 30000; // 30 seconds
+let startTime = Date.now();
+
+function showScene(id) {
+  scenes.forEach(s => {
+    const el = document.getElementById(s);
+    if (el) { el.style.opacity = '0'; el.classList.remove('active'); }
+  });
+  const el = document.getElementById(id);
+  if (el) { el.classList.add('active'); el.style.opacity = '1'; }
+}
+
+// Phone floating animation
+let phoneY = 0;
+let phoneRot = 0;
+function animatePhone() {
+  const wrap = document.getElementById('phone-svg-wrap');
+  if (wrap) {
+    phoneY = Math.sin(Date.now() * 0.0008) * 18;
+    phoneRot = Math.sin(Date.now() * 0.0006) * 3;
+    wrap.style.transform = `translateY(${phoneY}px) rotate(${phoneRot}deg)`;
+  }
+  requestAnimationFrame(animatePhone);
+}
+animatePhone();
+
+// ──────────────────────────────────────────────────
+// SCENE 1 — INTRO (0-5s)
+// ──────────────────────────────────────────────────
+function playScene1() {
+  showScene('s1');
+  const logo = document.getElementById('s1-logo');
+  const tag = document.getElementById('s1-tagline');
+  logo.style.opacity = '0';
+  tag.style.opacity = '0';
+  logo.style.transform = 'scale(0.85)';
+  tag.style.transform = 'translateY(20px)';
+
+  // Logo scale+fade in
+  setTimeout(() => {
+    const start = performance.now();
+    function step(now) {
+      const t = Math.min((now - start) / 900, 1);
+      const e = ease.back(t);
+      logo.style.opacity = ease.out(t);
+      logo.style.transform = `scale(${0.85 + 0.15 * e})`;
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }, 400);
+
+  slideUp(tag, 20, 700, 1100);
+
+  // Transition out
+  setTimeout(() => {
+    fadeOut(logo, 500);
+    fadeOut(tag, 500, 100);
+  }, 4200);
+}
+
+// ──────────────────────────────────────────────────
+// SCENE 2 — HERO (5-12s)
+// ──────────────────────────────────────────────────
+function playScene2() {
+  showScene('s2');
+  const badge = document.getElementById('s2-badge');
+  const hl = document.getElementById('s2-headline');
+  const sub = document.getElementById('s2-sub');
+  const line = document.getElementById('s2-line');
+  const phone = document.getElementById('s2-phone');
+
+  badge.style.opacity = '0'; badge.style.transform = 'translateY(16px)';
+  hl.style.opacity = '0'; hl.style.transform = 'translateY(40px)';
+  sub.style.opacity = '0'; sub.style.transform = 'translateY(20px)';
+  line.style.opacity = '0'; line.style.width = '0px';
+  phone.style.opacity = '0'; phone.style.transform = 'translateX(60px) scale(0.92)';
+
+  slideUp(badge, 16, 600, 200);
+  slideUp(hl, 40, 800, 500);
+
+  setTimeout(() => {
+    const start = performance.now();
+    function step(now) {
+      const t = Math.min((now - start) / 600, 1);
+      sub.style.opacity = ease.out(t);
+      sub.style.transform = `translateY(${20*(1-ease.out(t))}px)`;
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }, 1000);
+
+  setTimeout(() => {
+    const start = performance.now();
+    function step(now) {
+      const t = Math.min((now - start) / 500, 1);
+      line.style.opacity = ease.out(t);
+      line.style.width = (280 * ease.out(t)) + 'px';
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }, 1300);
+
+  setTimeout(() => {
+    const start = performance.now();
+    function step(now) {
+      const t = Math.min((now - start) / 900, 1);
+      phone.style.opacity = ease.out(t);
+      phone.style.transform = `translateX(${60*(1-ease.out(t))}px) scale(${0.92+0.08*ease.out(t)})`;
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }, 300);
+
+  // Transition out
+  setTimeout(() => {
+    ['s2-badge','s2-headline','s2-sub','s2-line','s2-phone'].forEach((id, i) => {
+      fadeOut(document.getElementById(id), 400, i * 50);
+    });
+  }, 6600);
+}
+
+// ──────────────────────────────────────────────────
+// SCENE 3 — STATS (12-18s)
+// ──────────────────────────────────────────────────
+function playScene3() {
+  showScene('s3');
+  const title = document.getElementById('s3-title');
+  title.style.opacity = '0'; title.style.transform = 'translateY(10px)';
+
+  const cards = ['sc1','sc2','sc3','sc4'];
+  cards.forEach(id => {
+    const el = document.getElementById(id);
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px) scale(0.95)';
+  });
+
+  slideUp(title, 10, 500, 300);
+
+  cards.forEach((id, i) => {
+    const el = document.getElementById(id);
+    setTimeout(() => {
+      const start = performance.now();
+      function step(now) {
+        const t = Math.min((now - start) / 700, 1);
+        const e = ease.back(t);
+        el.style.opacity = ease.out(t);
+        el.style.transform = `translateY(${30*(1-ease.out(t))}px) scale(${0.95+0.05*e})`;
+        if (t < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }, 600 + i * 160);
+  });
+
+  countUp(document.getElementById('sn1'), 0, 10000, 2000, 800);
+
+  setTimeout(() => {
+    document.getElementById('s3-title').style.transition = 'opacity 0.4s'; fadeOut(document.getElementById('s3-title'), 400);
+    cards.forEach((id, i) => fadeOut(document.getElementById(id), 400, i * 60));
+  }, 5200);
+}
+
+// ──────────────────────────────────────────────────
+// SCENE 4 — FEATURES (18-24s)
+// ──────────────────────────────────────────────────
+function playScene4() {
+  showScene('s4');
+  const hl = document.getElementById('s4-headline');
+  const sub = document.getElementById('s4-sub');
+  hl.style.opacity = '0'; hl.style.transform = 'translateY(30px)';
+  sub.style.opacity = '0'; sub.style.transform = 'translateY(20px)';
+
+  slideUp(hl, 30, 800, 300);
+  slideUp(sub, 20, 600, 800);
+
+  const chips = ['fc1','fc2','fc3','fc4','fc5','fc6'];
+  chips.forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.style.opacity = '0';
+    el.style.transform = 'translateX(40px)';
+    setTimeout(() => {
+      const start = performance.now();
+      function step(now) {
+        const t = Math.min((now - start) / 500, 1);
+        el.style.opacity = ease.out(t);
+        el.style.transform = `translateX(${40*(1-ease.out(t))}px)`;
+        if (t < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }, 500 + i * 130);
+  });
+
+  setTimeout(() => {
+    [hl, sub, ...chips.map(id => document.getElementById(id))].forEach((el, i) => {
+      if (el) fadeOut(el, 400, i * 40);
+    });
+  }, 5200);
+}
+
+// ──────────────────────────────────────────────────
+// SCENE 5 — CTA FINAL (24-30s)
+// ──────────────────────────────────────────────────
+function playScene5() {
+  showScene('s5');
+  const hl = document.getElementById('s5-headline');
+  const sub = document.getElementById('s5-sub');
+  const urlBlock = document.getElementById('s5-url-block');
+
+  hl.style.opacity = '0'; hl.style.transform = 'translateY(40px)';
+  sub.style.opacity = '0'; sub.style.transform = 'translateY(20px)';
+  urlBlock.style.opacity = '0'; urlBlock.style.transform = 'translateY(24px)';
+
+  slideUp(hl, 40, 900, 300);
+  slideUp(sub, 20, 700, 900);
+
+  setTimeout(() => {
+    const start = performance.now();
+    function step(now) {
+      const t = Math.min((now - start) / 900, 1);
+      urlBlock.style.opacity = ease.out(t);
+      urlBlock.style.transform = `translateY(${24*(1-ease.out(t))}px)`;
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }, 1500);
+}
+
+// ──────────────────────────────────────────────────
+// TIMELINE
+// ──────────────────────────────────────────────────
+function updateProgress() {
+  const pct = Math.min((Date.now() - startTime) / totalDuration * 100, 100);
+  document.getElementById('progress').style.width = pct + '%';
+  if (pct < 100) requestAnimationFrame(updateProgress);
+}
+
+playScene1();
+requestAnimationFrame(updateProgress);
+
+setTimeout(playScene2, 5000);
+setTimeout(playScene3, 12000);
+setTimeout(playScene4, 18000);
+setTimeout(playScene5, 24000);
+
+// Loop
+setTimeout(() => {
+  startTime = Date.now();
+  location.reload();
+}, 31000);
+</script>
+</body>
+</html>

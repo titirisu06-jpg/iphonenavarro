@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { buildTradeInWhatsAppUrl } from '../utils/whatsapp';
+import { buildTradeInWhatsAppUrl, WHATSAPP_NUMBER } from '../utils/whatsapp';
 import { ArrowRight, RefreshCw, CheckCircle } from 'lucide-react';
 
 const popularModels = [
@@ -40,7 +40,7 @@ const TradeIn: React.FC = () => {
               <span className="text-gradient-blue">Llevate uno mejor.</span>
             </h2>
             <p className="text-ink-tertiary text-base max-w-xs leading-relaxed">
-              Tomamos tu iPhone usado como parte de pago. Rápido, sin vueltas.
+              Tomamos tu iPhone usado como parte de pago. <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hola%20iPhone%20Navarro%2C%20busco%20un%20modelo%20específico.`} target="_blank" rel="noopener noreferrer" className="text-iphone-blue hover:underline">Rápido, sin vueltas.</a>
             </p>
           </div>
         </div>
@@ -166,7 +166,7 @@ const TradeIn: React.FC = () => {
                 Consultar por WhatsApp
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </button>
-              <p className="text-center font-mono text-xs text-ink-tertiary tracking-wider">+54 9 2227 58-0719</p>
+              <p className="text-center font-mono text-xs text-ink-tertiary tracking-wider">+54 9 2227 50-2299</p>
             </div>
           </div>
         </div>

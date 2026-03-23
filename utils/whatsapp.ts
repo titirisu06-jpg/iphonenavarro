@@ -1,5 +1,5 @@
 // iPhoneNavarro — WhatsApp config
-export const WHATSAPP_NUMBER = '5492227580719'; // +54 9 2227 58-0719
+export const WHATSAPP_NUMBER = '5492227502299'; // +54 9 2227 50-2299
 
 export const buildWhatsAppUrl = (message?: string): string => {
   const defaultMsg = 'Hola%20iPhone%20Navarro%2C%20quiero%20hacer%20una%20consulta.';

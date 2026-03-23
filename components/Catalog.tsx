@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { products as localProducts } from '../data/products';
 import { supabase } from '../utils/supabase';
+import { WHATSAPP_NUMBER } from '../utils/whatsapp';
 import { Category } from '../types';
 import type { Product } from '../types';
 import { MessageCircle, ChevronRight } from 'lucide-react';
@@ -197,7 +198,7 @@ const Catalog: React.FC = () => {
             ¿No ves el modelo que buscás?
           </p>
           <a
-            href="https://wa.me/5492227580719?text=Hola%20iPhone%20Navarro%2C%20busco%20un%20modelo%20específico."
+            href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hola%20iPhone%20Navarro%2C%20busco%20un%20modelo%20específico.`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-iphone-blue font-semibold text-sm hover:underline"

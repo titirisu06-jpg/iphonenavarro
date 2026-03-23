@@ -195,52 +195,52 @@
       opacity: 0;
     }
 
+    /* ── Apple-style Image frames ── */
+    .img-frame {
+      position: relative;
+      border-radius: 40px;
+      overflow: hidden;
+      box-shadow: 0 50px 100px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.1);
+      opacity: 0;
+    }
+    .img-frame img { width: 100%; height: auto; display: block; }
+
     /* ── Scene 1 — Intro ── */
     #s1 { flex-direction: column; }
-    #s1 .logo-text {
-      font-size: 96px;
-      font-weight: 900;
-      letter-spacing: -0.05em;
-      color: #fff;
-      opacity: 0;
-    }
+    #s1 .logo-text { font-size: 110px; font-weight: 950; letter-spacing: -0.06em; color: #fff; opacity: 0; }
     #s1 .logo-text span { color: #B5A48E; }
-    #s1 .tagline {
-      font-size: 22px;
-      color: rgba(181,164,142,0.7);
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      font-weight: 500;
-      margin-top: 20px;
-      opacity: 0;
-    }
+    #s1 .tagline { font-size: 18px; color: #B5A48E; letter-spacing: 0.5em; text-transform: uppercase; margin-top: 10px; opacity: 0; }
 
-    /* ── Scene 2 — Hero ── */
+    /* ── Scene 2 — Hero 3D ── */
     #s2 { gap: 80px; justify-content: center; padding: 0 80px; }
     #s2 .left { flex: 0 0 auto; width: 760px; display: flex; flex-direction: column; gap: 28px; }
     #s2 .right { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; }
     #s2 .big-headline { font-size: 110px; opacity: 0; }
+    .hero-img-wrap { transform: perspective(1000px) rotateY(-10deg); opacity: 0; }
 
-    /* ── Scene 3 — Stats ── */
-    #s3 { flex-direction: column; gap: 48px; align-items: center; justify-content: center; }
-    #s3 .stats-row { display: flex; gap: 28px; justify-content: center; flex-wrap: nowrap; }
-    #s3 .stat-card { min-width: 300px; max-width: 340px; flex: 1; }
-    #s3 .section-title { font-size: 18px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(181,164,142,0.6); opacity: 0; text-align: center; }
+    /* ── Scene 3 — Catalog ── */
+    #s3 { flex-direction: column; gap: 40px; }
+    #s3 .catalog-wrap { width: 1400px; height: 750px; position: relative; }
+    #s3 .catalog-img { position: absolute; top: 0; left: 0; width: 100%; object-fit: cover; object-position: top; border-radius: 30px; box-shadow: 0 40px 100px rgba(0,0,0,0.8); }
+    #s3 .cat-headline { font-size: 60px; font-weight: 800; text-align: center; opacity: 0; }
 
     /* ── Scene 4 — Features ── */
     #s4 { gap: 80px; justify-content: center; padding: 0 80px; }
-    #s4 .left { flex: 0 0 auto; width: 640px; display: flex; flex-direction: column; justify-content: center; }
-    #s4 .right { flex: 0 0 auto; width: 900px; display: flex; flex-direction: column; gap: 16px; }
-    #s4 .feat-headline { font-size: 76px; opacity: 0; }
-    #s4 .feat-sub { font-size: 20px; color: rgba(255,255,255,0.5); margin-top: 20px; opacity: 0; line-height: 1.5; }
+    #s4 .left { flex: 0 0 auto; width: 640px; }
+    #s4 .right { flex: 0 0 auto; width: 900px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    #s4 .feat-headline { font-size: 80px; opacity: 0; }
 
-    /* ── Scene 5 — CTA final ── */
-    #s5 { flex-direction: column; gap: 32px; align-items: center; }
-    #s5 .final-headline { font-size: 90px; text-align: center; opacity: 0; }
-    #s5 .final-sub { font-size: 22px; text-align: center; color: rgba(255,255,255,0.5); opacity: 0; }
-    #s5 .cta-url-block { display: flex; flex-direction: column; align-items: center; gap: 16px; opacity: 0; }
-    #s5 .cta-label { font-size: 22px; color: rgba(255,255,255,0.55); font-weight: 400; letter-spacing: 0.02em; }
-    #s5 .cta-url { font-size: 42px; font-weight: 700; letter-spacing: -0.02em; background: linear-gradient(135deg, #FFFFFF 0%, #A8C8FF 60%, #B5A48E 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    /* ── Scene 5 — Stats ── */
+    #s5 { flex-direction: column; gap: 48px; }
+    #s5 .stats-row { display: flex; gap: 28px; }
+    #s5 .section-title { font-size: 18px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #B5A48E; opacity: 0; }
+
+    /* ── Scene 6 — CTA final ── */
+    #s6 { flex-direction: column; gap: 32px; align-items: center; }
+    #s6 .final-headline { font-size: 100px; text-align: center; opacity: 0; }
+    #s6 .cta-url-block { display: flex; flex-direction: column; align-items: center; gap: 16px; opacity: 0; }
+    #s6 .cta-url { font-size: 48px; font-weight: 800; background: linear-gradient(135deg, #FFF, #0071E3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
     /* ── Progress bar ── */
     #progress {
@@ -272,193 +272,73 @@
 <div id="progress"></div>
 
 <!-- ═══════════════════════════════════════════════ -->
-<!-- SCENE 1 — INTRO LOGO                          -->
+<!-- SCENE 1 — INTRO -->
 <!-- ═══════════════════════════════════════════════ -->
 <div class="scene" id="s1">
-  <div class="grid-bg"></div>
-  <div class="radial-gold" style="width:700px;height:700px;top:50%;left:50%;transform:translate(-50%,-60%);"></div>
-  <div class="radial-blue" style="width:500px;height:500px;top:60%;left:50%;transform:translate(-50%,-40%);"></div>
   <div class="logo-text" id="s1-logo">iPhone <span>Navarro</span></div>
   <div class="tagline" id="s1-tagline">Navarro · Buenos Aires</div>
 </div>
 
 <!-- ═══════════════════════════════════════════════ -->
-<!-- SCENE 2 — HERO "Es mucho iPhone"              -->
+<!-- SCENE 2 — HERO 3D -->
 <!-- ═══════════════════════════════════════════════ -->
 <div class="scene" id="s2">
-  <div class="grid-bg"></div>
-  <div class="radial-blue" style="width:900px;height:900px;top:-100px;right:-200px;"></div>
-  <div class="radial-gold" style="width:600px;height:600px;bottom:-200px;left:200px;"></div>
-
   <div class="left">
-    <div class="badge" id="s2-badge">
-      <span class="badge-dot"></span>
-      +10.000 ventas confirmadas
-    </div>
-    <h1 class="headline big-headline" id="s2-headline">
-      Es mucho<br>
-      <em>iPhone.</em><br>
-      Por menos.
-    </h1>
-    <div class="subline" style="font-size:22px;max-width:480px;opacity:0;" id="s2-sub">
-      Sellados, usados premium y<br>envíos a todo el país.
-    </div>
-    <div class="line-h" style="width:280px;" id="s2-line"></div>
+    <div class="badge" id="s2-badge"><span class="badge-dot"></span>+10.000 ventas confirmadas</div>
+    <h1 class="headline big-headline" id="s2-headline">Es mucho <em>iPhone.</em><br>Por menos.</h1>
   </div>
-
-  <div class="right" id="s2-phone">
-    <!-- iPhone SVG illustration -->
-    <div class="phone-wrap" id="phone-svg-wrap">
-      <svg width="420" height="840" viewBox="0 0 420 840" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Body -->
-        <rect x="10" y="10" width="400" height="820" rx="58" fill="#0F0F14"/>
-        <rect x="10" y="10" width="400" height="820" rx="58" fill="url(#bodyGrad)" opacity="0.8"/>
-        <!-- Frame border with titanium color -->
-        <rect x="10" y="10" width="400" height="820" rx="58" fill="none" stroke="url(#frameGrad)" stroke-width="3"/>
-        <!-- Screen area -->
-        <rect x="22" y="22" width="376" height="796" rx="46" fill="#000"/>
-        <!-- Screen gradient -->
-        <rect x="22" y="22" width="376" height="796" rx="46" fill="url(#screenGrad)"/>
-        <!-- Dynamic Island -->
-        <rect x="153" y="40" width="114" height="34" rx="17" fill="#000"/>
-        <!-- Screen content — glow -->
-        <circle cx="210" cy="420" r="180" fill="url(#screenGlow)" opacity="0.6"/>
-        <!-- Apple logo on screen -->
-        <g transform="translate(183, 310) scale(1.2)">
-          <path d="M23.5 14.8c-.5.8-1 1.6-1.8 1.6-.8 0-1-.5-2.1-.5s-1.4.5-2.1.5c-.8 0-1.3-.9-1.8-1.7-1.2-1.8-2-4.5-.8-6.2C15.5 7.6 16.5 7 17.5 7c.9 0 1.5.6 2.1.6.6 0 1.4-.7 2.5-.6.4 0 1.5.2 2.2 1.2-.1.1-1.3.8-1.3 2.3 0 1.8 1.7 2.4 1.7 2.5 0 0-.2.9-.7 1.7zM19 5.5c.5-.6 1.2-1 1.8-1 .1.8-.2 1.5-.7 2.1-.5.6-1.2 1-1.9 1-.1-.7.2-1.5.8-2.1z" fill="white" opacity="0.9"/>
-        </g>
-        <!-- Brand text on screen -->
-        <text x="210" y="420" text-anchor="middle" font-family="Inter, -apple-system, sans-serif" font-size="36" font-weight="800" fill="white">iPhone</text>
-        <text x="210" y="468" text-anchor="middle" font-family="Inter, -apple-system, sans-serif" font-size="36" font-weight="800" fill="#C8B99A">Navarro</text>
-        <rect x="150" y="488" width="120" height="1.5" fill="#B5A48E" opacity="0.3"/>
-        <text x="210" y="512" text-anchor="middle" font-family="Inter, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#B5A48E" opacity="0.6" letter-spacing="3">NAVARRO · BS. AS.</text>
-        <!-- Home bar -->
-        <rect x="135" y="790" width="150" height="5" rx="2.5" fill="white" opacity="0.2"/>
-        <!-- Side buttons -->
-        <rect x="0" y="200" width="6" height="60" rx="3" fill="#C8B99A" opacity="0.6"/>
-        <rect x="0" y="280" width="6" height="80" rx="3" fill="#C8B99A" opacity="0.6"/>
-        <rect x="0" y="380" width="6" height="80" rx="3" fill="#C8B99A" opacity="0.6"/>
-        <rect x="414" y="260" width="6" height="100" rx="3" fill="#C8B99A" opacity="0.6"/>
-        <!-- Camera module -->
-        <rect x="250" y="56" width="100" height="95" rx="22" fill="#141414"/>
-        <rect x="250" y="56" width="100" height="95" rx="22" fill="none" stroke="#2A2A2A" stroke-width="1.5"/>
-        <circle cx="275" cy="88" r="18" fill="#0A0A0A"/><circle cx="275" cy="88" r="13" fill="#111"/><circle cx="275" cy="88" r="8" fill="#1A1A1A"/><circle cx="271" cy="84" r="2.5" fill="rgba(255,255,255,0.15)"/>
-        <circle cx="325" cy="88" r="18" fill="#0A0A0A"/><circle cx="325" cy="88" r="13" fill="#111"/><circle cx="325" cy="88" r="8" fill="#1A1A1A"/><circle cx="321" cy="84" r="2.5" fill="rgba(255,255,255,0.15)"/>
-        <circle cx="300" cy="128" r="15" fill="#0A0A0A"/><circle cx="300" cy="128" r="10" fill="#111"/><circle cx="300" cy="128" r="6" fill="#1A1A1A"/>
-        <circle cx="280" cy="127" r="4" fill="#1C1C1E"/>
-        <!-- Reflection shine on screen -->
-        <path d="M30 80 Q80 50 150 60 L140 200 Q80 180 30 200 Z" fill="url(#shineGrad)" opacity="0.04"/>
-        <defs>
-          <linearGradient id="bodyGrad" x1="0" y1="0" x2="420" y2="840" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#B5A48E" stop-opacity="0.15"/>
-            <stop offset="100%" stop-color="#0F0F14" stop-opacity="0"/>
-          </linearGradient>
-          <linearGradient id="frameGrad" x1="0" y1="0" x2="420" y2="840" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#C8B99A"/>
-            <stop offset="40%" stop-color="#8A7D6B"/>
-            <stop offset="100%" stop-color="#C8B99A"/>
-          </linearGradient>
-          <radialGradient id="screenGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#0071E3" stop-opacity="0.3"/>
-            <stop offset="100%" stop-color="#000" stop-opacity="0"/>
-          </radialGradient>
-          <linearGradient id="screenGrad" x1="0" y1="0" x2="0" y2="840" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#020810"/>
-            <stop offset="50%" stop-color="#000408"/>
-            <stop offset="100%" stop-color="#010306"/>
-          </linearGradient>
-          <linearGradient id="shineGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="white" stop-opacity="1"/>
-            <stop offset="100%" stop-color="white" stop-opacity="0"/>
-          </linearGradient>
-        </defs>
-      </svg>
+  <div class="right">
+    <div class="img-frame hero-img-wrap" id="s2-hero-img" style="width:500px;">
+       <img src="assets/promo/hero.png" alt="iPhone 3D">
     </div>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════ -->
-<!-- SCENE 3 — STATS                               -->
+<!-- SCENE 3 — CATALOG PREVIEW -->
 <!-- ═══════════════════════════════════════════════ -->
 <div class="scene" id="s3">
-  <div class="grid-bg"></div>
-  <div class="radial-blue" style="width:1200px;height:800px;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.5;"></div>
-  <div class="section-title" id="s3-title">En números</div>
-  <div class="stats-row">
-    <div class="stat-card" id="sc1">
-      <div class="stat-number" id="sn1">0</div>
-      <div class="stat-label">Ventas realizadas</div>
-    </div>
-    <div class="stat-card" id="sc2">
-      <div class="stat-number">24/7</div>
-      <div class="stat-label">Atención por WhatsApp</div>
-    </div>
-    <div class="stat-card" id="sc3">
-      <div class="stat-number">100%</div>
-      <div class="stat-label">Garantía incluida</div>
-    </div>
-    <div class="stat-card" id="sc4">
-      <div class="stat-number">📦</div>
-      <div class="stat-label">Envíos a todo el país</div>
-    </div>
+  <h2 class="headline cat-headline" id="s3-hl">Invertí en tu <em>próximo</em> equipo.</h2>
+  <div class="catalog-wrap" id="s3-cat-wrap">
+    <img src="assets/promo/catalog.png" class="catalog-img" id="s3-image">
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════ -->
-<!-- SCENE 4 — FEATURES                            -->
+<!-- SCENE 4 — FEATURES -->
 <!-- ═══════════════════════════════════════════════ -->
 <div class="scene" id="s4">
-  <div class="grid-bg"></div>
-  <div class="radial-gold" style="width:800px;height:800px;top:50%;left:-100px;transform:translateY(-50%);"></div>
-
   <div class="left">
     <h2 class="headline feat-headline" id="s4-headline">Todo lo que<br>necesitás.<br><em>En un lugar.</em></h2>
-    <p class="feat-sub" id="s4-sub">Comprá con confianza.<br>Vendemos iPhones como nadie.</p>
   </div>
-
-  <div class="right">
-    <div class="feature-chip" id="fc1">
-      <div class="feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      iPhones Nuevos Sellados — Garantía Apple
-    </div>
-    <div class="feature-chip" id="fc2">
-      <div class="feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 10H2" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
-      Hasta 12 cuotas sin interés
-    </div>
-    <div class="feature-chip" id="fc3">
-      <div class="feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      Plan Canje — Tu viejo vale más
-    </div>
-    <div class="feature-chip" id="fc4">
-      <div class="feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9,22 9,12 15,12 15,22" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      Local físico + Envíos a todo el país
-    </div>
-    <div class="feature-chip" id="fc5">
-      <div class="feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      Servicio Técnico Certificado
-    </div>
-    <div class="feature-chip" id="fc6">
-      <div class="feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke="white" stroke-width="2"/></svg></div>
-      Venta Mayorista disponible
-    </div>
+  <div class="right" id="s4-chips">
+    <div class="feature-chip"><span class="feature-icon">✔</span> iPhones Nuevos Sellados</div>
+    <div class="feature-chip"><span class="feature-icon">✔</span> Hasta 12 cuotas</div>
+    <div class="feature-chip"><span class="feature-icon">✔</span> Plan Canje</div>
+    <div class="feature-chip"><span class="feature-icon">✔</span> Garantía Escrita</div>
+    <div class="feature-chip"><span class="feature-icon">✔</span> Local Físico</div>
+    <div class="feature-chip"><span class="feature-icon">✔</span> Servicio Técnico</div>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════ -->
-<!-- SCENE 5 — CTA FINAL                           -->
+<!-- SCENE 5 — STATS -->
 <!-- ═══════════════════════════════════════════════ -->
 <div class="scene" id="s5">
-  <div class="grid-bg"></div>
-  <div class="radial-blue" style="width:1400px;height:1000px;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.4;"></div>
-  <div class="radial-gold" style="width:800px;height:800px;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.3;"></div>
+  <div class="section-title" id="s5-title">En números</div>
+  <div class="stats-row" id="s5-stats">
+    <div class="stat-card"><div class="stat-number">+10K</div><div class="stat-label">Ventas</div></div>
+    <div class="stat-card"><div class="stat-number">24/7</div><div class="stat-label">Atención</div></div>
+    <div class="stat-card"><div class="stat-number">100%</div><div class="stat-label">Confianza</div></div>
+  </div>
+</div>
 
-  <h2 class="headline final-headline" id="s5-headline">
-    Tu próximo iPhone<br>está en <em>Navarro.</em>
-  </h2>
-  <p class="subline final-sub" id="s5-sub">
-    Más de 10.000 clientes ya lo eligieron.
-  </p>
-  <div class="cta-url-block" id="s5-url-block">
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 6 — CTA FINAL -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="scene" id="s6">
+  <h2 class="headline final-headline" id="s6-headline">Tu próximo iPhone<br>está en <em>Navarro.</em></h2>
+  <div class="cta-url-block" id="s6-url">
     <span class="cta-label">Consultá ya en nuestra web</span>
     <span class="cta-url">www.iphonenavarro.vercel.app</span>
   </div>
@@ -607,11 +487,11 @@ function countUp(el, from, to, dur, delay) {
 }
 
 // ──────────────────────────────────────────────────
-// SCENE MANAGEMENT
+// SCENE MANAGEMENT (V4 Dynamics)
 // ──────────────────────────────────────────────────
-const scenes = ['s1','s2','s3','s4','s5'];
+const scenes = ['s1','s2','s3','s4','s5','s6'];
 let curr = -1;
-const totalDuration = 30000; // 30 seconds
+const totalDuration = 26000; // Faster: 26s
 let startTime = Date.now();
 
 function showScene(id) {
@@ -623,242 +503,94 @@ function showScene(id) {
   if (el) { el.classList.add('active'); el.style.opacity = '1'; }
 }
 
-// Phone floating animation
-let phoneY = 0;
-let phoneRot = 0;
-function animatePhone() {
-  const wrap = document.getElementById('phone-svg-wrap');
-  if (wrap) {
-    phoneY = Math.sin(Date.now() * 0.0008) * 18;
-    phoneRot = Math.sin(Date.now() * 0.0006) * 3;
-    wrap.style.transform = `translateY(${phoneY}px) rotate(${phoneRot}deg)`;
-  }
-  requestAnimationFrame(animatePhone);
-}
-animatePhone();
-
-// ──────────────────────────────────────────────────
-// SCENE 1 — INTRO (0-5s)
-// ──────────────────────────────────────────────────
 function playScene1() {
   showScene('s1');
   const logo = document.getElementById('s1-logo');
   const tag = document.getElementById('s1-tagline');
-  logo.style.opacity = '0';
-  tag.style.opacity = '0';
-  logo.style.transform = 'scale(0.85)';
-  tag.style.transform = 'translateY(20px)';
-
-  // Logo scale+fade in
-  setTimeout(() => {
-    const start = performance.now();
-    function step(now) {
-      const t = Math.min((now - start) / 900, 1);
-      const e = ease.back(t);
-      logo.style.opacity = ease.out(t);
-      logo.style.transform = `scale(${0.85 + 0.15 * e})`;
-      if (t < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }, 400);
-
-  slideUp(tag, 20, 700, 1100);
-
-  // Transition out
-  setTimeout(() => {
-    fadeOut(logo, 500);
-    fadeOut(tag, 500, 100);
-  }, 4200);
+  slideUp(logo, 40, 600, 200);
+  slideUp(tag, 20, 600, 600);
 }
 
-// ──────────────────────────────────────────────────
-// SCENE 2 — HERO (5-12s)
-// ──────────────────────────────────────────────────
 function playScene2() {
   showScene('s2');
   const badge = document.getElementById('s2-badge');
   const hl = document.getElementById('s2-headline');
-  const sub = document.getElementById('s2-sub');
-  const line = document.getElementById('s2-line');
-  const phone = document.getElementById('s2-phone');
-
-  badge.style.opacity = '0'; badge.style.transform = 'translateY(16px)';
-  hl.style.opacity = '0'; hl.style.transform = 'translateY(40px)';
-  sub.style.opacity = '0'; sub.style.transform = 'translateY(20px)';
-  line.style.opacity = '0'; line.style.width = '0px';
-  phone.style.opacity = '0'; phone.style.transform = 'translateX(60px) scale(0.92)';
-
-  slideUp(badge, 16, 600, 200);
-  slideUp(hl, 40, 800, 500);
-
+  const img = document.getElementById('s2-hero-img');
+  slideUp(badge, 16, 500, 100);
+  slideUp(hl, 40, 600, 300);
   setTimeout(() => {
-    const start = performance.now();
-    function step(now) {
-      const t = Math.min((now - start) / 600, 1);
-      sub.style.opacity = ease.out(t);
-      sub.style.transform = `translateY(${20*(1-ease.out(t))}px)`;
-      if (t < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }, 1000);
-
-  setTimeout(() => {
-    const start = performance.now();
-    function step(now) {
-      const t = Math.min((now - start) / 500, 1);
-      line.style.opacity = ease.out(t);
-      line.style.width = (280 * ease.out(t)) + 'px';
-      if (t < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }, 1300);
-
-  setTimeout(() => {
-    const start = performance.now();
-    function step(now) {
-      const t = Math.min((now - start) / 900, 1);
-      phone.style.opacity = ease.out(t);
-      phone.style.transform = `translateX(${60*(1-ease.out(t))}px) scale(${0.92+0.08*ease.out(t)})`;
-      if (t < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }, 300);
-
-  // Transition out
-  setTimeout(() => {
-    ['s2-badge','s2-headline','s2-sub','s2-line','s2-phone'].forEach((id, i) => {
-      fadeOut(document.getElementById(id), 400, i * 50);
-    });
-  }, 6600);
+    img.style.opacity = '1';
+    img.style.transition = 'all 1s cubic-bezier(0.23, 1, 0.32, 1)';
+    img.style.transform = 'perspective(1000px) rotateY(0deg) scale(1.1)';
+  }, 400);
 }
 
-// ──────────────────────────────────────────────────
-// SCENE 3 — STATS (12-18s)
-// ──────────────────────────────────────────────────
 function playScene3() {
   showScene('s3');
-  const title = document.getElementById('s3-title');
-  title.style.opacity = '0'; title.style.transform = 'translateY(10px)';
-
-  const cards = ['sc1','sc2','sc3','sc4'];
-  cards.forEach(id => {
-    const el = document.getElementById(id);
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(30px) scale(0.95)';
-  });
-
-  slideUp(title, 10, 500, 300);
-
-  cards.forEach((id, i) => {
-    const el = document.getElementById(id);
-    setTimeout(() => {
-      const start = performance.now();
-      function step(now) {
-        const t = Math.min((now - start) / 700, 1);
-        const e = ease.back(t);
-        el.style.opacity = ease.out(t);
-        el.style.transform = `translateY(${30*(1-ease.out(t))}px) scale(${0.95+0.05*e})`;
-        if (t < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    }, 600 + i * 160);
-  });
-
-  countUp(document.getElementById('sn1'), 0, 10000, 2000, 800);
-
+  const hl = document.getElementById('s3-hl');
+  const img = document.getElementById('s3-image');
+  slideUp(hl, 30, 600, 100);
   setTimeout(() => {
-    document.getElementById('s3-title').style.transition = 'opacity 0.4s'; fadeOut(document.getElementById('s3-title'), 400);
-    cards.forEach((id, i) => fadeOut(document.getElementById(id), 400, i * 60));
-  }, 5200);
+    img.style.opacity = '1';
+    img.style.transition = 'transform 6s linear';
+    img.style.transform = 'translateY(-200px)';
+  }, 500);
 }
 
-// ──────────────────────────────────────────────────
-// SCENE 4 — FEATURES (18-24s)
-// ──────────────────────────────────────────────────
 function playScene4() {
   showScene('s4');
   const hl = document.getElementById('s4-headline');
-  const sub = document.getElementById('s4-sub');
-  hl.style.opacity = '0'; hl.style.transform = 'translateY(30px)';
-  sub.style.opacity = '0'; sub.style.transform = 'translateY(20px)';
-
-  slideUp(hl, 30, 800, 300);
-  slideUp(sub, 20, 600, 800);
-
-  const chips = ['fc1','fc2','fc3','fc4','fc5','fc6'];
-  chips.forEach((id, i) => {
-    const el = document.getElementById(id);
-    el.style.opacity = '0';
-    el.style.transform = 'translateX(40px)';
+  slideUp(hl, 30, 600, 100);
+  const chips = document.querySelectorAll('#s4-chips .feature-chip');
+  chips.forEach((c, i) => {
+    c.style.opacity = '0';
+    c.style.transform = 'translateX(50px)';
     setTimeout(() => {
-      const start = performance.now();
-      function step(now) {
-        const t = Math.min((now - start) / 500, 1);
-        el.style.opacity = ease.out(t);
-        el.style.transform = `translateX(${40*(1-ease.out(t))}px)`;
-        if (t < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    }, 500 + i * 130);
+      c.style.transition = 'all 0.4s ease-out';
+      c.style.opacity = '1';
+      c.style.transform = 'translateX(0)';
+    }, 400 + i * 120);
   });
-
-  setTimeout(() => {
-    [hl, sub, ...chips.map(id => document.getElementById(id))].forEach((el, i) => {
-      if (el) fadeOut(el, 400, i * 40);
-    });
-  }, 5200);
 }
 
-// ──────────────────────────────────────────────────
-// SCENE 5 — CTA FINAL (24-30s)
-// ──────────────────────────────────────────────────
 function playScene5() {
   showScene('s5');
-  const hl = document.getElementById('s5-headline');
-  const sub = document.getElementById('s5-sub');
-  const urlBlock = document.getElementById('s5-url-block');
-
-  hl.style.opacity = '0'; hl.style.transform = 'translateY(40px)';
-  sub.style.opacity = '0'; sub.style.transform = 'translateY(20px)';
-  urlBlock.style.opacity = '0'; urlBlock.style.transform = 'translateY(24px)';
-
-  slideUp(hl, 40, 900, 300);
-  slideUp(sub, 20, 700, 900);
-
-  setTimeout(() => {
-    const start = performance.now();
-    function step(now) {
-      const t = Math.min((now - start) / 900, 1);
-      urlBlock.style.opacity = ease.out(t);
-      urlBlock.style.transform = `translateY(${24*(1-ease.out(t))}px)`;
-      if (t < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }, 1500);
+  const title = document.getElementById('s5-title');
+  slideUp(title, 20, 600, 100);
+  const cards = document.querySelectorAll('#s5-stats .stat-card');
+  cards.forEach((c, i) => {
+    c.style.opacity = '0';
+    c.style.transform = 'scale(0.8)';
+    setTimeout(() => {
+      c.style.transition = 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+      c.style.opacity = '1';
+      c.style.transform = 'scale(1)';
+    }, 400 + i * 150);
+  });
 }
 
-// ──────────────────────────────────────────────────
-// TIMELINE
-// ──────────────────────────────────────────────────
+function playScene6() {
+  showScene('s6');
+  slideUp(document.getElementById('s6-headline'), 40, 700, 200);
+  slideUp(document.getElementById('s6-url'), 20, 700, 1000);
+}
+
+// Timeline
+playScene1();
+setTimeout(playScene2, 3500);
+setTimeout(playScene3, 8500);
+setTimeout(playScene4, 13500);
+setTimeout(playScene5, 18500);
+setTimeout(playScene6, 23000);
+
 function updateProgress() {
   const pct = Math.min((Date.now() - startTime) / totalDuration * 100, 100);
   document.getElementById('progress').style.width = pct + '%';
   if (pct < 100) requestAnimationFrame(updateProgress);
 }
-
-playScene1();
 requestAnimationFrame(updateProgress);
 
-setTimeout(playScene2, 5000);
-setTimeout(playScene3, 12000);
-setTimeout(playScene4, 18000);
-setTimeout(playScene5, 24000);
-
-// Loop
-setTimeout(() => {
-  startTime = Date.now();
-  location.reload();
-}, 31000);
+setTimeout(() => location.reload(), 28000);
 </script>
 </body>
 </html>

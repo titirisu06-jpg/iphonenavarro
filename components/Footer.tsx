@@ -115,7 +115,7 @@ const Footer: React.FC = () => {
             {/* Contact */}
             <div>
               <h4 className="font-mono uppercase tracking-widest mb-4" style={{ fontSize: 10, color: '#0071E3', fontWeight: 600 }}>Contacto</h4>
-              <p className="font-mono text-white mb-2" style={{ fontSize: 15 }}>+54 9 2227 58-0719</p>
+              <p className="font-mono text-white mb-2" style={{ fontSize: 15 }}>+54 9 2227 50-2299</p>
               <p style={{ color: '#8E8E93', fontSize: 14, marginBottom: 16 }}>Navarro, Buenos Aires, Argentina</p>
               <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 14, padding: '9px 18px', borderRadius: 12 }}>
                 <MessageCircle size={14} />

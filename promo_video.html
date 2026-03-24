@@ -3,594 +3,286 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>iPhone Navarro — Promo</title>
+  <title>iPhone Navarro — Promo Reel Vertical</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body {
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      background: #060608;
-      font-family: 'Inter', -apple-system, sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ── Scaler wrapper: 1920x1080 canvas that shrinks/grows to fill viewport ── */
+    html, body { width: 100vw; height: 100vh; overflow: hidden; background: #060608; font-family: 'Inter', -apple-system, sans-serif; }
     #scaler {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 1920px;
-      height: 1080px;
+      position: fixed; top: 0; left: 0;
+      width: 1080px; height: 1920px;
       transform-origin: top left;
-      /* JS sets: transform: scale(X) + margin offsets for letter/pillarbox */
     }
+    canvas#bg { position: absolute; top: 0; left: 0; width: 1080px; height: 1920px; z-index: 0; }
 
-    canvas#bg { position: absolute; top: 0; left: 0; width: 1920px; height: 1080px; z-index: 0; }
-
-    /* ── Scene system ── */
     .scene {
-      position: absolute;
-      inset: 0;
-      width: 1920px;
-      height: 1080px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 10;
+      position: absolute; inset: 0; width: 1080px; height: 1920px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; z-index: 10; text-align: center;
+      padding: 0 80px;
     }
     .scene.active { opacity: 1; pointer-events: auto; }
 
-    /* ── Gradient overlays ── */
-    .radial-blue {
-      position: absolute;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(0,113,227,0.22) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .radial-gold {
-      position: absolute;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(181,164,142,0.2) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    /* ── Typography ── */
-    .eyebrow {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: #B5A48E;
-      opacity: 0;
-    }
-    .headline { color: #fff; font-weight: 800; line-height: 0.9; letter-spacing: -0.04em; }
+    /* Typography */
+    .headline { color: #fff; font-weight: 800; line-height: 0.95; letter-spacing: -0.04em; }
     .headline em { font-style: normal; color: #C8B99A; }
-    .subline { color: rgba(255,255,255,0.6); font-weight: 400; line-height: 1.6; }
 
-    /* ── iPhone SVG illustration ── */
-    .phone-wrap {
-      position: relative;
-      filter: drop-shadow(0 40px 80px rgba(0,113,227,0.35)) drop-shadow(0 0 120px rgba(181,164,142,0.2));
-    }
-
-    /* ── Pill badge ── */
+    /* Elements */
     .badge {
-      display: inline-flex;
-      align-self: flex-start;
-      align-items: center;
-      gap: 6px;
-      background: rgba(0,113,227,0.1);
-      border: 1px solid rgba(0,113,227,0.25);
-      color: #2997FF;
-      border-radius: 100px;
-      padding: 6px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      white-space: nowrap;
-      width: fit-content;
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(0,113,227,0.1); border: 1.5px solid rgba(0,113,227,0.25); color: #2997FF;
+      border-radius: 100px; padding: 12px 28px; font-size: 22px; font-weight: 600;
+      margin-bottom: 40px;
     }
-    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #0071E3; }
+    .badge-dot { width: 10px; height: 10px; border-radius: 50%; background: #0071E3; }
 
-    /* ── Stat card ── */
-    .stat-card {
-      background: rgba(28,28,30,0.9);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 24px;
-      padding: 36px 48px;
-      text-align: center;
-      backdrop-filter: blur(20px);
-      opacity: 0;
+    /* Scene 1 — Intro */
+    #s1 .logo-text { font-size: 140px; font-weight: 950; letter-spacing: -0.06em; color: #fff; opacity: 0; }
+    #s1 .logo-text span { color: #B5A48E; }
+    #s1 .tagline { font-size: 28px; color: #B5A48E; letter-spacing: 0.4em; text-transform: uppercase; margin-top: 20px; opacity: 0; }
+
+    /* Scene 2 — Hero */
+    #s2 { gap: 100px; justify-content: center; }
+    #s2 .left { display: flex; flex-direction: column; align-items: center; }
+    #s2 .big-headline { font-size: 140px; opacity: 0; }
+    .hero-img-wrap { transform: perspective(1500px) rotateY(-8deg) scale(0.9); opacity: 0; width: 850px; }
+    .hero-img-wrap img { width: 100%; border-radius: 60px; box-shadow: 0 60px 140px rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.08); }
+
+    /* Scene 3 — Catalog */
+    #s3 { gap: 80px; justify-content: flex-start; padding-top: 250px; }
+    #s3 .cat-headline { font-size: 110px; margin-bottom: 20px; opacity: 0; }
+    #s3 .catalog-wrap { 
+      width: 900px; height: 1000px; perspective: 1500px; 
+      border-radius: 50px; overflow: hidden; position: relative;
     }
-    .stat-number {
-      font-size: 60px;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      background: linear-gradient(135deg, #FFFFFF 0%, #A8C8FF 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1;
-      white-space: nowrap;
-    }
-    .stat-label {
-      font-size: 15px;
-      color: rgba(255,255,255,0.45);
-      font-weight: 500;
-      margin-top: 8px;
-      letter-spacing: 0.02em;
+    #s3 .catalog-img { 
+      position: absolute; top: 0; left: 0; width: 100%; 
+      object-fit: cover; object-position: top; 
+      border-radius: 40px; box-shadow: 0 80px 160px rgba(0,0,0,1); 
+      border: 2px solid rgba(255,255,255,0.15);
     }
 
-    /* ── Feature row ── */
+    /* Scene 4 — Features */
+    #s4 { gap: 120px; }
+    #s4 .feat-headline { font-size: 130px; opacity: 0; }
+    #s4 .right { width: 100%; display: grid; grid-template-columns: 1fr; gap: 30px; padding: 0 40px; }
     .feature-chip {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 14px;
-      padding: 14px 22px;
-      color: rgba(255,255,255,0.85);
-      font-size: 15px;
-      font-weight: 500;
-      opacity: 0;
+      display: flex; align-items: center; gap: 24px;
+      background: rgba(255,255,255,0.04); border: 2px solid rgba(255,255,255,0.07);
+      border-radius: 24px; padding: 28px 40px; color: rgba(255,255,255,0.9);
+      font-size: 38px; font-weight: 600; opacity: 0;
     }
     .feature-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: #0071E3;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
+      width: 64px; height: 64px; border-radius: 16px; background: #0071E3;
+      display: flex; align-items: center; justify-content: center; font-size: 32px; color: #fff;
     }
 
-    /* ── CTA Button ── */
-    .cta-btn {
-      background: #0071E3;
-      color: #fff;
-      font-weight: 700;
-      border-radius: 100px;
-      padding: 18px 48px;
-      font-size: 18px;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: 0 8px 32px rgba(0,113,227,0.5);
-      opacity: 0;
+    /* Scene 5 — Stats */
+    #s5 { gap: 80px; }
+    #s5 .section-title { font-size: 34px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #B5A48E; opacity: 0; }
+    #s5 .stats-row { display: flex; flex-direction: column; gap: 40px; width: 100%; padding: 0 60px; }
+    .stat-card {
+      background: rgba(28,28,30,0.9); border: 2px solid rgba(255,255,255,0.07);
+      border-radius: 40px; padding: 60px 40px; backdrop-filter: blur(20px); opacity: 0;
     }
-    .cta-secondary {
-      background: rgba(255,255,255,0.07);
-      color: #fff;
-      font-weight: 600;
-      border-radius: 100px;
-      padding: 18px 48px;
-      font-size: 18px;
-      border: 1px solid rgba(255,255,255,0.15);
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      opacity: 0;
-    }
+    .stat-number { font-size: 120px; font-weight: 800; line-height: 1; letter-spacing: -0.03em; background: linear-gradient(135deg, #FFFFFF 0%, #A8C8FF 100%); -webkit-background-clip: text; color: transparent; background-clip: text; }
+    .stat-label { font-size: 36px; color: rgba(255,255,255,0.5); font-weight: 500; margin-top: 16px; letter-spacing: 0.02em; }
 
-    /* ── Grid lines ── */
-    .grid-bg {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(0,113,227,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,113,227,0.04) 1px, transparent 1px);
-      background-size: 80px 80px;
-      pointer-events: none;
-    }
+    /* Scene 6 — CTA final */
+    #s6 { gap: 80px; justify-content: center; }
+    #s6 .final-headline { font-size: 140px; opacity: 0; line-height: 0.95; }
+    #s6 .cta-url-block { display: flex; flex-direction: column; align-items: center; gap: 30px; opacity: 0; margin-top: 40px; }
+    #s6 .cta-label { font-size: 32px; color: #86868B; }
+    #s6 .cta-url { font-size: 64px; font-weight: 800; background: linear-gradient(135deg, #FFF, #0071E3); -webkit-background-clip: text; color: transparent; background-clip: text; border-bottom: 2px solid #0071E3; padding-bottom: 8px;}
 
-    /* ── Horizontal line accent ── */
-    .line-h {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(181,164,142,0.4), transparent);
-      opacity: 0;
-    }
-
-    /* ── Apple-style Image frames ── */
-    .img-frame {
-      position: relative;
-      border-radius: 40px;
-      overflow: hidden;
-      box-shadow: 0 50px 100px rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,255,255,0.1);
-      opacity: 0;
-    }
-    .img-frame img { width: 100%; height: auto; display: block; }
-
-    /* ── Scene 1 — Intro ── */
-    #s1 { flex-direction: column; }
-    #s1 .logo-text { font-size: 110px; font-weight: 950; letter-spacing: -0.06em; color: #fff; opacity: 0; }
-    #s1 .logo-text span { color: #B5A48E; }
-    #s1 .tagline { font-size: 18px; color: #B5A48E; letter-spacing: 0.5em; text-transform: uppercase; margin-top: 10px; opacity: 0; }
-
-    /* ── Scene 2 — Hero 3D ── */
-    #s2 { gap: 80px; justify-content: center; padding: 0 80px; }
-    #s2 .left { flex: 0 0 auto; width: 760px; display: flex; flex-direction: column; gap: 28px; }
-    #s2 .right { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; }
-    #s2 .big-headline { font-size: 110px; opacity: 0; }
-    .hero-img-wrap { transform: perspective(1000px) rotateY(-10deg); opacity: 0; }
-
-    /* ── Scene 3 — Catalog ── */
-    #s3 { flex-direction: column; gap: 40px; }
-    #s3 .catalog-wrap { width: 1400px; height: 750px; position: relative; }
-    #s3 .catalog-img { position: absolute; top: 0; left: 0; width: 100%; object-fit: cover; object-position: top; border-radius: 30px; box-shadow: 0 40px 100px rgba(0,0,0,0.8); }
-    #s3 .cat-headline { font-size: 60px; font-weight: 800; text-align: center; opacity: 0; }
-
-    /* ── Scene 4 — Features ── */
-    #s4 { gap: 80px; justify-content: center; padding: 0 80px; }
-    #s4 .left { flex: 0 0 auto; width: 640px; }
-    #s4 .right { flex: 0 0 auto; width: 900px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    #s4 .feat-headline { font-size: 80px; opacity: 0; }
-
-    /* ── Scene 5 — Stats ── */
-    #s5 { flex-direction: column; gap: 48px; }
-    #s5 .stats-row { display: flex; gap: 28px; }
-    #s5 .section-title { font-size: 18px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #B5A48E; opacity: 0; }
-
-    /* ── Scene 6 — CTA final ── */
-    #s6 { flex-direction: column; gap: 32px; align-items: center; }
-    #s6 .final-headline { font-size: 100px; text-align: center; opacity: 0; }
-    #s6 .cta-url-block { display: flex; flex-direction: column; align-items: center; gap: 16px; opacity: 0; }
-    #s6 .cta-url { font-size: 48px; font-weight: 800; background: linear-gradient(135deg, #FFF, #0071E3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-    /* ── Progress bar ── */
-    #progress {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #0071E3, #2997FF);
-      z-index: 100;
-      transition: none;
-      box-shadow: 0 0 8px rgba(0,113,227,0.8);
-    }
-
-    /* ── Vignette ── */
-    .vignette {
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.65) 100%);
-      pointer-events: none;
-      z-index: 5;
-    }
+    /* Progress & Grid */
+    #progress { position: fixed; bottom: 0; left: 0; height: 8px; background: linear-gradient(90deg, #0071E3, #2997FF); z-index: 100; box-shadow: 0 0 16px rgba(0,113,227,0.8); transition: width 0.1s linear; }
+    .grid-bg { position: fixed; inset: 0; background-image: linear-gradient(rgba(0,113,227,0.04) 2px, transparent 2px), linear-gradient(90deg, rgba(0,113,227,0.04) 2px, transparent 2px); background-size: 100px 100px; z-index: 1; }
+    .vignette { position: fixed; inset: 0; background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.85) 100%); z-index: 5; pointer-events: none; }
   </style>
 </head>
 <body>
-
 <div id="scaler">
-<canvas id="bg"></canvas>
-<div class="vignette"></div>
-<div id="progress"></div>
+  <canvas id="bg"></canvas>
+  <div class="grid-bg"></div>
+  <div class="vignette"></div>
+  <div id="progress"></div>
 
-<!-- ═══════════════════════════════════════════════ -->
-<!-- SCENE 1 — INTRO -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="scene" id="s1">
-  <div class="logo-text" id="s1-logo">iPhone <span>Navarro</span></div>
-  <div class="tagline" id="s1-tagline">Navarro · Buenos Aires</div>
-</div>
-
-<!-- ═══════════════════════════════════════════════ -->
-<!-- SCENE 2 — HERO 3D -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="scene" id="s2">
-  <div class="left">
-    <div class="badge" id="s2-badge"><span class="badge-dot"></span>+10.000 ventas confirmadas</div>
-    <h1 class="headline big-headline" id="s2-headline">Más <em>iPhone.</em><br>Por menos.</h1>
+  <!-- S1 -->
+  <div class="scene" id="s1">
+    <div class="logo-text" id="s1-logo">iPhone<br><span>Navarro</span></div>
+    <div class="tagline" id="s1-tagline">Buenos Aires</div>
   </div>
-  <div class="right">
-    <div class="img-frame hero-img-wrap" id="s2-hero-img" style="width:500px;">
-       <img src="assets/promo/hero.png" alt="iPhone 3D">
+
+  <!-- S2 -->
+  <div class="scene" id="s2">
+    <div class="left">
+      <div class="badge" id="s2-badge"><span class="badge-dot"></span>+10.000 ventas</div>
+      <h1 class="headline big-headline" id="s2-headline">Más <em>iPhone.</em><br>Por menos.</h1>
+    </div>
+    <div class="hero-img-wrap" id="s2-hero-img">
+      <img src="assets/promo/hero.png?v=2" alt="Hero">
+    </div>
+  </div>
+
+  <!-- S3 (Advanced Animation) -->
+  <div class="scene" id="s3">
+    <h2 class="headline cat-headline" id="s3-hl">Invertí en tu<br><em>próximo</em> equipo.</h2>
+    <div class="catalog-wrap" id="s3-cat-wrap">
+      <video src="assets/promo/Vid%20scroll.mp4" class="catalog-img" id="s3-image" autoplay loop muted playsinline></video>
+    </div>
+  </div>
+
+  <!-- S4 -->
+  <div class="scene" id="s4">
+    <h2 class="headline feat-headline" id="s4-headline">Todo lo que<br>necesitás.<br><em>Acá.</em></h2>
+    <div class="right" id="s4-chips">
+      <div class="feature-chip"><span class="feature-icon">✔</span>Nuevos y Usados Premium</div>
+      <div class="feature-chip"><span class="feature-icon">✔</span>Plan Canje Directo</div>
+      <div class="feature-chip"><span class="feature-icon">✔</span>Garantía Oficial</div>
+    </div>
+  </div>
+
+  <!-- S5 -->
+  <div class="scene" id="s5">
+    <div class="section-title" id="s5-title">En números</div>
+    <div class="stats-row" id="s5-stats">
+      <div class="stat-card"><div class="stat-number">+10K</div><div class="stat-label">Equipos Entregados</div></div>
+      <div class="stat-card"><div class="stat-number">Stock</div><div class="stat-label">Permanente y Mayorista</div></div>
+    </div>
+  </div>
+
+  <!-- S6 -->
+  <div class="scene" id="s6">
+    <h2 class="headline final-headline" id="s6-headline">Tu próximo iPhone<br>está en <em>Navarro.</em></h2>
+    <div class="cta-url-block" id="s6-url">
+      <span class="cta-label">📲 Consultá ya en la web</span>
+      <span class="cta-url">iphonenavarro.vercel.app</span>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════ -->
-<!-- SCENE 3 — CATALOG PREVIEW -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="scene" id="s3">
-  <h2 class="headline cat-headline" id="s3-hl">Invertí en tu <em>próximo</em> equipo.</h2>
-  <div class="catalog-wrap" id="s3-cat-wrap">
-    <img src="assets/promo/catalog.png" class="catalog-img" id="s3-image">
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════ -->
-<!-- SCENE 4 — FEATURES -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="scene" id="s4">
-  <div class="left">
-    <h2 class="headline feat-headline" id="s4-headline">Todo lo que<br>necesitás.<br><em>En un lugar.</em></h2>
-  </div>
-  <div class="right" id="s4-chips">
-    <div class="feature-chip"><span class="feature-icon">✔</span> iPhones Nuevos Sellados</div>
-    <div class="feature-chip"><span class="feature-icon">✔</span> Hasta 12 cuotas</div>
-    <div class="feature-chip"><span class="feature-icon">✔</span> Plan Canje</div>
-    <div class="feature-chip"><span class="feature-icon">✔</span> Garantía Escrita</div>
-    <div class="feature-chip"><span class="feature-icon">✔</span> Local Físico</div>
-    <div class="feature-chip"><span class="feature-icon">✔</span> Servicio Técnico</div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════ -->
-<!-- SCENE 5 — STATS -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="scene" id="s5">
-  <div class="section-title" id="s5-title">En números</div>
-  <div class="stats-row" id="s5-stats">
-    <div class="stat-card"><div class="stat-number">+10K</div><div class="stat-label">Ventas</div></div>
-    <div class="stat-card"><div class="stat-number">24/7</div><div class="stat-label">Atención</div></div>
-    <div class="stat-card"><div class="stat-number">100%</div><div class="stat-label">Confianza</div></div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════ -->
-<!-- SCENE 6 — CTA FINAL -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="scene" id="s6">
-  <h2 class="headline final-headline" id="s6-headline">Tu próximo iPhone<br>está en <em>Navarro.</em></h2>
-  <div class="cta-url-block" id="s6-url">
-    <span class="cta-label">Consultá ya en nuestra web</span>
-    <span class="cta-url">www.iphonenavarro.vercel.app</span>
-  </div>
-</div>
-
-</div><!-- /#scaler -->
-
 <script>
-// ──────────────────────────────────────────────────
-// VIEWPORT SCALER — fills any screen with 1920x1080
-// ──────────────────────────────────────────────────
+// Scaler for 1080x1920 mode
 function scaleToViewport() {
   const scaler = document.getElementById('scaler');
-  const W = window.innerWidth;
-  const H = window.innerHeight;
-  const scaleX = W / 1920;
-  const scaleY = H / 1080;
-  const scale = Math.min(scaleX, scaleY); // cover: use Math.max; fit: use Math.min
-  const offsetX = (W - 1920 * scale) / 2;
-  const offsetY = (H - 1080 * scale) / 2;
+  const W = window.innerWidth, H = window.innerHeight;
+  const scale = Math.min(W / 1080, H / 1920);
+  const offsetX = (W - 1080 * scale) / 2;
+  const offsetY = (H - 1920 * scale) / 2;
   scaler.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
 }
-scaleToViewport();
-window.addEventListener('resize', scaleToViewport);
+scaleToViewport(); window.addEventListener('resize', scaleToViewport);
 
-// ──────────────────────────────────────────────────
-// PARTICLE BACKGROUND
-// ──────────────────────────────────────────────────
-const canvas = document.getElementById('bg');
-const ctx = canvas.getContext('2d');
-canvas.width = 1920;
-canvas.height = 1080;
-
-const particles = Array.from({ length: 120 }, () => ({
-  x: Math.random() * 1920,
-  y: Math.random() * 1080,
-  r: Math.random() * 1.8 + 0.3,
-  vx: (Math.random() - 0.5) * 0.3,
-  vy: (Math.random() - 0.5) * 0.3,
-  alpha: Math.random() * 0.5 + 0.1,
-  color: Math.random() > 0.5 ? '#0071E3' : '#B5A48E',
+// Particles
+const canvas = document.getElementById('bg'), ctx = canvas.getContext('2d');
+canvas.width = 1080; canvas.height = 1920;
+const particles = Array.from({length: 80}, () => ({
+  x: Math.random() * 1080, y: Math.random() * 1920,
+  r: Math.random() * 3 + 1,
+  vx: (Math.random()-0.5)*0.8, vy: (Math.random()-0.5)*0.8,
+  alpha: Math.random()*0.6+0.2, color: Math.random()>0.5?'#0071E3':'#B5A48E'
 }));
-
-function drawBg() {
-  ctx.clearRect(0, 0, 1920, 1080);
-  ctx.fillStyle = '#060608';
-  ctx.fillRect(0, 0, 1920, 1080);
+function draw() {
+  ctx.clearRect(0,0,1080,1920);
   particles.forEach(p => {
-    p.x += p.vx;
-    p.y += p.vy;
-    if (p.x < 0) p.x = 1920;
-    if (p.x > 1920) p.x = 0;
-    if (p.y < 0) p.y = 1080;
-    if (p.y > 1080) p.y = 0;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = p.color;
-    ctx.globalAlpha = p.alpha;
-    ctx.fill();
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.x<0)p.x=1080; if(p.x>1080)p.x=0; if(p.y<0)p.y=1920; if(p.y>1920)p.y=0;
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=p.color; ctx.globalAlpha=p.alpha; ctx.fill();
   });
-  ctx.globalAlpha = 1;
-  requestAnimationFrame(drawBg);
+  ctx.globalAlpha=1; requestAnimationFrame(draw);
 }
-drawBg();
+draw();
 
-// ──────────────────────────────────────────────────
-// ANIMATOR UTILITIES
-// ──────────────────────────────────────────────────
+// Animations
 const ease = {
   out: t => 1 - Math.pow(1 - t, 3),
-  inOut: t => t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2,
   back: t => { const c1=1.70158, c3=c1+1; return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2); }
 };
-
-function animate(el, from, to, dur, delay, easing, prop, unit='', cb) {
+function slideUp(el, fromY, dur, delay) {
+  el.style.opacity = '0'; el.style.transform = `translateY(${fromY}px)`;
   setTimeout(() => {
     const start = performance.now();
     function step(now) {
-      const t = Math.min((now - start) / dur, 1);
-      const e = easing ? easing(t) : t;
-      const val = from + (to - from) * e;
-      el.style[prop] = val + unit;
-      if (t < 1) requestAnimationFrame(step);
-      else if (cb) cb();
+      const t = Math.min((now-start)/dur, 1), e = ease.back(t);
+      el.style.opacity = Math.min(ease.out(t)*1.5, 1);
+      el.style.transform = `translateY(${fromY*(1-e)}px)`;
+      if(t<1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
   }, delay);
 }
 
-function fadeIn(el, dur=600, delay=0, cb) {
-  el.style.opacity = '0';
-  setTimeout(() => {
-    const start = performance.now();
-    function step(now) {
-      const t = Math.min((now - start) / dur, 1);
-      el.style.opacity = ease.out(t);
-      if (t < 1) requestAnimationFrame(step);
-      else if (cb) cb();
-    }
-    requestAnimationFrame(step);
-  }, delay);
-}
-
-function fadeOut(el, dur=400, delay=0, cb) {
-  setTimeout(() => {
-    const start = performance.now();
-    const startO = parseFloat(el.style.opacity) || 1;
-    function step(now) {
-      const t = Math.min((now - start) / dur, 1);
-      el.style.opacity = startO * (1 - ease.out(t));
-      if (t < 1) requestAnimationFrame(step);
-      else if (cb) cb();
-    }
-    requestAnimationFrame(step);
-  }, delay);
-}
-
-function slideUp(el, fromY, dur=700, delay=0, cb) {
-  el.style.opacity = '0';
-  el.style.transform = `translateY(${fromY}px)`;
-  setTimeout(() => {
-    const start = performance.now();
-    function step(now) {
-      const t = Math.min((now - start) / dur, 1);
-      const e = ease.back(t);
-      el.style.opacity = Math.min(ease.out(t) * 1.2, 1);
-      el.style.transform = `translateY(${fromY * (1-ease.out(t))}px)`;
-      if (t < 1) requestAnimationFrame(step);
-      else if (cb) cb();
-    }
-    requestAnimationFrame(step);
-  }, delay);
-}
-
-function countUp(el, from, to, dur, delay) {
-  setTimeout(() => {
-    const start = performance.now();
-    function step(now) {
-      const t = Math.min((now - start) / dur, 1);
-      const val = Math.round(from + (to - from) * ease.out(t));
-      el.textContent = '+' + val.toLocaleString('es-AR');
-      if (t < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }, delay);
-}
-
-// ──────────────────────────────────────────────────
-// SCENE MANAGEMENT (V4 Dynamics)
-// ──────────────────────────────────────────────────
+// Scenes
 const scenes = ['s1','s2','s3','s4','s5','s6'];
-let curr = -1;
-const totalDuration = 26000; // Faster: 26s
 let startTime = Date.now();
+const totalDuration = 28000;
 
-function showScene(id) {
-  scenes.forEach(s => {
-    const el = document.getElementById(s);
-    if (el) { el.style.opacity = '0'; el.classList.remove('active'); }
-  });
-  const el = document.getElementById(id);
-  if (el) { el.classList.add('active'); el.style.opacity = '1'; }
-}
+function show(id) { scenes.forEach(s => { const el = document.getElementById(s); if(el){ el.style.opacity='0'; el.classList.remove('active'); }}); document.getElementById(id).classList.add('active'); document.getElementById(id).style.opacity='1'; }
 
-function playScene1() {
-  showScene('s1');
-  const logo = document.getElementById('s1-logo');
-  const tag = document.getElementById('s1-tagline');
-  slideUp(logo, 40, 600, 200);
-  slideUp(tag, 20, 600, 600);
-}
-
-function playScene2() {
-  showScene('s2');
-  const badge = document.getElementById('s2-badge');
-  const hl = document.getElementById('s2-headline');
-  const img = document.getElementById('s2-hero-img');
-  slideUp(badge, 16, 500, 100);
-  slideUp(hl, 40, 600, 300);
+function playS1() { show('s1'); slideUp(document.getElementById('s1-logo'), 60, 800, 200); slideUp(document.getElementById('s1-tagline'), 40, 800, 700); }
+function playS2() {
+  show('s2');
+  slideUp(document.getElementById('s2-badge'), 40, 600, 100);
+  slideUp(document.getElementById('s2-headline'), 60, 800, 300);
   setTimeout(() => {
-    img.style.opacity = '1';
-    img.style.transition = 'all 1s cubic-bezier(0.23, 1, 0.32, 1)';
-    img.style.transform = 'perspective(1000px) rotateY(0deg) scale(1.1)';
-  }, 400);
-}
-
-function playScene3() {
-  showScene('s3');
-  const hl = document.getElementById('s3-hl');
-  const img = document.getElementById('s3-image');
-  slideUp(hl, 30, 600, 100);
-  setTimeout(() => {
-    img.style.opacity = '1';
-    img.style.transition = 'transform 6s linear';
-    img.style.transform = 'translateY(-200px)';
+    const img = document.getElementById('s2-hero-img');
+    img.style.opacity='1'; img.style.transition='all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1)';
+    img.style.transform='perspective(1500px) rotateY(0deg) scale(1.05)';
   }, 500);
 }
-
-function playScene4() {
-  showScene('s4');
-  const hl = document.getElementById('s4-headline');
-  slideUp(hl, 30, 600, 100);
-  const chips = document.querySelectorAll('#s4-chips .feature-chip');
-  chips.forEach((c, i) => {
-    c.style.opacity = '0';
-    c.style.transform = 'translateX(50px)';
+function playS3() { // Advanced 3D Scroll with Video
+  show('s3');
+  slideUp(document.getElementById('s3-hl'), 60, 800, 100);
+  const img = document.getElementById('s3-image');
+  if (img.play) { img.currentTime = 0; img.play(); }
+  
+  // Initial 3D tilt reveal
+  img.style.transition = 'none';
+  img.style.opacity = '0';
+  img.style.transform = 'perspective(2000px) rotateX(20deg) scale(0.9) translateY(400px)';
+  
+  setTimeout(() => {
+    // Drop into view
+    img.style.transition = 'all 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'; // elastic spring from Framer Motion theory
+    img.style.opacity = '1';
+    img.style.transform = 'perspective(2000px) rotateX(4deg) scale(1) translateY(0px)';
+    
+    // Very gentle float (no scroll out of bounds!)
     setTimeout(() => {
-      c.style.transition = 'all 0.4s ease-out';
-      c.style.opacity = '1';
-      c.style.transform = 'translateX(0)';
-    }, 400 + i * 120);
+      img.style.transition = 'transform 6.5s cubic-bezier(0.25, 0.1, 0.25, 1)'; 
+      img.style.transform = 'perspective(2000px) rotateX(0deg) scale(1.03) translateY(-30px)'; 
+    }, 1400);
+  }, 500);
+}
+function playS4() {
+  show('s4'); slideUp(document.getElementById('s4-headline'), 50, 700, 100);
+  document.querySelectorAll('.feature-chip').forEach((c,i)=>{
+    c.style.opacity='0'; c.style.transform='translateY(60px)';
+    setTimeout(()=>{ c.style.transition='all 0.5s ease-out'; c.style.opacity='1'; c.style.transform='translateY(0)'; }, 400 + i*150);
   });
 }
-
-function playScene5() {
-  showScene('s5');
-  const title = document.getElementById('s5-title');
-  slideUp(title, 20, 600, 100);
-  const cards = document.querySelectorAll('#s5-stats .stat-card');
-  cards.forEach((c, i) => {
-    c.style.opacity = '0';
-    c.style.transform = 'scale(0.8)';
-    setTimeout(() => {
-      c.style.transition = 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-      c.style.opacity = '1';
-      c.style.transform = 'scale(1)';
-    }, 400 + i * 150);
+function playS5() {
+  show('s5'); slideUp(document.getElementById('s5-title'), 40, 700, 100);
+  document.querySelectorAll('.stat-card').forEach((c,i)=>{
+    c.style.opacity='0'; c.style.transform='scale(0.8)';
+    setTimeout(()=>{ c.style.transition='all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)'; c.style.opacity='1'; c.style.transform='scale(1)'; }, 400 + i*200);
   });
 }
-
-function playScene6() {
-  showScene('s6');
-  slideUp(document.getElementById('s6-headline'), 40, 700, 200);
-  slideUp(document.getElementById('s6-url'), 20, 700, 1000);
+function playS6() {
+  show('s6'); slideUp(document.getElementById('s6-headline'), 60, 800, 200); slideUp(document.getElementById('s6-url'), 40, 800, 1000);
 }
 
-// Timeline
-playScene1();
-setTimeout(playScene2, 3500);
-setTimeout(playScene3, 8500);
-setTimeout(playScene4, 13500);
-setTimeout(playScene5, 18500);
-setTimeout(playScene6, 23000);
+const tl = [{f:playS1, t:0}, {f:playS2, t:4500}, {f:playS3, t:9500}, {f:playS4, t:18500}, {f:playS5, t:23000}, {f:playS6, t:28000}];
+tl.forEach(step => setTimeout(step.f, step.t));
 
-function updateProgress() {
-  const pct = Math.min((Date.now() - startTime) / totalDuration * 100, 100);
+function progress() {
+  const pct = Math.min((Date.now() - startTime) / 33000 * 100, 100);
   document.getElementById('progress').style.width = pct + '%';
-  if (pct < 100) requestAnimationFrame(updateProgress);
+  if (pct < 100) requestAnimationFrame(progress); else location.reload();
 }
-requestAnimationFrame(updateProgress);
-
-setTimeout(() => location.reload(), 28000);
+requestAnimationFrame(progress);
 </script>
 </body>
 </html>

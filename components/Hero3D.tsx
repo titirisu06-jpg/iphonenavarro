@@ -395,7 +395,7 @@ const Hero3D: React.FC = () => {
           {/* Headline */}
           <h1 className="font-bold leading-[0.88] tracking-tighter text-white mb-5"
             style={{ fontSize: 'clamp(2.8rem, 8vw, 5.2rem)' }}>
-            Es mucho<br />
+            Más<br />
             <span style={{ color: '#C8B99A' }}>iPhone.</span><br />
             Por menos.
           </h1>

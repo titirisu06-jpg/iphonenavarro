@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone Navarro — Promo V5 White</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FFFFFF;
+      --text: #1D1D1F;
+      --blue: #0071E3;
+      --gray: #F5F5F7;
+      --accent: #B5A48E;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── Layout ── */
+    #video-container {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transform-origin: center;
+    }
+
+    .scene {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s ease;
+    }
+    .scene.active { display: flex; opacity: 1; }
+
+    /* ── Typography ── */
+    h1, h2 { font-weight: 900; line-height: 0.95; letter-spacing: -0.04em; }
+    .text-blue { color: var(--blue); }
+
+    /* ── Scene 1: Logo ── */
+    #s1 .logo-wrap { text-align: center; }
+    #s1 h1 { font-size: 140px; margin-bottom: 10px; }
+    #s1 .tag { font-size: 24px; font-weight: 700; letter-spacing: 0.4em; color: var(--blue); text-transform: uppercase; }
+
+    /* ── Scene 2: Hero ── */
+    #s2 { gap: 100px; padding: 0 100px; }
+    #s2 .left { flex: 1; }
+    #s2 .right { flex: 1; display: flex; justify-content: center; }
+    #s2 h2 { font-size: 130px; margin-bottom: 20px; }
+    .hero-img { width: 550px; transform: rotate(-5deg); box-shadow: 0 50px 100px rgba(0,0,0,0.1); border-radius: 40px; }
+
+    /* ── Scene 3: Catalog ── */
+    #s3 { flex-direction: column; }
+    #s3 h2 { font-size: 80px; margin-bottom: 40px; text-align: center; }
+    .cat-scroll-wrap { width: 1400px; height: 700px; border-radius: 40px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.08); border: 1px solid var(--gray); }
+    .cat-img { width: 100%; transform: translateY(0); }
+
+    /* ── Scene 4: Fast Features ── */
+    #s4 { flex-direction: column; gap: 30px; }
+    .feat-row { display: flex; align-items: center; gap: 30px; font-size: 80px; font-weight: 900; opacity: 0; transform: translateX(-50px); }
+    .feat-check { color: var(--blue); font-size: 90px; }
+
+    /* ── Scene 5: WhatsApp ── */
+    #s5 { flex-direction: column; text-align: center; }
+    #s5 h2 { font-size: 110px; margin-bottom: 50px; }
+    .cta-box { background: var(--gray); padding: 50px 80px; border-radius: 60px; display: flex; flex-direction: column; gap: 15px; }
+    .cta-url { font-size: 60px; font-weight: 900; color: var(--blue); }
+    .cta-sub { font-size: 30px; font-weight: 700; opacity: 0.6; }
+
+    /* ── Progress ── */
+    #progress-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 8px; background: rgba(0,0,0,0.05); }
+    #progress-bar { width: 0%; height: 100%; background: var(--blue); }
+  </style>
+</head>
+<body>
+
+<div id="video-container">
+  <!-- Scene 1 -->
+  <div class="scene" id="s1">
+    <div class="logo-wrap">
+      <h1 id="s1-h1">iPhone<br><span class="text-blue">Navarro</span></h1>
+      <div class="tag" id="s1-tag">Premium Tech</div>
+    </div>
+  </div>
+
+  <!-- Scene 2 -->
+  <div class="scene" id="s2">
+    <div class="left">
+      <h2 id="s2-h2">Más iPhone.<br><span class="text-blue">Por menos.</span></h2>
+    </div>
+    <div class="right">
+      <img src="assets/promo/hero.png" class="hero-img" id="s2-img">
+    </div>
+  </div>
+
+  <!-- Scene 3 -->
+  <div class="scene" id="s3">
+    <h2 id="s3-h2">Invertí en tu <span class="text-blue">próximo equipo.</span></h2>
+    <div class="cat-scroll-wrap">
+       <img src="assets/promo/catalog.png" class="cat-img" id="s3-img">
+    </div>
+  </div>
+
+  <!-- Scene 4 -->
+  <div class="scene" id="s4">
+    <div class="feat-row" id="f1"><span class="feat-check">✔</span> iPhones Sellados</div>
+    <div class="feat-row" id="f2"><span class="feat-check">✔</span> Hasta 12 cuotas</div>
+    <div class="feat-row" id="f3"><span class="feat-check">✔</span> Plan Canje</div>
+    <div class="feat-row" id="f4"><span class="feat-check">✔</span> Garantía oficial</div>
+  </div>
+
+  <!-- Scene 5 -->
+  <div class="scene" id="s5">
+    <h2 id="s5-h2">¡Es hoy!<br>Tu nuevo iPhone.</h2>
+    <div class="cta-box" id="s5-cta">
+      <div class="cta-sub">Ingresá ahora en</div>
+      <div class="cta-url">iphonenavarro.com.ar</div>
+    </div>
+  </div>
+
+  <div id="progress-container"><div id="progress-bar"></div></div>
+</div>
+
+<script>
+  const totalDuration = 18000; // 18 seconds (Rapid)
+  let startTime = Date.now();
+
+  function show(id) {
+    document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function animate(el, props, duration = 600, delay = 0) {
+    el.style.transition = 'none';
+    Object.keys(props).forEach(k => el.style[k] = props[k].from);
+    setTimeout(() => {
+      el.style.transition = `all ${duration}ms cubic-bezier(0.19, 1, 0.22, 1)`;
+      Object.keys(props).forEach(k => el.style[k] = props[k].to);
+    }, delay);
+  }
+
+  // Scene 1 Logic
+  function playS1() {
+    show('s1');
+    animate(document.getElementById('s1-h1'), { opacity: {from: 0, to: 1}, transform: {from: 'scale(0.8)', to: 'scale(1)'} }, 700);
+    animate(document.getElementById('s1-tag'), { opacity: {from: 0, to: 1}, transform: {from: 'translateY(20px)', to: 'translateY(0)'} }, 700, 400);
+  }
+
+  // Scene 2 Logic
+  function playS2() {
+    show('s2');
+    animate(document.getElementById('s2-h2'), { opacity: {from: 0, to: 1}, transform: {from: 'translateX(-100px)', to: 'translateX(0)'} }, 600);
+    animate(document.getElementById('s2-img'), { opacity: {from: 0, to: 1}, transform: {from: 'rotate(-20deg) scale(0.5)', to: 'rotate(-5deg) scale(1)'} }, 800, 200);
+  }
+
+  // Scene 3 Logic
+  function playS3() {
+    show('s3');
+    animate(document.getElementById('s3-h2'), { opacity: {from: 0, to: 1}, transform: {from: 'translateY(-30px)', to: 'translateY(0)'} }, 500);
+    const img = document.getElementById('s3-img');
+    img.style.transform = 'translateY(0)';
+    setTimeout(() => {
+      img.style.transition = 'transform 3.5s linear';
+      img.style.transform = 'translateY(-600px)';
+    }, 500);
+  }
+
+  // Scene 4 Logic
+  function playS4() {
+    show('s4');
+    ['f1','f2','f3','f4'].forEach((id, i) => {
+      animate(document.getElementById(id), { opacity: {from: 0, to: 1}, transform: {from: 'translateX(-50px)', to: 'translateX(0)'} }, 400, i * 200);
+    });
+  }
+
+  // Scene 5 Logic
+  function playS5() {
+    show('s5');
+    animate(document.getElementById('s5-h2'), { opacity: {from: 0, to: 1}, transform: {from: 'scale(1.2)', to: 'scale(1)'} }, 800);
+    animate(document.getElementById('s5-cta'), { opacity: {from: 0, to: 1}, transform: {from: 'translateY(100px)', to: 'translateY(0)'} }, 800, 400);
+  }
+
+  // Timeline
+  const timeline = [
+    { fn: playS1, time: 0 },
+    { fn: playS2, time: 3000 },
+    { fn: playS3, time: 6500 },
+    { fn: playS4, time: 11000 },
+    { fn: playS5, time: 14500 }
+  ];
+
+  timeline.forEach(step => setTimeout(step.fn, step.time));
+
+  function updateProgress() {
+    const elapsed = Date.now() - startTime;
+    const pct = Math.min((elapsed / totalDuration) * 100, 100);
+    document.getElementById('progress-bar').style.width = pct + '%';
+    if (elapsed < totalDuration + 1000) requestAnimationFrame(updateProgress);
+    else location.reload();
+  }
+  updateProgress();
+</script>
+
+</body>
+</html>

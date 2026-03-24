@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone Navarro — Promo V5 PRO White</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FFFFFF;
+      --text: #1D1D1F;
+      --blue: #0071E3;
+      --gray: #F5F5F7;
+      --border: rgba(0,0,0,0.08);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── Core Container ── */
+    #video-container {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .scene {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0 160px;
+      transition: opacity 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+    .scene.active { display: flex; opacity: 1; }
+
+    /* ── Typography ── */
+    h1, h2 { font-weight: 800; line-height: 0.92; letter-spacing: -0.05em; margin: 0; }
+    .text-blue { color: var(--blue); }
+    .eyebrow { font-size: 24px; font-weight: 700; letter-spacing: 0.4em; color: var(--blue); text-transform: uppercase; margin-bottom: 24px; display: block; }
+
+    /* ── Scene 1: The Hook ── */
+    #s1 { flex-direction: column; text-align: center; }
+    #s1 h1 { font-size: 160px; }
+    #s1 .social-proof { margin-top: 40px; font-size: 42px; font-weight: 600; color: #86868b; }
+
+    /* ── Scene 2: Hero Shot ── */
+    #s2 { justify-content: space-between; }
+    #s2 .copy { max-width: 800px; }
+    #s2 h2 { font-size: 140px; }
+    .hero-img { 
+      width: 580px; 
+      transform: rotate(-4deg); 
+      box-shadow: 0 60px 120px rgba(0,0,0,0.12), 0 20px 40px rgba(0,0,0,0.06); 
+      border-radius: 48px;
+    }
+
+    /* ── Scene 3: Catalog ── */
+    #s3 { flex-direction: column; }
+    #s3 h2 { font-size: 110px; margin-bottom: 40px; text-align: center; }
+    .browser-mock { width: 1400px; height: 720px; border-radius: 40px; background: #fff; box-shadow: 0 40px 80px rgba(0,0,0,0.1); border: 1px solid var(--border); overflow: hidden; }
+    .browser-bar { height: 40px; background: var(--gray); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; padding: 0 20px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: #ddd; }
+    .browser-content { height: 100%; position: relative; }
+    .cat-img { width: 100%; transform: translateY(0); }
+
+    /* ── Scene 4: Core Values ── */
+    #s4 { flex-direction: column; gap: 35px; }
+    .value-item { display: flex; align-items: center; gap: 35px; font-size: 100px; font-weight: 800; opacity: 0; transform: translateY(40px); }
+    .icon { width: 100px; height: 100px; background: var(--blue); border-radius: 28px; display: flex; align-items: center; justify-content: center; }
+    .icon svg { width: 50px; height: 50px; stroke: #fff; stroke-width: 2.5; }
+
+    /* ── Scene 5: Grand Finale ── */
+    #s5 { flex-direction: column; text-align: center; }
+    #s5 h2 { font-size: 130px; margin-bottom: 60px; }
+    .cta-glass {
+      background: rgba(245, 245, 247, 0.7);
+      backdrop-filter: blur(20px);
+      border: 2px solid var(--bg);
+      padding: 60px 100px;
+      border-radius: 70px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transform: scale(0.95);
+    }
+    .url { font-size: 85px; font-weight: 900; color: var(--blue); }
+    .wa-link { font-size: 38px; font-weight: 700; opacity: 0.6; display: flex; align-items: center; justify-content: center; gap: 15px; }
+
+    /* ── Progress ── */
+    #progress-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 12px; background: var(--gray); }
+    #progress-bar { width: 0%; height: 100%; background: var(--blue); transition: width 0.1s linear; }
+  </style>
+</head>
+<body>
+
+<div id="video-container">
+  <!-- Scene 1: THE HOOK -->
+  <div class="scene" id="s1">
+    <span class="eyebrow" id="s1-eye">iPhone Navarro</span>
+    <h1 id="s1-h1">Tu próximo iPhone,<br>está acá.</h1>
+    <div class="social-proof" id="s1-proof">+10.000 clientes nos eligen.</div>
+  </div>
+
+  <!-- Scene 2: HERO -->
+  <div class="scene" id="s2">
+    <div class="copy">
+      <h2 id="s2-h2">Más iPhone.<br><span class="text-blue">Por menos.</span></h2>
+    </div>
+    <div class="right">
+      <img src="assets/promo/hero.png" class="hero-img" id="s2-img">
+    </div>
+  </div>
+
+  <!-- Scene 3: CATALOG -->
+  <div class="scene" id="s3">
+    <h2 id="s3-h2">Encontrá el <span class="text-blue">modelo ideal.</span></h2>
+    <div class="browser-mock" id="s3-mock">
+      <div class="browser-bar">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      </div>
+      <div class="browser-content">
+        <img src="assets/promo/catalog.png" class="cat-img" id="s3-img">
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 4: CORE VALUES -->
+  <div class="scene" id="s4">
+    <div class="value-item" id="v1">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6L9 17l-5-5" /></svg></div>
+      Sellados con Garantía
+    </div>
+    <div class="value-item" id="v2">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v20m10-10H2" /></svg></div>
+      Plan Canje Directo
+    </div>
+    <div class="value-item" id="v3">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 1v22m5-18H7m10 14H7" /></svg></div>
+      Hasta 12 Cuotas
+    </div>
+  </div>
+
+  <!-- Scene 5: CTA -->
+  <div class="scene" id="s5">
+    <h2 id="s5-h2">Comenzá a disfrutarlo hoy.</h2>
+    <div class="cta-glass" id="s5-cta">
+      <div class="wa-link">📱 Consulta por WhatsApp</div>
+      <div class="url">iphonenavarro.com.ar</div>
+    </div>
+  </div>
+
+  <div id="progress-container"><div id="progress-bar"></div></div>
+</div>
+
+<script>
+  const totalDuration = 19000; // 19 seconds
+  let startTime = Date.now();
+
+  function show(id) {
+    document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+    setTimeout(() => {
+       document.getElementById(id).classList.add('active');
+    }, 50);
+  }
+
+  function animate(el, props, duration = 800, delay = 0) {
+    el.style.transition = 'none';
+    Object.keys(props).forEach(k => el.style[k] = props[k].from);
+    setTimeout(() => {
+      el.style.transition = `all ${duration}ms cubic-bezier(0.19, 1, 0.22, 1)`;
+      Object.keys(props).forEach(k => el.style[k] = props[k].to);
+    }, delay);
+  }
+
+  function playS1() {
+    show('s1');
+    animate(document.getElementById('s1-eye'), { opacity: {from: 0, to: 1}, transform: {from: 'translateY(-20px)', to: 'translateY(0)'} }, 600);
+    animate(document.getElementById('s1-h1'), { opacity: {from: 0, to: 1}, transform: {from: 'scale(1.1)', to: 'scale(1)'} }, 900, 200);
+    animate(document.getElementById('s1-proof'), { opacity: {from: 0, to: 1}, transform: {from: 'translateY(20px)', to: 'translateY(0)'} }, 700, 600);
+  }
+
+  function playS2() {
+    show('s2');
+    animate(document.getElementById('s2-h2'), { opacity: {from: 0, to: 1}, transform: {from: 'translateX(-120px)', to: 'translateX(0)'} }, 800);
+    animate(document.getElementById('s2-img'), { opacity: {from: 0, to: 1}, transform: {from: 'rotate(-25deg) scale(0.6)', to: 'rotate(-4deg) scale(1.1)'} }, 1200, 300);
+  }
+
+  function playS3() {
+    show('s3');
+    animate(document.getElementById('s3-h2'), { opacity: {from: 0, to: 1}, transform: {from: 'translateY(-40px)', to: 'translateY(0)'} }, 600);
+    animate(document.getElementById('s3-mock'), { opacity: {from: 0, to: 1}, transform: {from: 'scale(0.9) translateY(40px)', to: 'scale(1) translateY(0)'} }, 900, 200);
+    const img = document.getElementById('s3-img');
+    setTimeout(() => {
+      img.style.transition = 'transform 3.5s ease-in-out';
+      img.style.transform = 'translateY(-700px)';
+    }, 800);
+  }
+
+  function playS4() {
+    show('s4');
+    ['v1','v2','v3'].forEach((id, i) => {
+      animate(document.getElementById(id), { opacity: {from: 0, to: 1}, transform: {from: 'translateY(40px)', to: 'translateY(0)'} }, 600, i * 250);
+    });
+  }
+
+  function playS5() {
+    show('s5');
+    animate(document.getElementById('s5-h2'), { opacity: {from: 0, to: 1}, transform: {from: 'scale(0.8)', to: 'scale(1)'} }, 1000);
+    animate(document.getElementById('s5-cta'), { opacity: {from: 0, to: 1}, transform: {from: 'translateY(120px) scale(0.9)', to: 'translateY(0) scale(1)'} }, 1200, 400);
+  }
+
+  const timeline = [
+    { fn: playS1, time: 0 },
+    { fn: playS2, time: 3500 },
+    { fn: playS3, time: 7500 },
+    { fn: playS4, time: 11500 },
+    { fn: playS5, time: 15500 }
+  ];
+
+  timeline.forEach(step => setTimeout(step.fn, step.time));
+
+  function update() {
+    const elapsed = Date.now() - startTime;
+    const pct = Math.min((elapsed / totalDuration) * 100, 100);
+    document.getElementById('progress-bar').style.width = pct + '%';
+    if (elapsed < totalDuration + 2000) requestAnimationFrame(update);
+    else location.reload();
+  }
+  update();
+</script>
+
+</body>
+</html>

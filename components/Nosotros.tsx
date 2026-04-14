@@ -19,21 +19,35 @@ const Nosotros: React.FC = () => {
               En iPhone Navarro, nos dedicamos a ofrecerte la mejor experiencia en tecnología Apple. Con años de experiencia en la industria, garantizamos calidad, seguridad y asesoramiento personalizado en cada una de tus compras y reparaciones.
             </p>
 
-            {/* Nuevo Local */}
+            {/* Ubicación */}
             <div className="bg-iphone-blue/5 border border-iphone-blue/10 p-6 rounded-2xl relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-iphone-blue/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
-              <h3 className="font-bold text-ink text-xl mb-2 relative z-10">¡Estén atentos!</h3>
+              <h3 className="font-bold text-ink text-xl mb-2 relative z-10">Nuestra Ubicación</h3>
               <p className="text-ink-secondary text-sm mb-4 relative z-10 max-w-sm">
-                Próximamente abrimos nuestro nuevo local en Lobos. Vení a conocernos y descubrí todo lo que tenemos para vos.
+                Vení a conocernos a nuestro local en Lobos y descubrí todo lo que tenemos para vos.
               </p>
+              
+              <div className="relative z-10 w-full h-48 rounded-xl overflow-hidden border border-iphone-blue/10 mb-4 bg-white">
+                <iframe 
+                  src="https://maps.google.com/maps?q=-35.187597,-59.098280&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+                  width="100%" 
+                  height="100%" 
+                  style={{ border: 0 }} 
+                  allowFullScreen 
+                  loading="lazy" 
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Ubicación iPhone Navarro Lobos"
+                ></iframe>
+              </div>
+
               <a 
-                href="https://maps.app.goo.gl/Q2wz6nR3oe293s7w7" 
+                href="https://maps.app.goo.gl/Kz1Wp4RTyCDDPJWh9" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-iphone-blue font-semibold text-sm hover:underline relative z-10"
               >
                 <MapPin size={16} />
-                Ver ubicación en el mapa
+                Abrir en Google Maps
               </a>
             </div>
           </div>

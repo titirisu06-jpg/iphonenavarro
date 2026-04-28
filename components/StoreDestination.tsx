@@ -35,8 +35,8 @@ const StoreDestination: React.FC = () => {
               </div>
               <h3 className="text-2xl font-bold text-ink mb-4 tracking-tight">Nuestro Local</h3>
               <p className="text-ink-secondary leading-relaxed mb-10 font-light">
-                Navarro, Buenos Aires.<br/>
-                Vení a conocer los equipos personalmente y recibí nuestro asesoramiento.
+                Local Lobos, Calle Albertini 402 N208.<br/>
+                Próximamente en Navarro.
               </p>
             </div>
             

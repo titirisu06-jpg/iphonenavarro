@@ -1,0 +1,64 @@
+# Plan de Refactorización: Arquitectura Bot de Ventas Jopi (n8n)
+
+Este documento detalla la reestructuración técnica necesaria para convertir el MVP actual del bot "Jopi" en un agente de ventas escalable, eficiente y listo para producción en WhatsApp, solucionando los problemas de consumo de tokens, falta de memoria persistente y derivación manual.
+
+## User Review Required
+
+> [!CAUTION]
+> **Costos de LLM y Base de Datos:** La implementación de memoria persistente y bases de datos vectoriales requerirá definir dónde se alojarán estos datos (idealmente en el mismo Supabase que ya usan).
+
+## Open Questions
+
+> [!IMPORTANT]
+> 1. **Notificaciones a Jopi:** Cuando el bot "derive" a Jopi, ¿cómo queremos notificarle? ¿Mandarle un mensaje automatizado a Jopi? ¿Notificación en Telegram/Slack?
+> 2. **Gestión de la FAQ:** Para armar el RAG de las políticas, ¿prefieren tener un documento base que se sincronice, o armamos una tabla en Supabase que guarde la "Base de Conocimiento"?
+> 3. **Memoria de Sesión:** ¿Podemos crear una tabla extra en Supabase para guardar el historial de chat (`chat_memory`) y así tener persistencia real?
+
+---
+
+## Proposed Changes
+
+La refactorización se dividirá en 4 ejes principales que abordaremos de manera secuencial dentro del canvas de n8n.
+
+### Eje 1: Infraestructura y Eventos (Webhooks & Memoria)
+- **[REPLACE] Polling por Webhook:** 
+  - Eliminar el `Schedule Trigger` y el nodo HTTP de `getUpdates`.
+  - Implementar un nodo **Telegram Trigger** (que opera nativamente por Webhook en tiempo real, mucho más eficiente).
+- **[NEW] Enrutador de Eventos (Switch Node):**
+  - Filtrar eventos que no sean mensajes directos (ej. lecturas de estado "read", "delivered", actualizaciones de perfil) para no gatillar llamadas a la IA innecesariamente.
+- **[MODIFY] Memoria Persistente:**
+  - Cambiar el `Simple Memory` (Window Buffer) por un nodo de **Postgres Chat Memory** o **Supabase Memory**. Esto guardará el historial de cada número de teléfono en la DB, permitiendo que el bot recuerde clientes días después de su primera interacción.
+
+### Eje 2: Optimización de Tools (Supabase & RAG)
+- **[MODIFY] Tool de Catálogo (`buscar_iphones`):**
+  - Quitar el `returnAll: true`.
+  - Reconfigurar la herramienta como una búsqueda parametrizada (Ej: la IA debe pasar como parámetro `modelo`, `almacenamiento`). Solo se devolverán los top 3-5 resultados que hagan match, reduciendo el consumo de tokens en un 90% y evitando marear al LLM.
+- **[NEW] Tool de Conocimiento (FAQ RAG):**
+  - Eliminar las reglas de garantía y pagos del *System Prompt*.
+  - Crear una nueva herramienta (ej. `consultar_politicas_tienda`) conectada a una base vectorial (Qdrant o Supabase Vector) o simplemente una tool estática que la IA llame solo cuando el usuario pregunte por métodos de pago, garantías o direcciones.
+
+### Eje 3: Lógica de Derivación (Human Handoff)
+- **[NEW] Tool de Escalamiento (`derivar_a_jopi`):**
+  - Crear una herramienta explícita que la IA deba ejecutar cuando el usuario pida descuentos, ofrezca permutas o confirme que va al local.
+  - Esta tool disparará un sub-flujo que:
+    1. Responde al usuario: "Perfecto, te paso con Jopi".
+    2. Envía una alerta a Jopi (vía Telegram, WhatsApp privado o CRM) con el formato: *"🚨 Nuevo Lead Listo: Juan Pérez - Interesado en: iPhone 13 128GB. Tel: +54911..."*.
+    3. Pone al bot en "Mute" (estado guardado en DB) para ese usuario, evitando que la IA siga respondiendo mientras Jopi interviene manualmente.
+
+### Eje 4: Refactorización del Prompt (Ingeniería de Prompts)
+- **[MODIFY] System Prompt:**
+  - Hacerlo más lean y enfocado estrictamente en la **personalidad** (Tono argentino, amabilidad, respuestas cortas, Chameleon Mode) y **dirección del objetivo** (Vender o derivar a Jopi).
+  - Quitar toda la data dura que ahora vivirá en las tools (FAQ, catálogo).
+
+---
+
+## Verification Plan
+
+### Automated Tests
+- Ejecutar escenarios controlados enviando payloads HTTP directos al webhook de desarrollo.
+- Simular una consulta masiva (ej: "qué iphones tenés?") para verificar que la tool `buscar_iphones` no devuelva el catálogo entero, sino que pida aclaraciones ("Tenemos varios, ¿buscabas algún modelo Pro o normal?").
+
+### Manual Verification
+- Test de Memoria: Hablar con el bot, dejar pasar unas horas, y preguntarle "¿De qué estábamos hablando?". Debe recordar la intención de compra.
+- Test de Handoff: Intentar negociar un precio ("te doy $500 y mi iPhone 11"). Verificar que el bot corta la conversación y llega la notificación al dispositivo de Jopi.
+- Test de Latencia: Medir el tiempo de respuesta usando Webhooks vs el sistema anterior de Polling.

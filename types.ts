@@ -4,6 +4,10 @@ export enum Category {
   USADOS_PREMIUM = 'Usados Premium',
   USADOS = 'Usados',
   ACCESORIOS = 'Accesorios',
+  MACBOOKS = 'MacBooks',
+  IPADS = 'iPads',
+  APPLE_WATCH = 'Apple Watch',
+  AIRPODS = 'AirPods',
 }
 
 export interface ProductVariant {

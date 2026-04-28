@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
-import { ProductVariant } from '../types';
+import { ProductVariant, Category } from '../types';
 import { X, Save } from 'lucide-react';
 
 interface VariantFormModalProps {
   product_id: string;
+  productCategory: Category;
   variant?: ProductVariant | null;
   onClose: () => void;
   onSaved: () => void;
 }
 
-export const VariantFormModal: React.FC<VariantFormModalProps> = ({ product_id, variant, onClose, onSaved }) => {
+export const VariantFormModal: React.FC<VariantFormModalProps> = ({ product_id, productCategory, variant, onClose, onSaved }) => {
   const [formData, setFormData] = useState<Partial<ProductVariant>>({
     product_id,
     storage: '',
@@ -34,16 +35,23 @@ export const VariantFormModal: React.FC<VariantFormModalProps> = ({ product_id, 
     e.preventDefault();
     setLoading(true);
 
+    const submissionData = { ...formData };
+    
+    // Set default N/A for fields that might be hidden or empty for accessories
+    if (!submissionData.storage) submissionData.storage = 'N/A';
+    if (!submissionData.battery) submissionData.battery = 'N/A';
+    if (!submissionData.color) submissionData.color = 'N/A';
+
     if (!import.meta.env.VITE_SUPABASE_URL) {
       alert('Modo Demo: Variante simulada guardada localmente.');
       onSaved();
       return;
     }
 
-    if (formData.id) {
-      await supabase.from('variants').update(formData).eq('id', formData.id);
+    if (submissionData.id) {
+      await supabase.from('variants').update(submissionData).eq('id', submissionData.id);
     } else {
-      await supabase.from('variants').insert([formData]);
+      await supabase.from('variants').insert([submissionData]);
     }
 
     setLoading(false);
@@ -73,20 +81,24 @@ export const VariantFormModal: React.FC<VariantFormModalProps> = ({ product_id, 
                 </select>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-ink-secondary uppercase mb-1">Almacenamiento</label>
-                <input required name="storage" value={formData.storage} onChange={handleChange} className="lead-input" placeholder="128GB" />
-              </div>
+              {productCategory !== Category.ACCESORIOS && productCategory !== Category.AIRPODS && (
+                <div>
+                  <label className="block text-xs font-semibold text-ink-secondary uppercase mb-1">Almacenamiento</label>
+                  <input name="storage" value={formData.storage} onChange={handleChange} className="lead-input" placeholder="128GB" />
+                </div>
+              )}
               
               <div>
                 <label className="block text-xs font-semibold text-ink-secondary uppercase mb-1">Color</label>
-                <input required name="color" value={formData.color} onChange={handleChange} className="lead-input" placeholder="Black" />
+                <input name="color" value={formData.color} onChange={handleChange} className="lead-input" placeholder="Black / N/A" />
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-ink-secondary uppercase mb-1">Batería (%)</label>
-                <input required type="number" name="battery" value={formData.battery} onChange={handleChange} className="lead-input" min="0" max="100" />
-              </div>
+              {productCategory !== Category.ACCESORIOS && productCategory !== Category.AIRPODS && (
+                <div>
+                  <label className="block text-xs font-semibold text-ink-secondary uppercase mb-1">Batería (%)</label>
+                  <input type="text" name="battery" value={formData.battery} onChange={handleChange} className="lead-input" placeholder="100 / N/A" />
+                </div>
+              )}
 
               <div>
                 <label className="block text-xs font-semibold text-ink-secondary uppercase mb-1">Precio Variación ($)</label>

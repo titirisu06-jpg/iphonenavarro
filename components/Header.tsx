@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X, Smartphone, Star, Package, CreditCard, MessageCircle } from 'lucide-react';
 import { scrollToSection } from '../utils/navigation';
 import { buildWhatsAppUrl } from '../utils/whatsapp';
 
 const navLinks = [
-  { name: 'Catálogo', id: 'catalogo', icon: <Smartphone size={16} /> },
-  { name: 'Plan Canje', id: 'plan-canje', icon: <Star size={16} /> },
-  { name: 'Mayoristas', id: 'mayoristas', icon: <Package size={16} /> },
-  { name: 'Garantía', id: 'garantia', icon: <Star size={16} /> },
-  { name: 'Medios de Pago', id: 'medios-de-pago', icon: <CreditCard size={16} /> },
+  { name: 'Catálogo', path: '/catalogo', id: 'catalogo', icon: <Smartphone size={16} /> },
+  { name: 'Plan Canje', path: '/#plan-canje', id: 'plan-canje', icon: <Star size={16} /> },
+  { name: 'Mayoristas', path: '/#mayoristas', id: 'mayoristas', icon: <Package size={16} /> },
+  { name: 'Garantía', path: '/#garantia', id: 'garantia', icon: <Star size={16} /> },
+  { name: 'Medios de Pago', path: '/#medios-de-pago', id: 'medios-de-pago', icon: <CreditCard size={16} /> },
 ];
 
 const Header: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -26,10 +29,21 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (e: React.MouseEvent, id: string) => {
+  const handleNavClick = (e: React.MouseEvent, path: string, id: string) => {
     e.preventDefault();
     setIsMobileMenuOpen(false);
-    scrollToSection(id);
+    
+    if (path.startsWith('/#')) {
+      if (location.pathname === '/') {
+        scrollToSection(id);
+      } else {
+        navigate('/');
+        setTimeout(() => scrollToSection(id), 100);
+      }
+    } else {
+      navigate(path);
+      window.scrollTo(0, 0);
+    }
   };
 
   const whatsappUrl = buildWhatsAppUrl();
@@ -50,7 +64,7 @@ const Header: React.FC = () => {
           <a
             href="#"
             className="flex items-center gap-3 group shrink-0"
-            onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); setIsMobileMenuOpen(false); }}
+            onClick={e => { e.preventDefault(); navigate('/'); window.scrollTo({ top: 0, behavior: 'smooth' }); setIsMobileMenuOpen(false); }}
           >
             <div className="w-9 h-9 bg-[#0071E3] rounded-xl flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-200">
               <svg viewBox="0 0 24 24" fill="white" className="w-5 h-5">
@@ -76,8 +90,8 @@ const Header: React.FC = () => {
             {navLinks.map(link => (
               <a
                 key={link.id}
-                href={`#${link.id}`}
-                onClick={e => handleNavClick(e, link.id)}
+                href={link.path}
+                onClick={e => handleNavClick(e, link.path, link.id)}
                 className={`text-[14px] font-medium transition-colors duration-200 cursor-pointer ${
                   isScrolled
                     ? 'text-[#424245] hover:text-[#1D1D1F]'
@@ -118,8 +132,8 @@ const Header: React.FC = () => {
             {navLinks.map((link) => (
               <a
                 key={link.id}
-                href={`#${link.id}`}
-                onClick={e => handleNavClick(e, link.id)}
+                href={link.path}
+                onClick={e => handleNavClick(e, link.path, link.id)}
                 className={`flex items-center gap-3 py-3 px-3 rounded-xl transform transition-all active:scale-[0.98] ${
                   isScrolled 
                     ? 'text-[#1D1D1F] hover:bg-black/5' 

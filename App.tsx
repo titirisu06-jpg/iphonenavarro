@@ -12,6 +12,8 @@ import ServicioTecnico from './components/ServicioTecnico';
 import Redes from './components/Redes';
 import { AdminLogin } from './components/AdminLogin';
 import { AdminDashboard } from './components/AdminDashboard';
+import StoreDestination from './components/StoreDestination';
+import FeaturedCatalog from './components/FeaturedCatalog';
 import Footer from './components/Footer';
 import { MessageCircle } from 'lucide-react';
 import { buildWhatsAppUrl } from './utils/whatsapp';
@@ -64,7 +66,8 @@ const HomePage: React.FC = () => {
       <Header />
       <main>
         <Hero3D />
-        <Catalog />
+        <StoreDestination />
+        <FeaturedCatalog />
         <TradeIn />
         <ServicioTecnico />
         <Mayoristas />
@@ -78,6 +81,19 @@ const HomePage: React.FC = () => {
 };
 
 
+
+const CatalogPage: React.FC = () => {
+  return (
+    <div className="bg-white min-h-screen">
+      <Header />
+      <main className="pt-24 pb-12">
+        <Catalog />
+      </main>
+      <Footer />
+      <WhatsAppFab />
+    </div>
+  );
+};
 
 const RedesPage: React.FC = () => {
   return (
@@ -95,6 +111,7 @@ const RedesPage: React.FC = () => {
 const App: React.FC = () => (
   <Routes>
     <Route path="/" element={<HomePage />} />
+    <Route path="/catalogo" element={<CatalogPage />} />
     <Route path="/redes" element={<RedesPage />} />
     <Route path="/admin" element={<AdminLogin />} />
     <Route path="/admin/dashboard" element={<AdminDashboard />} />

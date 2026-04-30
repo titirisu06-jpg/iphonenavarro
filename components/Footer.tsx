@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { scrollToSection } from '../utils/navigation';
 import { buildWhatsAppUrl } from '../utils/whatsapp';
 import { DollarSign, Banknote, CreditCard } from 'lucide-react';
@@ -124,7 +125,11 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          <div style={{ borderTop: '1px solid #1C1C1E', paddingTop: 24, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+          <div style={{ borderTop: '1px solid #1C1C1E', paddingTop: 24, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+            <div className="flex gap-6 text-sm font-medium" style={{ color: '#8E8E93' }}>
+              <Link to="/faq" className="hover:text-white transition-colors duration-200">Preguntas Frecuentes (FAQ)</Link>
+              <Link to="/privacidad" className="hover:text-white transition-colors duration-200">Política de Privacidad</Link>
+            </div>
             <p className="font-mono text-center" style={{ fontSize: 10, color: 'rgba(255,255,255,0.18)', textTransform: 'uppercase', letterSpacing: '0.2em' }}>
               © {year} IPHONE NAVARRO · NAVARRO · BUENOS AIRES · ARGENTINA
             </p>

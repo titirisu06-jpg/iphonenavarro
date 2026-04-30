@@ -15,6 +15,7 @@ import { AdminDashboard } from './components/AdminDashboard';
 import StoreDestination from './components/StoreDestination';
 import FeaturedCatalog from './components/FeaturedCatalog';
 import Footer from './components/Footer';
+import FaqPrivacy from './components/FaqPrivacy';
 import { buildWhatsAppUrl } from './utils/whatsapp';
 
 const WhatsAppIcon = ({ size = 28, color = "white", className = "" }: { size?: number, color?: string, className?: string }) => (
@@ -120,11 +121,26 @@ const RedesPage: React.FC = () => {
   );
 };
 
+const FaqPrivacyPage: React.FC = () => {
+  return (
+    <div className="bg-white min-h-screen">
+      <Header />
+      <main className="pt-24 pb-12">
+        <FaqPrivacy />
+      </main>
+      <Footer />
+      <WhatsAppFab />
+    </div>
+  );
+};
+
 const App: React.FC = () => (
   <Routes>
     <Route path="/" element={<HomePage />} />
     <Route path="/catalogo" element={<CatalogPage />} />
     <Route path="/redes" element={<RedesPage />} />
+    <Route path="/faq" element={<FaqPrivacyPage />} />
+    <Route path="/privacidad" element={<FaqPrivacyPage />} />
     <Route path="/admin" element={<AdminLogin />} />
     <Route path="/admin/dashboard" element={<AdminDashboard />} />
   </Routes>

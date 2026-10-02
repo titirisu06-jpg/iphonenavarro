@@ -1,5 +1,6 @@
 param(
-  [string]$AssetsPath = (Join-Path $PSScriptRoot '..\public\products')
+  [string]$AssetsPath = (Join-Path $PSScriptRoot '..\public\products'),
+  [string[]]$Include = @('*.png')
 )
 
 Add-Type -AssemblyName System.Drawing
@@ -107,8 +108,10 @@ public static class ProductImageNormalizer
 '@ -ErrorAction Stop
 }
 
-Get-ChildItem -LiteralPath $AssetsPath -Filter '*.png' |
-  Sort-Object Name |
+@($Include | ForEach-Object {
+  Get-ChildItem -LiteralPath $AssetsPath -Filter $_
+}) |
+  Sort-Object FullName -Unique |
   ForEach-Object {
     [ProductImageNormalizer]::Normalize($_.FullName)
   }

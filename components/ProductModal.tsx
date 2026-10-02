@@ -87,9 +87,10 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) => {
   }, [onClose]);
 
   const displayStorages = useMemo(
-    () => variants.length > 0
+    () => (variants.length > 0
       ? unique(variants.map((variant) => variant.storage))
-      : unique(product.storages || []),
+      : unique(product.storages || []))
+      .filter((storage) => storage && storage.trim().toUpperCase() !== 'N/A'),
     [product.storages, variants],
   );
 

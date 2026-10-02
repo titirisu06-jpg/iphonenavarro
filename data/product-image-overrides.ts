@@ -1,0 +1,30 @@
+// Las imágenes remotas del catálogo usan lienzos panorámicos pensados para la
+// tienda de Apple. Estas copias locales mantienen cada producto bien encuadrado
+// y evitan que una generación termine mostrando el render de otra.
+export const productImageOverrides: Record<string, string> = {
+  'cargador-20w': '/products/catalog/cargador-20w-usb-c.webp',
+  'airpods-4': '/products/catalog/airpods-4.webp',
+  'airpods-4-anc': '/products/catalog/airpods-4-anc.webp',
+  'airpods-max': '/products/catalog/airpods-max-2.webp',
+  'airpods-pro-2': '/products/catalog/airpods-pro-2.webp',
+  'airpods-pro-3': '/products/catalog/airpods-pro-3.webp',
+  'watch-se-2': '/products/catalog/apple-watch-se-2-44mm.webp',
+  'watch-se-3-40': '/products/catalog/apple-watch-se-3-40mm.webp',
+  'watch-se-3-44': '/products/catalog/apple-watch-se-3-44mm.webp',
+  'watch-s11-42': '/products/catalog/apple-watch-series-11-42mm.webp',
+  'watch-s11-46': '/products/catalog/apple-watch-series-11-46mm.webp',
+  'ipad-10': '/products/catalog/ipad-10.webp',
+  'ipad-air-m4-11': '/products/catalog/ipad-air-m4-11.webp',
+  'ipad-air-m3-13': '/products/catalog/ipad-air-m3-13.webp',
+  'ipad-air-m4-13': '/products/catalog/ipad-air-m4-13.webp',
+  'ipad-pro-m5-11': '/products/catalog/ipad-pro-m5-11.webp',
+  'ipad-pro-m4-13': '/products/catalog/ipad-pro-m4-13.webp',
+  'ipad-pro-m5-13': '/products/catalog/ipad-pro-m5-13.webp',
+  'mac-air-m4-15': '/products/catalog/macbook-air-m4-15.webp',
+  'mac-air-m5-13': '/products/catalog/macbook-air-m5-13.webp',
+  'mac-air-m5-13-1tb': '/products/catalog/macbook-air-m5-13-1tb.webp',
+  'mac-air-m5-15': '/products/catalog/macbook-air-m5-15.webp',
+  'mac-neo-13-256': '/products/catalog/macbook-neo-13.webp',
+  'mac-neo-13-512': '/products/catalog/macbook-neo-13.webp',
+  'mac-pro-14-m5': '/products/catalog/macbook-pro-m5-14.webp',
+};

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ImageOff, Search, SlidersHorizontal, X } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { products as localProducts } from '../data/products';
+import { productImageOverrides } from '../data/product-image-overrides';
 import { Category } from '../types';
 import type { Product, ProductVariant } from '../types';
 import { getVariantCondition } from '../utils/product';
@@ -58,7 +59,7 @@ const availableVariants = (product: Product): ProductVariant[] => (
 const productStorages = (product: Product): string[] => Array.from(new Set([
   ...(product.storages || []),
   ...availableVariants(product).map((variant) => variant.storage),
-]));
+].filter((storage) => storage && normalizeStorage(storage) !== 'N/A')));
 
 const numericPrice = (price: number | string): number => {
   if (typeof price === 'number') return price;
@@ -135,7 +136,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const displayVariants = hasVariantFilter ? relevantVariants : variants;
   const storages = Array.from(new Set(
     displayVariants.length > 0
-      ? displayVariants.map((variant) => variant.storage)
+      ? displayVariants
+        .map((variant) => variant.storage)
+        .filter((storage) => storage && normalizeStorage(storage) !== 'N/A')
       : productStorages(product),
   )).sort((a, b) => storageRank(a) - storageRank(b));
   const variantPrices = displayVariants.map((variant) => numericPrice(variant.price)).filter(Number.isFinite);
@@ -274,7 +277,10 @@ const Catalog: React.FC = () => {
         console.error('Error fetching catalog:', error);
         setCatalogItems(localProducts);
       } else {
-        const remoteProducts = data as unknown as Product[];
+        const remoteProducts = (data as unknown as Product[]).map((product) => ({
+          ...product,
+          image: productImageOverrides[product.id] ?? product.image,
+        }));
         const remoteIphones = remoteProducts.filter(isIphone);
         const remoteIphoneIds = new Set(remoteIphones.map((product) => product.id));
         const remoteHasCondition = remoteIphones.some((product) => (

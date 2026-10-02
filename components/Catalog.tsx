@@ -1,139 +1,264 @@
-
-import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
+import { ImageOff, Search, SlidersHorizontal, X } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
 import { products as localProducts } from '../data/products';
+import { Category } from '../types';
+import type { Product, ProductVariant } from '../types';
+import { getVariantCondition } from '../utils/product';
 import { supabase } from '../utils/supabase';
 import { WHATSAPP_NUMBER } from '../utils/whatsapp';
-import { Category } from '../types';
-import type { Product } from '../types';
-import { MessageCircle, ChevronRight } from 'lucide-react';
 import ProductModal from './ProductModal';
+
+type SortOption = 'recommended' | 'model-desc' | 'price-asc' | 'price-desc' | 'name';
+type ConditionFilter = 'all' | 'Sellado' | 'Semi';
 
 const categoryLabels: Record<Category, string> = {
   [Category.SELLADOS]: 'Sellados',
   [Category.USADOS_PREMIUM]: 'Usados Premium',
   [Category.USADOS]: 'Usados',
-  [Category.ACCESORIOS]: 'Accesorios',
   [Category.MACBOOKS]: 'MacBooks',
   [Category.IPADS]: 'iPads',
   [Category.APPLE_WATCH]: 'Apple Watch',
   [Category.AIRPODS]: 'AirPods',
+  [Category.ACCESORIOS]: 'Accesorios',
 };
 
-const badgeColors: Record<Category, React.CSSProperties> = {
-  [Category.SELLADOS]: { background: '#0071E3', color: '#fff' },
-  [Category.USADOS_PREMIUM]: { background: '#DCFCE7', color: '#166534', border: '1px solid #BBF7D0' },
-  [Category.USADOS]: { background: '#F3F4F6', color: '#374151', border: '1px solid #E5E7EB' },
-  [Category.ACCESORIOS]: { background: '#EDE9FE', color: '#6D28D9', border: '1px solid #DDD6FE' },
-  [Category.MACBOOKS]: { background: '#1e293b', color: '#f8fafc', border: '1px solid #475569' },
-  [Category.IPADS]: { background: '#f0fdf4', color: '#15803d', border: '1px solid #bbf7d0' },
-  [Category.APPLE_WATCH]: { background: '#fff1f2', color: '#be123c', border: '1px solid #fecdd3' },
-  [Category.AIRPODS]: { background: '#fdf4ff', color: '#a21caf', border: '1px solid #fbcfe8' },
+const categoryOrder: Category[] = [
+  Category.SELLADOS,
+  Category.USADOS_PREMIUM,
+  Category.USADOS,
+  Category.MACBOOKS,
+  Category.IPADS,
+  Category.APPLE_WATCH,
+  Category.AIRPODS,
+  Category.ACCESORIOS,
+];
+
+const categoryWeight = new Map(categoryOrder.map((category, index) => [category, index]));
+
+const normalizeText = (value: string) => value
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .toLocaleLowerCase('es');
+
+const normalizeStorage = (value: string) => value.replace(/\s/g, '').toUpperCase();
+
+const storageRank = (value: string): number => {
+  const normalized = normalizeStorage(value);
+  const amount = Number.parseFloat(normalized);
+  if (!Number.isFinite(amount)) return Number.POSITIVE_INFINITY;
+  return normalized.endsWith('TB') ? amount * 1024 : amount;
 };
 
-const ProductCard: React.FC<{ product: Product; onSelect: (p: Product) => void }> = ({ product, onSelect }) => {
+const availableVariants = (product: Product): ProductVariant[] => (
+  (product.variants || []).filter((variant) => variant.stock_status !== 'out_of_stock')
+);
+
+const productStorages = (product: Product): string[] => Array.from(new Set([
+  ...(product.storages || []),
+  ...availableVariants(product).map((variant) => variant.storage),
+]));
+
+const numericPrice = (price: number | string): number => {
+  if (typeof price === 'number') return price;
+  const parsed = Number(String(price).replace(/[^0-9.,-]/g, '').replace(',', '.'));
+  return Number.isFinite(parsed) ? parsed : Number.POSITIVE_INFINITY;
+};
+
+const minimumPrice = (product: Product): number => {
+  const prices = availableVariants(product)
+    .map((variant) => numericPrice(variant.price))
+    .filter(Number.isFinite);
+  return prices.length > 0 ? Math.min(...prices) : numericPrice(product.price);
+};
+
+const isIphone = (product: Product): boolean => normalizeText(product.name).startsWith('iphone');
+
+const iphoneModelRank = (product: Product): [number, number] => {
+  const normalizedName = normalizeText(product.name);
+  const generation = Number(normalizedName.match(/iphone\s*(\d+)/)?.[1] || 0);
+  const tier = normalizedName.includes('pro max')
+    ? 5
+    : normalizedName.includes('pro')
+      ? 4
+      : normalizedName.includes('plus')
+        ? 3
+        : /\d+e\b/.test(normalizedName)
+          ? 1
+          : 2;
+  return [generation, tier];
+};
+
+const compareModelsNewest = (a: Product, b: Product): number => {
+  const aIsIphone = isIphone(a);
+  const bIsIphone = isIphone(b);
+  if (aIsIphone && bIsIphone) {
+    const [aGeneration, aTier] = iphoneModelRank(a);
+    const [bGeneration, bTier] = iphoneModelRank(b);
+    return bGeneration - aGeneration || bTier - aTier || a.name.localeCompare(b.name, 'es');
+  }
+  if (aIsIphone !== bIsIphone) return aIsIphone ? -1 : 1;
+  return a.name.localeCompare(b.name, 'es', { numeric: true });
+};
+
+const compareRecommended = (a: Product, b: Product): number => {
+  const categoryDifference = (categoryWeight.get(a.category) ?? 99) - (categoryWeight.get(b.category) ?? 99);
+  return categoryDifference || compareModelsNewest(a, b);
+};
+
+const formatPrice = (product: Product, price = minimumPrice(product)): string => {
+  if (!Number.isFinite(price)) return String(product.price);
+  return `${product.currency === 'USD' ? 'USD' : '$'} ${price.toLocaleString('es-AR')}`;
+};
+
+interface ProductCardProps {
+  product: Product;
+  storageFilter: string;
+  conditionFilter: ConditionFilter;
+  onSelect: (product: Product) => void;
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({
+  product,
+  storageFilter,
+  conditionFilter,
+  onSelect,
+}) => {
+  const [imageFailed, setImageFailed] = useState(false);
+  const variants = availableVariants(product);
+  const relevantVariants = variants.filter((variant) => (
+    (storageFilter === 'all' || normalizeStorage(variant.storage) === storageFilter)
+    && (conditionFilter === 'all' || getVariantCondition(variant, product.category) === conditionFilter)
+  ));
+  const hasVariantFilter = storageFilter !== 'all' || conditionFilter !== 'all';
+  const displayVariants = hasVariantFilter ? relevantVariants : variants;
+  const storages = Array.from(new Set(
+    displayVariants.length > 0
+      ? displayVariants.map((variant) => variant.storage)
+      : productStorages(product),
+  )).sort((a, b) => storageRank(a) - storageRank(b));
+  const variantPrices = displayVariants.map((variant) => numericPrice(variant.price)).filter(Number.isFinite);
+  const cardPrice = variantPrices.length > 0 ? Math.min(...variantPrices) : minimumPrice(product);
+  const distinctPrices = new Set(variantPrices);
+  const hasPriceRange = distinctPrices.size > 1;
+  const usedUnits = product.category === Category.USADOS ? displayVariants.length : 0;
+
+  useEffect(() => setImageFailed(false), [product.image]);
+
   return (
-    <div 
-      className="group bg-white border border-gray-100 hover:border-gray-200 transition-all duration-300 flex flex-col justify-between" 
-      style={{ borderRadius: '24px', padding: '16px', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}
-    >
-      {/* Image area */}
-      <div className="relative overflow-hidden flex items-center justify-center bg-gray-50/50 mb-4" style={{ height: 220, borderRadius: '16px' }}>
-        <img
-          src={product.image}
-          alt={product.name}
-          className="h-full object-contain transition-transform duration-500 group-hover:scale-105"
-          style={{ padding: 20, maxHeight: 200 }}
-          loading="lazy"
-        />
-        {/* Badge */}
-        <span
-          className="absolute top-3 left-3 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-white shadow-sm"
-          style={{ color: '#1D1D1F', letterSpacing: '0.04em' }}
-        >
-          {categoryLabels[product.category]}
+    <article className="group flex h-full flex-col overflow-hidden rounded-[28px] border border-black/[0.06] bg-white shadow-[0_2px_14px_rgba(0,0,0,0.035)] transition duration-500 hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(0,0,0,0.09)]">
+      <button
+        type="button"
+        onClick={() => onSelect(product)}
+        className="relative aspect-[4/3] w-full overflow-hidden bg-[#f5f5f7] p-6 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-iphone-blue"
+        aria-label={`Ver opciones de ${product.name}`}
+      >
+        <span className={`absolute left-4 top-4 z-10 rounded-full px-3 py-1.5 text-[11px] font-semibold tracking-tight shadow-sm ${
+          product.category === Category.SELLADOS
+            ? 'bg-iphone-blue text-white'
+            : 'border border-black/[0.06] bg-white/90 text-ink backdrop-blur'
+        }`}>
+          {categoryLabels[product.category] || product.category}
         </span>
-      </div>
 
-      {/* Content */}
-      <div className="flex flex-col flex-1">
-        <h3 className="font-semibold text-ink text-lg leading-tight mb-2">{product.name}</h3>
-        {product.description && (
-          <p className="text-gray-500 text-sm leading-relaxed line-clamp-2 mb-4">{product.description}</p>
+        {imageFailed ? (
+          <span className="flex h-full w-full flex-col items-center justify-center gap-2 text-ink-tertiary">
+            <ImageOff size={30} strokeWidth={1.5} />
+            <span className="text-xs">Imagen no disponible</span>
+          </span>
+        ) : (
+          <img
+            src={product.image}
+            alt={product.name}
+            className="h-full w-full object-contain drop-shadow-[0_18px_18px_rgba(0,0,0,0.12)] transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+            loading="lazy"
+            onError={() => setImageFailed(true)}
+          />
         )}
-        
-        {/* Storage chips */}
-        {(() => {
-          const allStorages = Array.from(new Set([
-            ...(product.storages || []),
-            ...((product as any).variants?.map((v: any) => v.storage) || [])
-          ]));
-          return allStorages.length > 0 ? (
-            <div className="flex flex-wrap gap-1.5 mb-5 mt-auto">
-              {allStorages.map(s => (
-                <span
-                  key={Math.random() + s}
-                  className="text-xs font-medium text-gray-600 px-2.5 py-1 rounded-md bg-gray-100/80"
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
-          ) : <div className="mt-auto mb-5"></div>;
-        })()}
-        
-        {/* CTA */}
-        <button
-          onClick={() => onSelect(product)}
-          className="w-full justify-center bg-black hover:bg-gray-800 text-white font-medium flex items-center gap-2 transition-colors"
-          style={{ borderRadius: '12px', padding: '12px 16px', fontSize: '15px' }}
-        >
-          Consultar precio
-        </button>
-      </div>
-    </div>
-  );
-};
+      </button>
 
-const categoryWeight: Record<string, number> = {
-  [Category.SELLADOS]: 1,
-  [Category.USADOS_PREMIUM]: 2,
-  [Category.USADOS]: 3,
-  [Category.MACBOOKS]: 4,
-  [Category.IPADS]: 5,
-  [Category.APPLE_WATCH]: 6,
-  [Category.AIRPODS]: 7,
-  [Category.ACCESORIOS]: 8,
+      <div className="flex flex-1 flex-col p-5 sm:p-6">
+        <div className="mb-1.5 flex items-start justify-between gap-3">
+          <h3 className="text-xl font-semibold leading-tight tracking-[-0.02em] text-ink">{product.name}</h3>
+          {usedUnits > 0 && (
+            <span className="shrink-0 rounded-full bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700">
+              {usedUnits} {usedUnits === 1 ? 'unidad' : 'unidades'}
+            </span>
+          )}
+        </div>
+
+        <p className="mb-4 text-sm leading-relaxed text-ink-tertiary">
+          {product.description || 'Consultá disponibilidad y opciones.'}
+        </p>
+
+        {storages.length > 0 && (
+          <div className="mb-5 mt-auto flex flex-wrap gap-1.5">
+            {storages.slice(0, 3).map((storage) => (
+              <span
+                key={`${product.id}-${storage}`}
+                className="rounded-lg bg-[#f5f5f7] px-2.5 py-1.5 text-xs font-medium text-ink-secondary"
+              >
+                {storage}
+              </span>
+            ))}
+            {storages.length > 3 && (
+              <span className="rounded-lg bg-[#f5f5f7] px-2.5 py-1.5 text-xs font-medium text-ink-tertiary">
+                +{storages.length - 3}
+              </span>
+            )}
+          </div>
+        )}
+
+        <div className="flex items-end justify-between gap-3 border-t border-black/[0.06] pt-5">
+          <div>
+            <span className="block text-[11px] font-medium uppercase tracking-[0.08em] text-ink-tertiary">
+              {hasPriceRange ? 'Desde' : 'Precio'}
+            </span>
+            <span className="text-lg font-semibold tracking-tight text-ink">{formatPrice(product, cardPrice)}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => onSelect(product)}
+            className="shrink-0 rounded-full bg-ink px-4 py-2.5 text-sm font-medium text-white transition hover:bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iphone-blue focus-visible:ring-offset-2"
+          >
+            Ver opciones
+          </button>
+        </div>
+      </div>
+    </article>
+  );
 };
 
 const Catalog: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryParam = searchParams.get('categoria');
+  const validCategory = Object.values(Category).includes(categoryParam as Category)
+    ? categoryParam as Category
+    : 'all';
 
-  const [activeCategory, setActiveCategory] = useState<Category | 'all'>(
-    (categoryParam as Category) || 'all'
-  );
+  const [activeCategory, setActiveCategory] = useState<Category | 'all'>(validCategory);
+  const [query, setQuery] = useState('');
+  const [storageFilter, setStorageFilter] = useState('all');
+  const [conditionFilter, setConditionFilter] = useState<ConditionFilter>('all');
+  const [sortOption, setSortOption] = useState<SortOption>('recommended');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [catalogItems, setCatalogItems] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showAll, setShowAll] = useState(false);
+  const forceReviewStock = import.meta.env.DEV || import.meta.env.VITE_USE_LOCAL_CATALOG === 'true';
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
-    if (categoryParam) {
-      setActiveCategory(categoryParam as Category);
-    } else {
-      setActiveCategory('all');
-    }
-  }, [categoryParam]);
+    setActiveCategory(validCategory);
+  }, [validCategory]);
 
   useEffect(() => {
     const loadCatalog = async () => {
       setLoading(true);
+
       if (!import.meta.env.VITE_SUPABASE_URL) {
         setCatalogItems(localProducts);
         setLoading(false);
@@ -142,163 +267,361 @@ const Catalog: React.FC = () => {
 
       const { data, error } = await supabase
         .from('products')
-        .select('*, variants(storage)')
+        .select('*, variants(*)')
         .order('created_at', { ascending: false });
 
       if (error || !data) {
         console.error('Error fetching catalog:', error);
         setCatalogItems(localProducts);
       } else {
-        const sortedData = (data as Product[]).sort((a, b) => {
-          const wA = categoryWeight[a.category] || 99;
-          const wB = categoryWeight[b.category] || 99;
-          return wA - wB;
-        });
-        setCatalogItems(sortedData);
+        const remoteProducts = data as unknown as Product[];
+        const remoteIphones = remoteProducts.filter(isIphone);
+        const remoteIphoneIds = new Set(remoteIphones.map((product) => product.id));
+        const remoteHasCondition = remoteIphones.some((product) => (
+          (product.variants || []).some((variant) => Object.hasOwn(variant, 'condition'))
+        ));
+        const remoteStockIsCurrent = ['ip18p', 'ip18pm', 'u-ip11', 'u-ip17e']
+          .every((id) => remoteIphoneIds.has(id)) && remoteHasCondition;
+
+        if (forceReviewStock || !remoteStockIsCurrent) {
+          const nonIphoneProducts = remoteProducts.filter((product) => !isIphone(product));
+
+          // Hasta que Supabase tenga la migración nueva, el sitio usa el stock
+          // versionado para iPhones y conserva las demás categorías remotas.
+          setCatalogItems([...localProducts, ...nonIphoneProducts]);
+        } else {
+          setCatalogItems(remoteProducts);
+        }
       }
+
       setLoading(false);
     };
 
-    loadCatalog();
-  }, []);
+    void loadCatalog();
+  }, [forceReviewStock]);
 
-  const categories: Array<{ key: Category | 'all'; label: string }> = [
-    { key: 'all', label: 'Todos' },
-    { key: Category.SELLADOS, label: 'Sellados' },
-    { key: Category.USADOS_PREMIUM, label: 'Usados Premium' },
-    { key: Category.USADOS, label: 'Usados' },
-    { key: Category.MACBOOKS, label: 'MacBooks' },
-    { key: Category.IPADS, label: 'iPads' },
-    { key: Category.APPLE_WATCH, label: 'Apple Watch' },
-    { key: Category.AIRPODS, label: 'AirPods' },
-    { key: Category.ACCESORIOS, label: 'Accesorios' },
-  ];
+  useEffect(() => {
+    if (!selectedProduct) return undefined;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [selectedProduct]);
 
-  const handleCategoryChange = (key: Category | 'all') => {
-    setActiveCategory(key);
-    setShowAll(false);
-    if (key === 'all') {
+  const storageOptions = useMemo(() => Array.from(new Set(
+    catalogItems.flatMap(productStorages).map(normalizeStorage),
+  )).sort((a, b) => storageRank(a) - storageRank(b)), [catalogItems]);
+
+  const categoryCounts = useMemo(() => new Map(
+    categoryOrder.map((category) => [
+      category,
+      catalogItems.filter((product) => product.category === category).length,
+    ]),
+  ), [catalogItems]);
+
+  const usedIphoneUnits = useMemo(() => catalogItems
+    .filter((product) => product.category === Category.USADOS && isIphone(product))
+    .reduce((total, product) => total + availableVariants(product).length, 0), [catalogItems]);
+
+  const filteredProducts = useMemo(() => {
+    const normalizedQuery = normalizeText(query.trim());
+    const result = catalogItems.filter((product) => {
+      if (activeCategory !== 'all' && product.category !== activeCategory) return false;
+
+      if (normalizedQuery) {
+        const searchableText = normalizeText([
+          product.name,
+          product.category,
+          ...(product.colors || []),
+          ...productStorages(product),
+          ...availableVariants(product).map((variant) => variant.color),
+        ].join(' '));
+        if (!searchableText.includes(normalizedQuery)) return false;
+      }
+
+      if (storageFilter !== 'all') {
+        const hasStorage = productStorages(product)
+          .some((storage) => normalizeStorage(storage) === storageFilter);
+        if (!hasStorage) return false;
+      }
+
+      if (conditionFilter !== 'all') {
+        const variants = availableVariants(product);
+        const hasCondition = variants.length > 0
+          ? variants.some((variant) => getVariantCondition(variant, product.category) === conditionFilter)
+          : (product.category === Category.SELLADOS ? 'Sellado' : 'Semi') === conditionFilter;
+        if (!hasCondition) return false;
+      }
+
+      return true;
+    });
+
+    return result.sort((a, b) => {
+      switch (sortOption) {
+        case 'model-desc':
+          return compareModelsNewest(a, b);
+        case 'price-asc':
+          return minimumPrice(a) - minimumPrice(b) || compareRecommended(a, b);
+        case 'price-desc':
+          return minimumPrice(b) - minimumPrice(a) || compareRecommended(a, b);
+        case 'name':
+          return a.name.localeCompare(b.name, 'es', { numeric: true });
+        default:
+          return compareRecommended(a, b);
+      }
+    });
+  }, [activeCategory, catalogItems, conditionFilter, query, sortOption, storageFilter]);
+
+  const groupedProducts = useMemo(() => {
+    if (sortOption !== 'recommended' || activeCategory !== 'all') {
+      return [{ key: 'results', label: '', products: filteredProducts }];
+    }
+
+    return categoryOrder
+      .map((category) => ({
+        key: category,
+        label: categoryLabels[category],
+        products: filteredProducts.filter((product) => product.category === category),
+      }))
+      .filter((group) => group.products.length > 0);
+  }, [activeCategory, filteredProducts, sortOption]);
+
+  const hasActiveFilters = activeCategory !== 'all'
+    || query.trim().length > 0
+    || storageFilter !== 'all'
+    || conditionFilter !== 'all'
+    || sortOption !== 'recommended';
+
+  const handleCategoryChange = (category: Category | 'all') => {
+    setActiveCategory(category);
+    if (category === 'all') {
       setSearchParams({});
     } else {
-      setSearchParams({ categoria: key });
+      setSearchParams({ categoria: category });
     }
   };
 
-  const filtered = activeCategory === 'all' ? catalogItems : catalogItems.filter(p => p.category === activeCategory);
+  const clearFilters = () => {
+    setActiveCategory('all');
+    setQuery('');
+    setStorageFilter('all');
+    setConditionFilter('all');
+    setSortOption('recommended');
+    setSearchParams({});
+  };
+
+  const categories: Array<{ key: Category | 'all'; label: string; count: number }> = [
+    { key: 'all', label: 'Todos', count: catalogItems.length },
+    ...categoryOrder
+      .filter((category) => (categoryCounts.get(category) || 0) > 0)
+      .map((category) => ({
+        key: category,
+        label: categoryLabels[category],
+        count: categoryCounts.get(category) || 0,
+      })),
+  ];
 
   return (
-    <section id="catalogo" className="bg-white py-16 scroll-mt-20">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+    <section id="catalogo" className="min-h-screen scroll-mt-20 bg-[#f5f5f7] pb-24 pt-10 sm:pt-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <motion.header
+          initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-10 text-center"
+          className="mb-10 max-w-4xl sm:mb-12"
         >
-          <h2 className="font-semibold text-ink tracking-tight mb-4" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.1 }}>
-            Catálogo de Productos
-          </h2>
-          <p className="text-gray-500 text-lg max-w-2xl mx-auto">
-            Encontrá el equipo ideal. Simple, rápido y con la mejor garantía.
+          <span className="mb-4 inline-flex rounded-full bg-iphone-blue/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-iphone-blue">
+            Stock actualizado
+          </span>
+          <h1 className="max-w-3xl text-4xl font-semibold leading-[1.04] tracking-[-0.045em] text-ink sm:text-5xl lg:text-6xl">
+            Elegí tu próximo iPhone.
+          </h1>
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-ink-tertiary sm:text-lg">
+            Compará modelos, capacidades y estado real de cada equipo. Precios claros y asesoramiento directo.
           </p>
-        </motion.div>
+          <div className="mt-7 flex flex-wrap gap-2.5 text-sm font-medium text-ink-secondary">
+            {usedIphoneUnits > 0 && (
+              <span className="rounded-full border border-black/[0.06] bg-white px-4 py-2 shadow-sm">
+                {usedIphoneUnits} usados detallados
+              </span>
+            )}
+            <span className="rounded-full border border-black/[0.06] bg-white px-4 py-2 shadow-sm">Precios en USD</span>
+            <span className="rounded-full border border-black/[0.06] bg-white px-4 py-2 shadow-sm">Garantía incluida</span>
+          </div>
+        </motion.header>
 
-        {/* Filter tabs */}
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex justify-center mb-10"
+          transition={{ duration: 0.45, delay: 0.08 }}
+          className="relative z-30 mb-10 rounded-[26px] border border-black/[0.07] bg-white/90 p-3 shadow-[0_12px_40px_rgba(0,0,0,0.08)] backdrop-blur-xl sm:p-4 lg:sticky lg:top-20"
         >
-          <div 
-            className="flex gap-2 overflow-x-auto pb-4 max-w-full" 
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
-          >
-            <style>{`.hide-scroll::-webkit-scrollbar { display: none; }`}</style>
-            <div className="flex gap-2 hide-scroll px-2">
-              {categories.map(cat => (
-                <button
-                  key={cat.key}
-                  onClick={() => handleCategoryChange(cat.key)}
-                  className={`shrink-0 transition-all duration-200 border ${
-                    activeCategory === cat.key 
-                      ? 'bg-black text-white border-black' 
-                      : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                  }`}
-                  style={{ minHeight: '40px', padding: '0 20px', borderRadius: '100px', fontSize: '14px', fontWeight: 500 }}
-                >
-                  {cat.label}
-                </button>
-              ))}
-            </div>
+          <div className="grid gap-2.5 lg:grid-cols-[minmax(260px,1fr)_auto_auto_auto_auto]">
+            <label className="relative block">
+              <span className="sr-only">Buscar en el catálogo</span>
+              <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink-tertiary" size={18} />
+              <input
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Buscar modelo, color o capacidad"
+                className="h-12 w-full rounded-2xl border border-black/[0.08] bg-[#f5f5f7] pl-11 pr-4 text-sm text-ink outline-none transition placeholder:text-ink-tertiary focus:border-iphone-blue focus:bg-white focus:ring-4 focus:ring-iphone-blue/10"
+              />
+            </label>
+
+            <label className="relative">
+              <span className="sr-only">Filtrar por capacidad</span>
+              <select
+                value={storageFilter}
+                onChange={(event) => setStorageFilter(event.target.value)}
+                className="h-12 w-full min-w-36 appearance-none rounded-2xl border border-black/[0.08] bg-[#f5f5f7] px-4 pr-9 text-sm font-medium text-ink outline-none transition focus:border-iphone-blue focus:bg-white focus:ring-4 focus:ring-iphone-blue/10"
+              >
+                <option value="all">Capacidad</option>
+                {storageOptions.map((storage) => <option key={storage} value={storage}>{storage}</option>)}
+              </select>
+              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-ink-tertiary">▼</span>
+            </label>
+
+            <label className="relative">
+              <span className="sr-only">Filtrar por condición</span>
+              <select
+                value={conditionFilter}
+                onChange={(event) => setConditionFilter(event.target.value as ConditionFilter)}
+                className="h-12 w-full min-w-40 appearance-none rounded-2xl border border-black/[0.08] bg-[#f5f5f7] px-4 pr-9 text-sm font-medium text-ink outline-none transition focus:border-iphone-blue focus:bg-white focus:ring-4 focus:ring-iphone-blue/10"
+              >
+                <option value="all">Todo estado</option>
+                <option value="Sellado">Sellados</option>
+                <option value="Semi">Seminuevos</option>
+              </select>
+              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-ink-tertiary">▼</span>
+            </label>
+
+            <label className="relative">
+              <span className="sr-only">Ordenar productos</span>
+              <select
+                value={sortOption}
+                onChange={(event) => setSortOption(event.target.value as SortOption)}
+                className="h-12 w-full min-w-44 appearance-none rounded-2xl border border-black/[0.08] bg-[#f5f5f7] px-4 pr-9 text-sm font-medium text-ink outline-none transition focus:border-iphone-blue focus:bg-white focus:ring-4 focus:ring-iphone-blue/10"
+              >
+                <option value="recommended">Recomendados</option>
+                <option value="model-desc">Modelo más nuevo</option>
+                <option value="price-asc">Menor precio</option>
+                <option value="price-desc">Mayor precio</option>
+                <option value="name">Nombre A–Z</option>
+              </select>
+              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-ink-tertiary">▼</span>
+            </label>
+
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="flex h-12 items-center justify-center gap-2 rounded-2xl px-3 text-sm font-medium text-ink-secondary transition hover:bg-black/[0.04] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iphone-blue"
+              >
+                <X size={16} /> Limpiar
+              </button>
+            )}
+          </div>
+
+          <div className="mt-3 flex items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <SlidersHorizontal className="ml-1 hidden shrink-0 text-ink-tertiary sm:block" size={17} />
+            {categories.map((category) => (
+              <button
+                key={category.key}
+                type="button"
+                onClick={() => handleCategoryChange(category.key)}
+                aria-pressed={activeCategory === category.key}
+                className={`flex h-10 shrink-0 items-center gap-2 rounded-full border px-4 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iphone-blue focus-visible:ring-offset-2 ${
+                  activeCategory === category.key
+                    ? 'border-ink bg-ink text-white'
+                    : 'border-black/[0.08] bg-white text-ink-secondary hover:border-black/20 hover:text-ink'
+                }`}
+              >
+                {category.label}
+                <span className={`text-xs ${activeCategory === category.key ? 'text-white/60' : 'text-ink-tertiary'}`}>
+                  {category.count}
+                </span>
+              </button>
+            ))}
           </div>
         </motion.div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 min-h-[400px]">
-          {loading ? (
-            Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="bg-gray-100 rounded-[24px] h-[380px] animate-pulse border border-gray-200" />
-            ))
-          ) : filtered.length === 0 ? (
-            <div className="col-span-full py-20 text-center text-ink-tertiary">
-              <p className="text-lg">No hay productos disponibles en esta categoría.</p>
-            </div>
-          ) : (
-            (showAll ? filtered : filtered.slice(0, 8)).map((product, i) => (
-              <motion.div 
-                key={product.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "0px 0px -50px 0px" }}
-                transition={{ duration: 0.5, delay: (i % 8) * 0.05 }}
-              >
-                <ProductCard product={product} onSelect={setSelectedProduct} />
-              </motion.div>
-            ))
+        <div className="mb-6 flex items-center justify-between gap-4">
+          <p className="text-sm font-medium text-ink-secondary">
+            {loading ? 'Actualizando catálogo…' : `${filteredProducts.length} ${filteredProducts.length === 1 ? 'modelo' : 'modelos'}`}
+          </p>
+          {!loading && filteredProducts.length > 0 && (
+            <p className="hidden text-sm text-ink-tertiary sm:block">Stock sujeto a disponibilidad</p>
           )}
         </div>
 
-        {/* Show More Button */}
-        {!loading && !showAll && filtered.length > 8 && (
-          <div className="mt-10 flex justify-center animate-fade-up">
+        {loading ? (
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {Array.from({ length: 8 }).map((_, index) => (
+              <div key={index} className="h-[480px] animate-pulse rounded-[28px] border border-black/[0.05] bg-white" />
+            ))}
+          </div>
+        ) : filteredProducts.length === 0 ? (
+          <div className="rounded-[32px] border border-black/[0.06] bg-white px-6 py-20 text-center shadow-sm">
+            <Search className="mx-auto mb-4 text-ink-tertiary" size={30} strokeWidth={1.5} />
+            <h2 className="text-xl font-semibold tracking-tight text-ink">No encontramos coincidencias</h2>
+            <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-ink-tertiary">
+              Probá con otro modelo o quitá alguno de los filtros aplicados.
+            </p>
             <button
-              onClick={() => setShowAll(true)}
-              className="px-8 py-3.5 bg-gray-100 hover:bg-gray-200 text-ink-secondary font-semibold rounded-2xl transition-all duration-300 flex items-center gap-2"
+              type="button"
+              onClick={clearFilters}
+              className="mt-6 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-white transition hover:bg-black"
             >
-              Ver Catálogo Completo <ChevronRight size={16} />
+              Ver todo el catálogo
             </button>
+          </div>
+        ) : (
+          <div className="space-y-12">
+            {groupedProducts.map((group) => (
+              <section key={group.key} aria-label={group.label || 'Resultados'}>
+                {group.label && (
+                  <div className="mb-5 flex items-end justify-between border-b border-black/[0.08] pb-4">
+                    <h2 className="text-2xl font-semibold tracking-[-0.025em] text-ink">{group.label}</h2>
+                    <span className="text-sm text-ink-tertiary">{group.products.length} modelos</span>
+                  </div>
+                )}
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {group.products.map((product) => (
+                    <div key={product.id}>
+                      <ProductCard
+                        product={product}
+                        storageFilter={storageFilter}
+                        conditionFilter={conditionFilter}
+                        onSelect={setSelectedProduct}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ))}
           </div>
         )}
 
-        {/* Bottom CTA */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="mt-16 text-center"
-        >
-          <p className="text-gray-500 mb-3 text-sm">
-            ¿No ves el modelo que buscás?
+        <div className="mt-16 rounded-[32px] bg-ink px-6 py-10 text-center text-white sm:px-10 sm:py-12">
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">¿Buscás otra configuración?</h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-white/60 sm:text-base">
+            Escribinos y te ayudamos a encontrar el modelo, color y capacidad que necesitás.
           </p>
           <a
-            href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hola%20iPhone%20Navarro%2C%20busco%20un%20modelo%20específico.`}
+            href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hola%20iPhone%20Navarro%2C%20busco%20un%20modelo%20espec%C3%ADfico.`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-black font-medium hover:underline decoration-gray-300 underline-offset-4"
+            className="mt-6 inline-flex rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink transition hover:scale-[1.02] hover:bg-white/90"
           >
-            Consultanos por WhatsApp
-            <ChevronRight size={16} />
+            Consultar por WhatsApp
           </a>
-        </motion.div>
+        </div>
       </div>
 
       {selectedProduct && (
-        <ProductModal 
-          product={selectedProduct} 
-          onClose={() => setSelectedProduct(null)} 
-        />
+        <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
       )}
     </section>
   );

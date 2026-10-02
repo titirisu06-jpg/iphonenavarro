@@ -7,9 +7,19 @@ export const buildWhatsAppUrl = (message?: string): string => {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
 };
 
-export const buildProductWhatsAppUrl = (productName: string, storage?: string, color?: string, battery?: string): string => {
-  const batteryStr = battery ? `Batería ${battery}%` : '';
-  const details = [productName, storage, color, batteryStr].filter(Boolean).join(' - ');
+export const buildProductWhatsAppUrl = (
+  productName: string,
+  storage?: string,
+  color?: string,
+  condition?: string,
+  battery?: string,
+): string => {
+  const normalizedBattery = battery?.trim();
+  const formattedBattery = normalizedBattery && normalizedBattery !== 'N/A'
+    ? (/^\d+(?:[.,]\d+)?$/.test(normalizedBattery) ? `${normalizedBattery}%` : normalizedBattery)
+    : '';
+  const batteryStr = formattedBattery ? `Batería ${formattedBattery}` : '';
+  const details = [productName, storage, color, condition, batteryStr].filter(Boolean).join(' - ');
   return buildWhatsAppUrl(`Hola iPhone Navarro, me interesa el ${details}. Quiero más info.`);
 };
 

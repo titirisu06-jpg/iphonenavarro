@@ -1,0 +1,1448 @@
+[
+  {
+    "id": "ip15",
+    "name": "iPhone 15",
+    "category": "Sellados",
+    "price": 800,
+    "currency": "USD",
+    "image": "/products/iphone-15.png",
+    "description": "Equipo sellado con garantía oficial Apple.",
+    "storages": [
+      "128GB"
+    ],
+    "colors": [
+      "Consultar"
+    ],
+    "variants": [
+      {
+        "id": "ip15-001",
+        "product_id": "ip15",
+        "storage": "128GB",
+        "color": "Consultar",
+        "battery": "100%",
+        "condition": "Sellado",
+        "price": 800,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "ip16",
+    "name": "iPhone 16",
+    "category": "Sellados",
+    "price": 900,
+    "currency": "USD",
+    "image": "/products/iphone-16.png",
+    "description": "Equipo sellado con garantía oficial Apple.",
+    "storages": [
+      "128GB"
+    ],
+    "colors": [
+      "Consultar"
+    ],
+    "variants": [
+      {
+        "id": "ip16-001",
+        "product_id": "ip16",
+        "storage": "128GB",
+        "color": "Consultar",
+        "battery": "100%",
+        "condition": "Sellado",
+        "price": 900,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "ip17",
+    "name": "iPhone 17",
+    "category": "Sellados",
+    "price": 1030,
+    "currency": "USD",
+    "image": "/products/iphone-17.png",
+    "description": "Equipo sellado con garantía oficial Apple.",
+    "storages": [
+      "256GB"
+    ],
+    "colors": [
+      "Consultar"
+    ],
+    "variants": [
+      {
+        "id": "ip17-001",
+        "product_id": "ip17",
+        "storage": "256GB",
+        "color": "Consultar",
+        "battery": "100%",
+        "condition": "Sellado",
+        "price": 1030,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "ip17p",
+    "name": "iPhone 17 Pro",
+    "category": "Sellados",
+    "price": 1270,
+    "currency": "USD",
+    "image": "/products/iphone-17-pro.png",
+    "description": "Equipo sellado con garantía oficial Apple.",
+    "storages": [
+      "256GB"
+    ],
+    "colors": [
+      "Consultar"
+    ],
+    "variants": [
+      {
+        "id": "ip17p-001",
+        "product_id": "ip17p",
+        "storage": "256GB",
+        "color": "Consultar",
+        "battery": "100%",
+        "condition": "Sellado",
+        "price": 1270,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "ip17pm",
+    "name": "iPhone 17 Pro Max",
+    "category": "Sellados",
+    "price": 1370,
+    "currency": "USD",
+    "image": "/products/iphone-17-pro-max.png",
+    "description": "Equipo sellado con garantía oficial Apple.",
+    "storages": [
+      "256GB"
+    ],
+    "colors": [
+      "Consultar"
+    ],
+    "variants": [
+      {
+        "id": "ip17pm-001",
+        "product_id": "ip17pm",
+        "storage": "256GB",
+        "color": "Consultar",
+        "battery": "100%",
+        "condition": "Sellado",
+        "price": 1370,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "ip18p",
+    "name": "iPhone 18 Pro",
+    "category": "Sellados",
+    "price": 1480,
+    "currency": "USD",
+    "image": "/products/iphone-18-pro.png",
+    "description": "Equipo sellado con garantía oficial Apple.",
+    "storages": [
+      "256GB"
+    ],
+    "colors": [
+      "Consultar"
+    ],
+    "variants": [
+      {
+        "id": "ip18p-001",
+        "product_id": "ip18p",
+        "storage": "256GB",
+        "color": "Consultar",
+        "battery": "100%",
+        "condition": "Sellado",
+        "price": 1480,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "ip18pm",
+    "name": "iPhone 18 Pro Max",
+    "category": "Sellados",
+    "price": 1730,
+    "currency": "USD",
+    "image": "/products/iphone-18-pro-max.png",
+    "description": "Equipo sellado con garantía oficial Apple.",
+    "storages": [
+      "256GB"
+    ],
+    "colors": [
+      "Negro",
+      "Silver",
+      "Celeste",
+      "Bordo"
+    ],
+    "variants": [
+      {
+        "id": "ip18pm-001",
+        "product_id": "ip18pm",
+        "storage": "256GB",
+        "color": "Negro",
+        "battery": "100%",
+        "condition": "Sellado",
+        "price": 1730,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "ip18pm-002",
+        "product_id": "ip18pm",
+        "storage": "256GB",
+        "color": "Silver",
+        "battery": "100%",
+        "condition": "Sellado",
+        "price": 1730,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "ip18pm-003",
+        "product_id": "ip18pm",
+        "storage": "256GB",
+        "color": "Celeste",
+        "battery": "100%",
+        "condition": "Sellado",
+        "price": 1730,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "ip18pm-004",
+        "product_id": "ip18pm",
+        "storage": "256GB",
+        "color": "Bordo",
+        "battery": "100%",
+        "condition": "Sellado",
+        "price": 1830,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "u-ip11",
+    "name": "iPhone 11",
+    "category": "Usados",
+    "price": 170,
+    "currency": "USD",
+    "image": "/products/iphone-11.png",
+    "description": "Condición y batería indicadas en cada variante.",
+    "storages": [
+      "64GB"
+    ],
+    "colors": [
+      "Lila",
+      "White"
+    ],
+    "variants": [
+      {
+        "id": "u-ip11-001",
+        "product_id": "u-ip11",
+        "storage": "64GB",
+        "color": "Lila",
+        "battery": "75%",
+        "condition": "Semi",
+        "price": 170,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip11-002",
+        "product_id": "u-ip11",
+        "storage": "64GB",
+        "color": "White",
+        "battery": "100%",
+        "condition": "Semi",
+        "price": 170,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "u-ip13",
+    "name": "iPhone 13",
+    "category": "Usados",
+    "price": 330,
+    "currency": "USD",
+    "image": "/products/iphone-13.png",
+    "description": "Condición y batería indicadas en cada variante.",
+    "storages": [
+      "128GB",
+      "256GB"
+    ],
+    "colors": [
+      "Blanco",
+      "Blue",
+      "Green",
+      "Pink",
+      "Starlight",
+      "Midnight"
+    ],
+    "variants": [
+      {
+        "id": "u-ip13-001",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Blanco",
+        "battery": "85%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-002",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Blue",
+        "battery": "86%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-003",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Blue",
+        "battery": "84%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-004",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Green",
+        "battery": "85%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-005",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Pink",
+        "battery": "81%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-006",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Pink",
+        "battery": "86%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-007",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Pink",
+        "battery": "80%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-008",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Pink",
+        "battery": "88%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-009",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Starlight",
+        "battery": "89%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-010",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Starlight",
+        "battery": "96%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-011",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Starlight",
+        "battery": "84%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-012",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Starlight",
+        "battery": "100%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-013",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Starlight",
+        "battery": "100%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-014",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Starlight",
+        "battery": "88%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-015",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Starlight",
+        "battery": "85%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-016",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Starlight",
+        "battery": "86%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-017",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Starlight",
+        "battery": "85%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-018",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Starlight",
+        "battery": "85%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-019",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Starlight",
+        "battery": "88%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-020",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Starlight",
+        "battery": "84%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-021",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Starlight",
+        "battery": "89%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-022",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Starlight",
+        "battery": "86%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-023",
+        "product_id": "u-ip13",
+        "storage": "128GB",
+        "color": "Starlight",
+        "battery": "87%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip13-024",
+        "product_id": "u-ip13",
+        "storage": "256GB",
+        "color": "Midnight",
+        "battery": "78%",
+        "condition": "Semi",
+        "price": 330,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "u-ip13p",
+    "name": "iPhone 13 Pro",
+    "category": "Usados",
+    "price": 400,
+    "currency": "USD",
+    "image": "/products/iphone-13-pro.png",
+    "description": "Condición y batería indicadas en cada variante.",
+    "storages": [
+      "128GB"
+    ],
+    "colors": [
+      "Sierra Blue"
+    ],
+    "variants": [
+      {
+        "id": "u-ip13p-001",
+        "product_id": "u-ip13p",
+        "storage": "128GB",
+        "color": "Sierra Blue",
+        "battery": "7%",
+        "condition": "Semi",
+        "price": 400,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "u-ip14",
+    "name": "iPhone 14",
+    "category": "Usados",
+    "price": 365,
+    "currency": "USD",
+    "image": "/products/iphone-14.png",
+    "description": "Condición y batería indicadas en cada variante.",
+    "storages": [
+      "128GB"
+    ],
+    "colors": [
+      "Rojo",
+      "Black",
+      "Blue"
+    ],
+    "variants": [
+      {
+        "id": "u-ip14-001",
+        "product_id": "u-ip14",
+        "storage": "128GB",
+        "color": "Rojo",
+        "battery": "77%",
+        "condition": "Semi",
+        "price": 365,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip14-002",
+        "product_id": "u-ip14",
+        "storage": "128GB",
+        "color": "Rojo",
+        "battery": "79%",
+        "condition": "Semi",
+        "price": 365,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip14-003",
+        "product_id": "u-ip14",
+        "storage": "128GB",
+        "color": "Black",
+        "battery": "86%",
+        "condition": "Semi",
+        "price": 365,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip14-004",
+        "product_id": "u-ip14",
+        "storage": "128GB",
+        "color": "Black",
+        "battery": "81%",
+        "condition": "Semi",
+        "price": 365,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip14-005",
+        "product_id": "u-ip14",
+        "storage": "128GB",
+        "color": "Blue",
+        "battery": "80%",
+        "condition": "Semi",
+        "price": 365,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "u-ip14p",
+    "name": "iPhone 14 Pro",
+    "category": "Usados",
+    "price": 485,
+    "currency": "USD",
+    "image": "/products/iphone-14-pro.png",
+    "description": "Condición y batería indicadas en cada variante.",
+    "storages": [
+      "128GB",
+      "256GB"
+    ],
+    "colors": [
+      "Negro",
+      "Space Black"
+    ],
+    "variants": [
+      {
+        "id": "u-ip14p-001",
+        "product_id": "u-ip14p",
+        "storage": "128GB",
+        "color": "Negro",
+        "battery": "85%",
+        "condition": "Semi",
+        "price": 485,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip14p-002",
+        "product_id": "u-ip14p",
+        "storage": "128GB",
+        "color": "Space Black",
+        "battery": "85%",
+        "condition": "Semi",
+        "price": 485,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip14p-003",
+        "product_id": "u-ip14p",
+        "storage": "256GB",
+        "color": "Space Black",
+        "battery": "100%",
+        "condition": "Semi",
+        "price": 560,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip14p-004",
+        "product_id": "u-ip14p",
+        "storage": "256GB",
+        "color": "Space Black",
+        "battery": "99%",
+        "condition": "Semi",
+        "price": 560,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip14p-005",
+        "product_id": "u-ip14p",
+        "storage": "256GB",
+        "color": "Space Black",
+        "battery": "73%",
+        "condition": "Semi",
+        "price": 560,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "u-ip15",
+    "name": "iPhone 15",
+    "category": "Usados",
+    "price": 485,
+    "currency": "USD",
+    "image": "/products/iphone-15.png",
+    "description": "Condición y batería indicadas en cada variante.",
+    "storages": [
+      "128GB"
+    ],
+    "colors": [
+      "Black",
+      "Pink"
+    ],
+    "variants": [
+      {
+        "id": "u-ip15-001",
+        "product_id": "u-ip15",
+        "storage": "128GB",
+        "color": "Black",
+        "battery": "82%",
+        "condition": "Semi",
+        "price": 485,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15-002",
+        "product_id": "u-ip15",
+        "storage": "128GB",
+        "color": "Black",
+        "battery": "86%",
+        "condition": "Semi",
+        "price": 485,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15-003",
+        "product_id": "u-ip15",
+        "storage": "128GB",
+        "color": "Pink",
+        "battery": "87%",
+        "condition": "Semi",
+        "price": 485,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "u-ip15p",
+    "name": "iPhone 15 Pro",
+    "category": "Usados",
+    "price": 600,
+    "currency": "USD",
+    "image": "/products/iphone-15-pro.png",
+    "description": "Condición y batería indicadas en cada variante.",
+    "storages": [
+      "128GB",
+      "256GB"
+    ],
+    "colors": [
+      "Black Titanium",
+      "Blue Titanium",
+      "Natural Titanium"
+    ],
+    "variants": [
+      {
+        "id": "u-ip15p-001",
+        "product_id": "u-ip15p",
+        "storage": "128GB",
+        "color": "Black Titanium",
+        "battery": "88%",
+        "condition": "Semi",
+        "price": 600,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15p-002",
+        "product_id": "u-ip15p",
+        "storage": "128GB",
+        "color": "Black Titanium",
+        "battery": "80%",
+        "condition": "Semi",
+        "price": 600,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15p-003",
+        "product_id": "u-ip15p",
+        "storage": "128GB",
+        "color": "Black Titanium",
+        "battery": "80%",
+        "condition": "Semi",
+        "price": 600,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15p-004",
+        "product_id": "u-ip15p",
+        "storage": "128GB",
+        "color": "Black Titanium",
+        "battery": "82%",
+        "condition": "Semi",
+        "price": 600,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15p-005",
+        "product_id": "u-ip15p",
+        "storage": "128GB",
+        "color": "Black Titanium",
+        "battery": "84%",
+        "condition": "Semi",
+        "price": 600,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15p-006",
+        "product_id": "u-ip15p",
+        "storage": "128GB",
+        "color": "Blue Titanium",
+        "battery": "84%",
+        "condition": "Semi",
+        "price": 600,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15p-007",
+        "product_id": "u-ip15p",
+        "storage": "128GB",
+        "color": "Blue Titanium",
+        "battery": "83%",
+        "condition": "Semi",
+        "price": 600,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15p-008",
+        "product_id": "u-ip15p",
+        "storage": "128GB",
+        "color": "Blue Titanium",
+        "battery": "89%",
+        "condition": "Semi",
+        "price": 600,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15p-009",
+        "product_id": "u-ip15p",
+        "storage": "128GB",
+        "color": "Blue Titanium",
+        "battery": "80%",
+        "condition": "Semi",
+        "price": 600,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15p-010",
+        "product_id": "u-ip15p",
+        "storage": "128GB",
+        "color": "Natural Titanium",
+        "battery": "80%",
+        "condition": "Semi",
+        "price": 600,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15p-011",
+        "product_id": "u-ip15p",
+        "storage": "256GB",
+        "color": "Black Titanium",
+        "battery": "85%",
+        "condition": "Semi",
+        "price": 640,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "u-ip15pm",
+    "name": "iPhone 15 Pro Max",
+    "category": "Usados",
+    "price": 700,
+    "currency": "USD",
+    "image": "/products/iphone-15-pro-max.png",
+    "description": "Condición y batería indicadas en cada variante.",
+    "storages": [
+      "256GB"
+    ],
+    "colors": [
+      "Black Titanium",
+      "Blue Titanium"
+    ],
+    "variants": [
+      {
+        "id": "u-ip15pm-001",
+        "product_id": "u-ip15pm",
+        "storage": "256GB",
+        "color": "Black Titanium",
+        "battery": "82%",
+        "condition": "Semi",
+        "price": 700,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15pm-002",
+        "product_id": "u-ip15pm",
+        "storage": "256GB",
+        "color": "Black Titanium",
+        "battery": "84%",
+        "condition": "Semi",
+        "price": 700,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15pm-003",
+        "product_id": "u-ip15pm",
+        "storage": "256GB",
+        "color": "Black Titanium",
+        "battery": "83%",
+        "condition": "Semi",
+        "price": 700,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15pm-004",
+        "product_id": "u-ip15pm",
+        "storage": "256GB",
+        "color": "Blue Titanium",
+        "battery": "82%",
+        "condition": "Semi",
+        "price": 700,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15pm-005",
+        "product_id": "u-ip15pm",
+        "storage": "256GB",
+        "color": "Blue Titanium",
+        "battery": "88%",
+        "condition": "Semi",
+        "price": 700,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15pm-006",
+        "product_id": "u-ip15pm",
+        "storage": "256GB",
+        "color": "Blue Titanium",
+        "battery": "80%",
+        "condition": "Semi",
+        "price": 700,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15pm-007",
+        "product_id": "u-ip15pm",
+        "storage": "256GB",
+        "color": "Blue Titanium",
+        "battery": "97%",
+        "condition": "Semi",
+        "price": 700,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip15pm-008",
+        "product_id": "u-ip15pm",
+        "storage": "256GB",
+        "color": "Blue Titanium",
+        "battery": "80%",
+        "condition": "Semi",
+        "price": 700,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "u-ip16",
+    "name": "iPhone 16",
+    "category": "Usados",
+    "price": 640,
+    "currency": "USD",
+    "image": "/products/iphone-16.png",
+    "description": "Condición y batería indicadas en cada variante.",
+    "storages": [
+      "128GB"
+    ],
+    "colors": [
+      "Black",
+      "Pink",
+      "Ultramarine",
+      "White"
+    ],
+    "variants": [
+      {
+        "id": "u-ip16-001",
+        "product_id": "u-ip16",
+        "storage": "128GB",
+        "color": "Black",
+        "battery": "89%",
+        "condition": "Semi",
+        "price": 640,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip16-002",
+        "product_id": "u-ip16",
+        "storage": "128GB",
+        "color": "Black",
+        "battery": "89%",
+        "condition": "Semi",
+        "price": 640,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip16-003",
+        "product_id": "u-ip16",
+        "storage": "128GB",
+        "color": "Black",
+        "battery": "89%",
+        "condition": "Semi",
+        "price": 640,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip16-004",
+        "product_id": "u-ip16",
+        "storage": "128GB",
+        "color": "Black",
+        "battery": "89%",
+        "condition": "Semi",
+        "price": 640,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip16-005",
+        "product_id": "u-ip16",
+        "storage": "128GB",
+        "color": "Black",
+        "battery": "87%",
+        "condition": "Semi",
+        "price": 640,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip16-006",
+        "product_id": "u-ip16",
+        "storage": "128GB",
+        "color": "Black",
+        "battery": "89%",
+        "condition": "Semi",
+        "price": 640,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip16-007",
+        "product_id": "u-ip16",
+        "storage": "128GB",
+        "color": "Black",
+        "battery": "90%",
+        "condition": "Semi",
+        "price": 640,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip16-008",
+        "product_id": "u-ip16",
+        "storage": "128GB",
+        "color": "Black",
+        "battery": "91%",
+        "condition": "Semi",
+        "price": 640,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip16-009",
+        "product_id": "u-ip16",
+        "storage": "128GB",
+        "color": "Black",
+        "battery": "88%",
+        "condition": "Semi",
+        "price": 640,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip16-010",
+        "product_id": "u-ip16",
+        "storage": "128GB",
+        "color": "Pink",
+        "battery": "88%",
+        "condition": "Semi",
+        "price": 640,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip16-011",
+        "product_id": "u-ip16",
+        "storage": "128GB",
+        "color": "Ultramarine",
+        "battery": "89%",
+        "condition": "Semi",
+        "price": 640,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip16-012",
+        "product_id": "u-ip16",
+        "storage": "128GB",
+        "color": "Ultramarine",
+        "battery": "91%",
+        "condition": "Semi",
+        "price": 640,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip16-013",
+        "product_id": "u-ip16",
+        "storage": "128GB",
+        "color": "Ultramarine",
+        "battery": "90%",
+        "condition": "Semi",
+        "price": 640,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip16-014",
+        "product_id": "u-ip16",
+        "storage": "128GB",
+        "color": "Ultramarine",
+        "battery": "88%",
+        "condition": "Semi",
+        "price": 640,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip16-015",
+        "product_id": "u-ip16",
+        "storage": "128GB",
+        "color": "White",
+        "battery": "90%",
+        "condition": "Semi",
+        "price": 640,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip16-016",
+        "product_id": "u-ip16",
+        "storage": "128GB",
+        "color": "White",
+        "battery": "100%",
+        "condition": "Sellado",
+        "price": 640,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "u-ip16p",
+    "name": "iPhone 16 Pro",
+    "category": "Usados",
+    "price": 750,
+    "currency": "USD",
+    "image": "/products/iphone-16-pro.png",
+    "description": "Condición y batería indicadas en cada variante.",
+    "storages": [
+      "128GB"
+    ],
+    "colors": [
+      "Black",
+      "Desert"
+    ],
+    "variants": [
+      {
+        "id": "u-ip16p-001",
+        "product_id": "u-ip16p",
+        "storage": "128GB",
+        "color": "Black",
+        "battery": "89%",
+        "condition": "Semi",
+        "price": 750,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip16p-002",
+        "product_id": "u-ip16p",
+        "storage": "128GB",
+        "color": "Desert",
+        "battery": "88%",
+        "condition": "Semi",
+        "price": 750,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "u-ip16pm",
+    "name": "iPhone 16 Pro Max",
+    "category": "Usados",
+    "price": 890,
+    "currency": "USD",
+    "image": "/products/iphone-16-pro-max.png",
+    "description": "Condición y batería indicadas en cada variante.",
+    "storages": [
+      "256GB"
+    ],
+    "colors": [
+      "Desert",
+      "Black Titanium"
+    ],
+    "variants": [
+      {
+        "id": "u-ip16pm-001",
+        "product_id": "u-ip16pm",
+        "storage": "256GB",
+        "color": "Desert",
+        "battery": "91%",
+        "condition": "Semi",
+        "price": 890,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip16pm-002",
+        "product_id": "u-ip16pm",
+        "storage": "256GB",
+        "color": "Black Titanium",
+        "battery": "87%",
+        "condition": "Semi",
+        "price": 890,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "u-ip17",
+    "name": "iPhone 17",
+    "category": "Usados",
+    "price": 910,
+    "currency": "USD",
+    "image": "/products/iphone-17.png",
+    "description": "Condición y batería indicadas en cada variante.",
+    "storages": [
+      "256GB"
+    ],
+    "colors": [
+      "Black",
+      "Lavender"
+    ],
+    "variants": [
+      {
+        "id": "u-ip17-001",
+        "product_id": "u-ip17",
+        "storage": "256GB",
+        "color": "Black",
+        "battery": "100%",
+        "condition": "Sellado",
+        "price": 910,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip17-002",
+        "product_id": "u-ip17",
+        "storage": "256GB",
+        "color": "Lavender",
+        "battery": "93%",
+        "condition": "Semi",
+        "price": 910,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip17-003",
+        "product_id": "u-ip17",
+        "storage": "256GB",
+        "color": "Lavender",
+        "battery": "100%",
+        "condition": "Semi",
+        "price": 910,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "u-ip17p",
+    "name": "iPhone 17 Pro",
+    "category": "Usados",
+    "price": 1160,
+    "currency": "USD",
+    "image": "/products/iphone-17-pro.png",
+    "description": "Condición y batería indicadas en cada variante.",
+    "storages": [
+      "256GB"
+    ],
+    "colors": [
+      "Orange",
+      "Cosmic Orange",
+      "Deep Blue",
+      "Silver"
+    ],
+    "variants": [
+      {
+        "id": "u-ip17p-001",
+        "product_id": "u-ip17p",
+        "storage": "256GB",
+        "color": "Orange",
+        "battery": "92%",
+        "condition": "Semi",
+        "price": 1160,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip17p-002",
+        "product_id": "u-ip17p",
+        "storage": "256GB",
+        "color": "Cosmic Orange",
+        "battery": "100%",
+        "condition": "Sellado",
+        "price": 1160,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip17p-003",
+        "product_id": "u-ip17p",
+        "storage": "256GB",
+        "color": "Cosmic Orange",
+        "battery": "100%",
+        "condition": "Sellado",
+        "price": 1160,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip17p-004",
+        "product_id": "u-ip17p",
+        "storage": "256GB",
+        "color": "Deep Blue",
+        "battery": "100%",
+        "condition": "Sellado",
+        "price": 1160,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip17p-005",
+        "product_id": "u-ip17p",
+        "storage": "256GB",
+        "color": "Silver",
+        "battery": "100%",
+        "condition": "Sellado",
+        "price": 1160,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip17p-006",
+        "product_id": "u-ip17p",
+        "storage": "256GB",
+        "color": "Silver",
+        "battery": "100%",
+        "condition": "Sellado",
+        "price": 1160,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "u-ip17pm",
+    "name": "iPhone 17 Pro Max",
+    "category": "Usados",
+    "price": 1230,
+    "currency": "USD",
+    "image": "/products/iphone-17-pro-max.png",
+    "description": "Condición y batería indicadas en cada variante.",
+    "storages": [
+      "256GB",
+      "512GB"
+    ],
+    "colors": [
+      "Blue",
+      "Orange",
+      "Cosmic Orange",
+      "Silver"
+    ],
+    "variants": [
+      {
+        "id": "u-ip17pm-001",
+        "product_id": "u-ip17pm",
+        "storage": "256GB",
+        "color": "Blue",
+        "battery": "99%",
+        "condition": "Semi",
+        "price": 1230,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip17pm-002",
+        "product_id": "u-ip17pm",
+        "storage": "256GB",
+        "color": "Blue",
+        "battery": "99%",
+        "condition": "Semi",
+        "price": 1230,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip17pm-003",
+        "product_id": "u-ip17pm",
+        "storage": "256GB",
+        "color": "Orange",
+        "battery": "99%",
+        "condition": "Semi",
+        "price": 1230,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip17pm-004",
+        "product_id": "u-ip17pm",
+        "storage": "256GB",
+        "color": "Cosmic Orange",
+        "battery": "100%",
+        "condition": "Sellado",
+        "price": 1230,
+        "stock_status": "in_stock"
+      },
+      {
+        "id": "u-ip17pm-005",
+        "product_id": "u-ip17pm",
+        "storage": "512GB",
+        "color": "Silver",
+        "battery": "95%",
+        "condition": "Semi",
+        "price": 1400,
+        "stock_status": "in_stock"
+      }
+    ]
+  },
+  {
+    "id": "u-ip17e",
+    "name": "iPhone 17e",
+    "category": "Usados",
+    "price": 600,
+    "currency": "USD",
+    "image": "/products/iphone-17e.png",
+    "description": "Condición y batería indicadas en cada variante.",
+    "storages": [
+      "256GB"
+    ],
+    "colors": [
+      "Black"
+    ],
+    "variants": [
+      {
+        "id": "u-ip17e-001",
+        "product_id": "u-ip17e",
+        "storage": "256GB",
+        "color": "Black",
+        "battery": "N/A",
+        "condition": "Semi",
+        "price": 600,
+        "stock_status": "in_stock"
+      }
+    ]
+  }
+]

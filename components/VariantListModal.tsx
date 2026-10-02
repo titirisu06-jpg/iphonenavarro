@@ -3,6 +3,7 @@ import { supabase } from '../utils/supabase';
 import { Product, ProductVariant } from '../types';
 import { X, Plus, Edit2, Trash2, Battery } from 'lucide-react';
 import { VariantFormModal } from './VariantFormModal';
+import { formatBattery, getVariantCondition } from '../utils/product';
 
 interface VariantListModalProps {
   product: Product;
@@ -76,6 +77,7 @@ export const VariantListModal: React.FC<VariantListModalProps> = ({ product, onC
                   <tr className="bg-gray-50 border-b border-gray-200 text-ink-secondary">
                     <th className="p-4 text-[11px] font-bold uppercase tracking-wider">Almacenamiento</th>
                     <th className="p-4 text-[11px] font-bold uppercase tracking-wider">Color</th>
+                    <th className="p-4 text-[11px] font-bold uppercase tracking-wider">Condición</th>
                     <th className="p-4 text-[11px] font-bold uppercase tracking-wider">Batería</th>
                     <th className="p-4 text-[11px] font-bold uppercase tracking-wider">Stock</th>
                     <th className="p-4 text-[11px] font-bold uppercase tracking-wider">Precio</th>
@@ -84,16 +86,22 @@ export const VariantListModal: React.FC<VariantListModalProps> = ({ product, onC
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {loading ? (
-                    <tr><td colSpan={6} className="p-8 text-center text-ink-tertiary">Cargando variantes...</td></tr>
+                    <tr><td colSpan={7} className="p-8 text-center text-ink-tertiary">Cargando variantes...</td></tr>
                   ) : variants.length === 0 ? (
-                    <tr><td colSpan={6} className="p-8 text-center text-ink-tertiary">No hay variantes cargadas.</td></tr>
+                    <tr><td colSpan={7} className="p-8 text-center text-ink-tertiary">No hay variantes cargadas.</td></tr>
                   ) : (
                     variants.map(v => (
                       <tr key={v.id} className="hover:bg-gray-50/50 transition-colors">
                         <td className="p-4 font-semibold text-ink">{v.storage}</td>
                         <td className="p-4 text-ink-secondary">{v.color}</td>
-                        <td className="p-4 flex items-center gap-1.5 font-medium text-ink-secondary">
-                          <Battery size={14} className={parseInt(v.battery.replace('%', '')) < 85 ? 'text-amber-500' : 'text-green-500'} /> {v.battery}{!v.battery.includes('%') && v.battery !== 'N/A' && '%'}
+                        <td className="p-4 text-ink-secondary">{getVariantCondition(v, product.category)}</td>
+                        <td className="p-4 font-medium text-ink-secondary">
+                          {formatBattery(v.battery) ? (
+                            <span className="flex items-center gap-1.5">
+                              <Battery size={14} className={parseInt(v.battery, 10) < 85 ? 'text-amber-500' : 'text-green-500'} />
+                              {formatBattery(v.battery)}
+                            </span>
+                          ) : 'No informada'}
                         </td>
                         <td className="p-4">
                           <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-tighter ${v.stock_status === 'in_stock' ? 'bg-green-100/50 text-green-700 border border-green-200' : 'bg-red-100/50 text-red-700 border border-red-200'}`}>
@@ -131,9 +139,12 @@ export const VariantListModal: React.FC<VariantListModalProps> = ({ product, onC
                       <div>
                         <p className="font-bold text-ink text-base">{v.storage} — {v.color}</p>
                         <div className="flex items-center gap-3 mt-1 text-xs text-ink-secondary">
-                          <span className="flex items-center gap-1 font-medium">
-                            <Battery size={12} className={parseInt(v.battery.replace('%', '')) < 85 ? 'text-amber-500' : 'text-green-500'} /> {v.battery}{!v.battery.includes('%') && v.battery !== 'N/A' && '%'}
-                          </span>
+                          <span className="font-semibold">{getVariantCondition(v, product.category)}</span>
+                          {formatBattery(v.battery) && (
+                            <span className="flex items-center gap-1 font-medium">
+                              <Battery size={12} className={parseInt(v.battery, 10) < 85 ? 'text-amber-500' : 'text-green-500'} /> {formatBattery(v.battery)}
+                            </span>
+                          )}
                           <span className={`font-bold uppercase tracking-tighter ${v.stock_status === 'in_stock' ? 'text-green-600' : 'text-red-600'}`}>
                              {v.stock_status === 'in_stock' ? 'En Stock' : 'Sin Stock'}
                           </span>

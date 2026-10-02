@@ -1,110 +1,101 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { ArrowRight, Plus } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+interface SecondaryCardProps {
+  name: string;
+  description: string;
+  image: string;
+}
+
+const SecondaryCard: React.FC<SecondaryCardProps> = ({ name, description, image }) => (
+  <article className="group relative min-h-[220px] flex-1 overflow-hidden rounded-[2rem] border border-black/[0.05] bg-[#f5f5f7] p-6 transition duration-500 hover:-translate-y-0.5 hover:shadow-xl">
+    <div className="relative z-20 max-w-[54%]">
+      <h3 className="text-xl font-semibold tracking-[-0.025em] text-ink sm:text-2xl">{name}</h3>
+      <p className="mt-1.5 text-sm leading-snug text-ink-tertiary">{description}</p>
+    </div>
+
+    <Link
+      to="/catalogo?categoria=Sellados"
+      aria-label={`Ver ${name} en el catálogo`}
+      className="absolute bottom-6 left-6 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/[0.05] text-ink transition duration-300 group-hover:bg-ink group-hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iphone-blue focus-visible:ring-offset-2"
+    >
+      <Plus size={20} />
+    </Link>
+
+    <div className="absolute inset-y-2 right-2 z-0 w-[48%] transition-transform duration-700 ease-out group-hover:scale-[1.04]">
+      <img
+        src={image}
+        alt={name}
+        className="h-full w-full object-contain object-right"
+        loading="lazy"
+      />
+    </div>
+  </article>
+);
 
 const FeaturedCatalog: React.FC = () => {
   return (
-    <section className="bg-white py-24 md:py-32 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
-        
-        {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-16 gap-6">
-          <div>
-            <h2 className="text-4xl md:text-5xl font-bold text-ink tracking-tight leading-tight">
-              Diseñados para destacar.<br/>
-              <span className="text-ink/40">Nuestra selección.</span>
-            </h2>
-          </div>
-          <Link 
-            to="/catalogo" 
-            className="group flex items-center gap-2 text-iphone-blue font-medium hover:text-blue-600 transition-colors"
+    <section id="seleccion-destacada" className="relative scroll-mt-24 overflow-hidden bg-white py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mb-12 flex flex-col gap-6 md:mb-16 md:flex-row md:items-end md:justify-between">
+          <h2 className="text-4xl font-semibold leading-[1.05] tracking-[-0.04em] text-ink md:text-5xl">
+            Diseñados para destacar.<br />
+            <span className="text-ink/40">Nuestra selección.</span>
+          </h2>
+
+          <Link
+            to="/catalogo"
+            className="group inline-flex w-fit items-center gap-2 font-medium text-iphone-blue transition-colors hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iphone-blue focus-visible:ring-offset-4"
           >
             Ver todos los modelos
-            <div className="bg-iphone-blue/10 rounded-full p-1 group-hover:bg-iphone-blue/20 transition-colors">
+            <span className="rounded-full bg-iphone-blue/10 p-1 transition-colors group-hover:bg-iphone-blue/20">
               <ArrowRight size={16} />
-            </div>
+            </span>
           </Link>
         </div>
 
-        {/* Asymmetric Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:h-[450px]">
-          
-          {/* Main Hero Card (2 cols) */}
-          <div className="lg:col-span-2 bg-[#f5f5f7] rounded-[2rem] p-8 md:p-10 flex flex-col justify-between group overflow-hidden relative border border-black/5 hover:shadow-xl transition-shadow duration-500 min-h-[350px] lg:min-h-0">
-            <div className="relative z-20 flex flex-col md:flex-row md:justify-between md:items-start gap-6 max-w-[60%]">
-              <div>
-                <h3 className="text-3xl md:text-4xl font-bold text-ink mb-2">iPhone 15 Pro</h3>
-                <p className="text-ink-secondary text-lg font-light">Titanio aeroespacial. Fuerte. Ligero. Pro.</p>
-              </div>
-              <Link 
-                to="/catalogo" 
-                className="inline-flex items-center justify-center bg-ink text-white px-6 py-3 rounded-full font-medium hover:bg-black hover:scale-105 transition-all duration-300 w-fit shrink-0"
+        <div className="grid grid-cols-1 gap-6 lg:h-[480px] lg:grid-cols-3">
+          <article className="group relative min-h-[520px] overflow-hidden rounded-[2rem] border border-black/[0.05] bg-[#f5f5f7] p-8 transition duration-500 hover:-translate-y-0.5 hover:shadow-xl sm:min-h-[500px] sm:p-10 lg:col-span-2 lg:min-h-0">
+            <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#8f243d]/10 blur-3xl" />
+
+            <div className="relative z-20 max-w-md lg:max-w-[42%]">
+              <span className="inline-flex rounded-full bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-[#8f243d] shadow-sm backdrop-blur">
+                Lo último
+              </span>
+              <h3 className="mt-4 text-3xl font-semibold tracking-[-0.035em] text-ink md:text-4xl">iPhone 18 Pro</h3>
+              <p className="mt-3 text-base leading-relaxed text-ink-secondary md:text-lg">
+                A20 Pro. Potencia y fotografía de nivel Pro.
+              </p>
+              <Link
+                to="/catalogo?categoria=Sellados"
+                className="mt-7 inline-flex w-fit items-center justify-center rounded-full bg-ink px-6 py-3 font-medium text-white transition duration-300 hover:scale-[1.02] hover:bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iphone-blue focus-visible:ring-offset-2"
               >
                 Más información
               </Link>
             </div>
-            
-            {/* Product Image */}
-            <div className="absolute right-[-10%] bottom-[-5%] w-[110%] h-[130%] md:right-[-5%] md:bottom-[2%] md:w-[85%] md:h-[140%] z-10 transition-transform duration-700 group-hover:scale-105 origin-bottom-right">
-              <img 
-                src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-finish-select-202309-6-1inch-naturaltitanium?wid=5120&hei=2880&fmt=png-alpha" 
-                alt="iPhone 15 Pro" 
-                className="w-full h-full object-contain object-right-bottom mix-blend-multiply"
+
+            <div className="absolute inset-x-4 bottom-[-2%] z-10 h-[55%] transition-transform duration-700 ease-out group-hover:scale-[1.025] sm:inset-x-auto sm:right-[2%] sm:h-[58%] sm:w-[70%] lg:bottom-[1%] lg:right-[1%] lg:h-[96%] lg:w-[56%]">
+              <img
+                src="/products/iphone-18-pro.png"
+                alt="iPhone 18 Pro"
+                className="h-full w-full object-contain object-right-bottom drop-shadow-[0_24px_28px_rgba(0,0,0,0.12)]"
               />
             </div>
+          </article>
+
+          <div className="flex flex-col gap-6 lg:h-[480px]">
+            <SecondaryCard
+              name="iPhone 17 Pro"
+              description="Rendimiento Pro, diseño inconfundible."
+              image="/products/iphone-17-pro.png"
+            />
+            <SecondaryCard
+              name="iPhone 16"
+              description="Potente, versátil y listo para todo."
+              image="/products/iphone-16.png"
+            />
           </div>
-
-          {/* Secondary Cards Column */}
-          <div className="flex flex-col gap-6 lg:h-[450px]">
-            
-            {/* Secondary Card 1 */}
-            <div className="flex-1 bg-[#f5f5f7] rounded-[2rem] p-6 flex flex-col justify-between group overflow-hidden relative border border-black/5 hover:shadow-xl transition-shadow duration-500 min-h-[220px]">
-              <div className="relative z-20 max-w-[65%]">
-                <h3 className="text-2xl font-bold text-ink mb-1">iPhone 14 Pro</h3>
-                <p className="text-ink-secondary text-sm font-light">Un salto increíble.</p>
-              </div>
-              
-              <Link 
-                to="/catalogo" 
-                className="absolute bottom-6 left-6 z-20 w-10 h-10 rounded-full bg-black/5 flex items-center justify-center text-ink group-hover:bg-ink group-hover:text-white transition-colors duration-300"
-              >
-                <Plus size={20} />
-              </Link>
-
-              <div className="absolute right-[-15%] bottom-[-15%] w-[100%] h-[130%] z-10 transition-transform duration-700 group-hover:scale-105 origin-bottom-right">
-                <img 
-                  src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-pro-finish-select-202209-6-1inch-deeppurple?wid=5120&hei=2880&fmt=png-alpha" 
-                  alt="iPhone 14 Pro" 
-                  className="w-full h-full object-contain object-right-bottom mix-blend-multiply"
-                />
-              </div>
-            </div>
-
-            {/* Secondary Card 2 */}
-            <div className="flex-1 bg-[#f5f5f7] rounded-[2rem] p-6 flex flex-col justify-between group overflow-hidden relative border border-black/5 hover:shadow-xl transition-shadow duration-500 min-h-[220px]">
-              <div className="relative z-20 max-w-[65%]">
-                <h3 className="text-2xl font-bold text-ink mb-1">iPhone 13</h3>
-                <p className="text-ink-secondary text-sm font-light">Tu nuevo superpoder.</p>
-              </div>
-              
-              <Link 
-                to="/catalogo" 
-                className="absolute bottom-6 left-6 z-20 w-10 h-10 rounded-full bg-black/5 flex items-center justify-center text-ink group-hover:bg-ink group-hover:text-white transition-colors duration-300"
-              >
-                <Plus size={20} />
-              </Link>
-
-              <div className="absolute right-[-15%] bottom-[-15%] w-[100%] h-[130%] z-10 transition-transform duration-700 group-hover:scale-105 origin-bottom-right">
-                <img 
-                  src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-finish-select-202207-6-1inch-starlight?wid=5120&hei=2880&fmt=png-alpha" 
-                  alt="iPhone 13" 
-                  className="w-full h-full object-contain object-right-bottom mix-blend-multiply"
-                />
-              </div>
-            </div>
-
-          </div>
-
         </div>
       </div>
     </section>

@@ -25,6 +25,7 @@ CREATE TABLE variants (
   storage text NOT NULL,
   color text NOT NULL,
   battery text NOT NULL,
+  condition text NOT NULL DEFAULT 'Semi' CHECK (condition IN ('Semi', 'Sellado')),
   price numeric NOT NULL,
   stock_status text DEFAULT 'in_stock',
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL

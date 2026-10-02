@@ -16,6 +16,7 @@ export interface ProductVariant {
   storage: string;
   color: string;
   battery: string;
+  condition?: 'Semi' | 'Sellado';
   price: number;
   stock_status: string;
 }

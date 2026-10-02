@@ -17,14 +17,20 @@ export const VariantFormModal: React.FC<VariantFormModalProps> = ({ product_id, 
     storage: '',
     color: '',
     battery: '100',
+    condition: productCategory === Category.SELLADOS ? 'Sellado' : 'Semi',
     price: 0,
     stock_status: 'in_stock'
   });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (variant) setFormData(variant);
-  }, [variant]);
+    if (variant) {
+      setFormData({
+        ...variant,
+        condition: variant.condition || (productCategory === Category.SELLADOS ? 'Sellado' : 'Semi'),
+      });
+    }
+  }, [productCategory, variant]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -78,6 +84,14 @@ export const VariantFormModal: React.FC<VariantFormModalProps> = ({ product_id, 
                   <option value="in_stock">En Stock</option>
                   <option value="out_of_stock">Sin Stock</option>
                   <option value="preorder">Pre-Orden</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-ink-secondary uppercase mb-1">Condición</label>
+                <select name="condition" value={formData.condition} onChange={handleChange} className="lead-input">
+                  <option value="Semi">Semi</option>
+                  <option value="Sellado">Sellado</option>
                 </select>
               </div>
 

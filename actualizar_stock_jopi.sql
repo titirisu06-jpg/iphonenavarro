@@ -1,4 +1,7 @@
 
+-- OBSOLETO: no ejecutar para el stock actual.
+-- Usar actualizar_stock_2026-10-01.sql, que conserva las categorías no-iPhone.
+
 -- =======================================
 -- ACTUALIZACIÓN DE INVENTARIO JOPI
 -- =======================================
